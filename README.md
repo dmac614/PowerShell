@@ -1,2 +1,2 @@
 # PowerShell
-My Powershell scripts
+This respository contains all my PowerShell scripts. 
