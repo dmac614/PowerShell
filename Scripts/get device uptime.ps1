@@ -1,12 +1,13 @@
 ﻿<#
 .SYNOPSIS
-	          Retrieves the uptime of a Windows system. 
+Retrieves the uptime of a Windows system. 
 
 .DESCRIPTION
-	          The following cmdlets retriev information about when the Windows computer system was last booted. There are cmdlets for Powershell v5 and v6+.
+The following cmdlets retriev information about when the Windows computer system was last booted. There are cmdlets for Powershell v5 and v6+.
 
 .NOTES
-	          Author: Daniel Macdonald
+Author: Daniel Macdonald
+
 #>
 
 
