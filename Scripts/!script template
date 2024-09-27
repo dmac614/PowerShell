@@ -1,10 +1,11 @@
 ﻿<#
-  .SYNOPSIS
-	          Short description of the script. 
+.SYNOPSIS
+Short description of the script. 
 
 .DESCRIPTION
-	          Longer description of the script with more details.
+Longer description of the script with more details.
 
 .NOTES
-	          Author: Daniel Macdonald
+Author: Daniel Macdonald
+
 #>
