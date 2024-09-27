@@ -22,21 +22,20 @@ function ComputerDetails {
         Get-ComputerInfo | 
         Select-Object csname,csusername,CsDomain,OsName,osversion,BiosSMBIOSBIOSVersion,CsManufacturer,CsModel,@{
             n='CsTotalPhysicalMemory';
-            e={$_.CsTotalPhysicalMemory/1GB}
+            e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }
         }
 
         # Gather disk size and free space
- 
         "Disk information in gigabytes.`n"
-
         Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" | 
-        Select-object @{
+        Select-object DeviceID,
+        @{
             n='size';
-            e={$_.size/1gb}
+            e={ '{0:N2}' -f ($_.size/1gb) }
         },
         @{
             n='freespace';
-            e={$_.freespace/1gb}
+            e={ '{0:N2}' -f ($_.freespace/1gb) }
         }
 }
 
