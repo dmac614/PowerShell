@@ -22,5 +22,12 @@ Get-ComputerInfo -Property OsLastBootUpTime
 
 ## The following method works in PowerShell v6+
 
-$DevUptime = get-uptime | select-object days,hours
-$DevUptime = get-uptime | select-object totalhours 
+get-uptime
+
+# Format the total hours to a number with two decimal places
+$DevUptime =  '{0:N2}' -f (get-Uptime).TotalHours
+"Your device has been up for $DevUptime hours."
+
+# Format the total days to a number with two decimal places
+$DevUptime =  '{0:N2}' -f (get-Uptime).TotalDays
+"Your device has been up for $DevUptime days."
