@@ -1,0 +1,17 @@
+## PC Checks ##
+
+# Check last boot time
+(Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+
+# Clear recycle bin
+Clear-RecycleBin -driveletter C -Confirm
+
+# Check Timezone; Set Timezone if it's incorrect
+$timezone = (Get-TimeZone).id
+
+if ($timezone -match "E. Australia Standard Time") {
+    Write-host "Timezone is set correctly on this device."
+}
+else {
+    Set-TimeZone -id "E. Australia Standard Time"
+}
