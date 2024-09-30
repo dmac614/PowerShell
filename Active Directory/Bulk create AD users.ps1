@@ -13,9 +13,9 @@ Author: Daniel Macdonald
 	# Check for a duplicate username i.e an existing account
 	if (Get-ADUser -Filter {SamAccountName -eq $row.SamAccountName}) {
 
-		# Write a warning if a username exists
-		Write-Warning -Message "An account with username $($Property.Username) already exists."
-		}
+	# Write a warning if a username exists
+	Write-Warning -Message "An account with username $($Property.Username) already exists."
+	}
 
 	else { # Continue from (New-ADUser @UserParams) }
 
