@@ -37,18 +37,18 @@ foreach ($row in $CSVData) {
 	# User account parameters
 	$UserParams = @{
 
-		Name = $row.Name
-		GivenName = $row.FirstName
-		Surname = $row.Surname
-    DisplayName = $row.Name
-		Email = $row.EmailAddress
-    Company = $row.Company
-    SamAccountName = $row.SamAccountName
-    UserPrincipalName = $row.UserPrincipalName
-		Path = $row.Path
-    AccountPassword = (ConvertTo-SecureString -AsPlainText $row.Password -Force)
-    Enabled = $True 
-    ChangePasswordAtLogon = $False 
+	Name = $row.Name
+	GivenName = $row.FirstName
+	Surname = $row.Surname
+    	DisplayName = $row.Name
+	Email = $row.EmailAddress
+    	Company = $row.Company
+    	SamAccountName = $row.SamAccountName
+    	UserPrincipalName = $row.UserPrincipalName
+	Path = $row.Path
+    	AccountPassword = (ConvertTo-SecureString -AsPlainText $row.Password -Force)
+    	Enabled = $True 
+    	ChangePasswordAtLogon = $False 
 	}
 
 # Create new user accounts with the hashtable data
