@@ -16,7 +16,7 @@ $date = get-date
     
 # Get user info
 [string]$Name = read-host -Prompt "What is your name?"
-[int]$weight_kg = read-host -Prompt "What is your weight?"
+[int]$weight_kg = read-host -Prompt "What is your weight in kilograms?"
     
 # Convert kilograms to pounds: kg * 2.2045 = lbs
 $GetPounds = '{0:n2}' -f ($weight_kg * 2.2045)
