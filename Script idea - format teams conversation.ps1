@@ -47,7 +47,33 @@ Remove text that contains "... reaction"
 # The file containing the teams conversation
 $teamsChat = get-content -path "C:\users\macdond_a\documents\My Files\PowerShell\teamschat.txt" -raw
 
+function CleanUpConversation {
+
+$teamsChat = get-content -path 'C:\PS Demo\Working with files\teamschat.txt'
+$teamsChat
+
 # Get names of the two having a conversation
 $user = read-host -prompt "Enter the name of the user"
 $yourname = read-host -prompt "Enter your name"
+
+# Common text
+$string1 = "has context menu"
+$reaction = [regex]"\d \w{5} reaction." # This applies to 'heart' and 'laugh' reactions
+$byUser = [regex]"\w{1,45} by $($user)"
+$byYourName = [regex]"\w{1,45} by $($yourname)"
+
+# Remove common text
+$teamsChat -replace "$($string1)" -and "$($reaction)", ""
+
+<#
+if ($teamsChat -match $reaction) {
+    $teamsChat.Replace("")
+} else {
+    Write-output "No match found."
+}
+#>
+
+}
+
+CleanUpConversation
 
