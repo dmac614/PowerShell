@@ -66,7 +66,7 @@ $TheirName = read-host -prompt "Enter the name of the user"
 $YourName = read-host -prompt "Enter your name"
 
 # Regex to query the time messages were sent 
-$TimePattern    = [regex]'(\d{1,2}:\d{2}) [PA]M'
+$TimePattern    = [regex]'\d{1,2}:\d{2} [PA]M'
 $Reaction       = [regex]'\d \w{1,8} reaction.' 
 $ContextMenu    = "has context menu"
 $Number1        = "1"
@@ -76,8 +76,9 @@ $replacements = @{
 
 $ContextMenu        = $null
 $Reaction           = $null
-$ReplaceTheirName   = [regex]"($TheirName)+\s($TimePattern)"
-$ReplaceYourName    = [regex]"($TimePattern)+\s($YourName)"
+$Number1            = $null
+$ReplaceTheirName   = [regex]'($TheirName)+\s($TimePattern)'
+$ReplaceYourName    = [regex]'($TimePattern)+\s($YourName)'
 
 }
 
