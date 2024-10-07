@@ -44,36 +44,56 @@ Remove text that contains "... reaction"
 
 #>
 
-# The file containing the teams conversation
-$teamsChat = get-content -path "C:\users\macdond_a\documents\My Files\PowerShell\teamschat.txt" -raw
+
+<#
+https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference
+https://learn.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#word-character-w
+https://learn.microsoft.com/en-us/dotnet/api/system.string.endswith?view=net-8.0
+https://www.sharepointdiary.com/2021/11/powershell-string-manipulation-comprehensive-guide.html
+
+get-help select-string -full
+get-help about_Regular_Expressions
+#>
 
 function CleanUpConversation {
 
-$teamsChat = get-content -path 'C:\PS Demo\Working with files\teamschat.txt'
-$teamsChat
+# Location of the Teams chat 
+$ConversationFile = "C:\PS Demo\Working with files\teamschat.txt"
 
-# Get names of the two having a conversation
-$user = read-host -prompt "Enter the name of the user"
-$yourname = read-host -prompt "Enter your name"
 
-# Common text
-$string1 = "has context menu"
-$reaction = [regex]"\d \w{5} reaction." # This applies to 'heart' and 'laugh' reactions
-$byUser = [regex]"\w{1,45} by $($user)"
-$byYourName = [regex]"\w{1,45} by $($yourname)"
+# Get the names of the two having a conversation
+$TheirName = read-host -prompt "Enter the name of the user"
+$YourName = read-host -prompt "Enter your name"
 
-# Remove common text
-$teamsChat -replace "$($string1)" -and "$($reaction)", ""
+# Regex to query the time messages were sent 
+$TimePattern    = [regex]'(\d{1,2}:\d{2}) [PA]M'
+$Reaction       = [regex]'\d \w{1,8} reaction.' 
+$ContextMenu    = "has context menu"
+$Number1        = "1"
 
-<#
-if ($teamsChat -match $reaction) {
-    $teamsChat.Replace("")
-} else {
-    Write-output "No match found."
-}
-#>
+# Replace common text in the chat
+$replacements = @{
+
+$ContextMenu        = $null
+$Reaction           = $null
+$ReplaceTheirName   = [regex]"($TheirName)+\s($TimePattern)"
+$ReplaceYourName    = [regex]"($TimePattern)+\s($YourName)"
 
 }
+
+# Display chat contents 
+$FileContents = get-content -path $ConversationFile
+
+# Foreach loop to replace the text
+Foreach ($item in $replacements.Keys) {
+    $FileContents = $FileContents -replace $item, $replacements[$item]
+}
+
+# Update the replaced content in the file 
+Set-content -path $ConversationFile -value $FileContents
+Get-content -path $ConversationFile
+}
+
+
 
 CleanUpConversation
-
