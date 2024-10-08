@@ -1,35 +1,79 @@
 <#
 
-# Teams conversation
-Charles Cook
-3:21 pm
-too many project behind the scene, alot of breakage.
-not enough people on the desk either by Daniel MacDonald
-3:21 pm
+
+Today
+Hello Sasha - are you free for a remote ses... by Daniel MacDonald
+2:44 pm
 Daniel MacDonald
-not enough people on the desk either
-1 Laugh reaction.
+Hello Sasha - are you free for a remote session regarding the CM add-in?
+Sure. Thanks! by Sasha McCarthy
+Sasha McCarthy
+2:44 pm
+Sure. Thanks!
+Surprised Surprised Surprised by Sasha McCarthy
+Sasha McCarthy
+2:48 pm
+You’re amazing!!!!!! by Sasha McCarthy
+Sasha McCarthy
+2:49 pm
+You’re amazing!!!!!!
+The add-in is back, can you verify it's wor... by Daniel MacDonald
+2:49 pm
+Daniel MacDonald
+The add-in is back, can you verify it's working?
+Smile   Smile by Daniel MacDonald
+2:49 pm
+Daniel MacDonald
+ 
+It just didn't 'check in on close'. by Sasha McCarthy
+Sasha McCarthy
+2:52 pm
+It just didn't 'check in on close'.
+The rest worked perfectly. by Sasha McCarthy
+Sasha McCarthy
+2:52 pm
+The rest worked perfectly.
+PWR\PT BN 2024 DJAG Communications Communit... by Daniel MacDonald
+2:55 pm
+Daniel MacDonald
+PWR\PT BN 2024 DJAG Communications Community presentation.DOCX
+Is this the file you were checking in? I di... by Daniel MacDonald
+2:55 pm
+Daniel MacDonald
+Is this the file you were checking in? I didnt pay attention
+No. That one was the one I saved from my de... by Sasha McCarthy
+Sasha McCarthy
+2:55 pm
+No. That one was the one I saved from my desktop earlier today. I saved in a CED calendar. 
+
 1
-yeah John is the gate keeper by Charles Cook
-Charles Cook
-3:22 pm
-yeah John is the gate keeper
-now you know! by Charles Cook
-Charles Cook
-3:22 pm
-now you know!
-Can I call you about GPO when you are back by Daniel MacDonald
-3:46 pm
+It does look like my CM was just slow. by Sasha McCarthy
+Sasha McCarthy
+2:55 pm
+It does look like my CM was just slow.
+Its saved in now. by Sasha McCarthy
+Sasha McCarthy
+2:55 pm
+Its saved in now.
+You did great! Thanks for your help by Sasha McCarthy
+Sasha McCarthy
+2:56 pm
+You did great! Thanks for your help
+
+1
+Thanks for the kind words  by Daniel MacDonald
+2:56 pm
 Daniel MacDonald
-Can I call you about GPO when you are back
-yeah sure by Charles Cook
-Charles Cook
-4:06 pm
-yeah sure
-has context menu
+Thanks for the kind words 
+You are super welcome! by Sasha McCarthy
+Sasha McCarthy
+2:57 pm
+You are super welcome!
+
+Have a great day!You're the bestThank you!
 
 
-has context menu
+
 
 
 # Idea
@@ -55,46 +99,57 @@ get-help select-string -full
 get-help about_Regular_Expressions
 #>
 
-function CleanUpConversation {
 
 # Location of the Teams chat 
-$ConversationFile = "C:\PS Demo\Working with files\teamschat.txt"
+$ConversationFile = "C:\Users\macdond_a\Documents\My Files\PowerShell\teams1.txt"
 
 
-# Get the names of the two having a conversation
-$TheirName = read-host -prompt "Enter the name of the user"
-$YourName = read-host -prompt "Enter your name"
+# Main function to run individual functions
+function CleanUpConversation {
 
-# Regex to query the time messages were sent 
-$TimePattern    = [regex]'\d{1,2}:\d{2} [PA]M'
-$Reaction       = [regex]'\d \w{1,8} reaction.' 
-$ContextMenu    = "has context menu"
-$Number1        = "1"
+    # Get the names of the two having a conversation
+    function global:Conversation {
+        $TheirName = read-host -prompt "Enter the name of the user"
+        $YourName = read-host -prompt "Enter your name"
+    }
 
-# Replace common text in the chat
-$replacements = @{
+    # Contains expressions to look for and replace in the conversation
+    function global:StringExpressions {
+        # Query expressions in the conversation 
+        $TimePattern    = [regex]'\d{1,2}:\d{2} [AP]M'
+        $Reaction       = [regex]'\d \w{1,8} reaction.' 
+        $ByTheirName    = [regex]"\w* by $($TheirName)"
+        $ByYourName     = [regex]"\w* by $($YourName)"
+        $Number1        = [regex]'\d{1} \s'
+        $ContextMenu    = "has context menu"
+        $LastRead       = "Last read"
 
-$ContextMenu        = $null
-$Reaction           = $null
-$Number1            = $null
-$ReplaceTheirName   = [regex]'($TheirName)+\s($TimePattern)'
-$ReplaceYourName    = [regex]'($TimePattern)+\s($YourName)'
+        $replacements = @{
+        # Replace common text in the chat
+        $ContextMenu        = $null
+        $Reaction           = $null
+        $Number1            = $null
+        $LastRead           = $null
+        $ReplaceTheirName   = [regex]"$($TheirName)+\s$($TimePattern)"
+        $ReplaceYourName    = [regex]"$($TimePattern)+\s$($YourName)"
+        }
+    }
 
-}
+# 
+    function global:ReplaceFileValues {
+        # Display chat contents 
+        $FileContents = get-content -path $ConversationFile
+            
+        # Foreach loop to replace the text
+        Foreach ($item in $replacements.Keys) {
+            $FileContents = $FileContents -replace $item, $replacements[$item]
+        }
+        
+        # Update the replaced content in the file 
+        Set-content -path $ConversationFile -value $FileContents
+        Get-content -path $ConversationFile
+    }
+} 
 
-# Display chat contents 
-$FileContents = get-content -path $ConversationFile
-
-# Foreach loop to replace the text
-Foreach ($item in $replacements.Keys) {
-    $FileContents = $FileContents -replace $item, $replacements[$item]
-}
-
-# Update the replaced content in the file 
-Set-content -path $ConversationFile -value $FileContents
-Get-content -path $ConversationFile
-}
-
-
-
+# Call the function
 CleanUpConversation
