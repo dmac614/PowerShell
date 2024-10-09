@@ -101,54 +101,69 @@ get-help about_Regular_Expressions
 
 
 # Location of the Teams chat 
-$ConversationFile = "C:\Users\macdond_a\Documents\My Files\PowerShell\teams1.txt"
+$ConversationFile = "C:\PS Demo\Working with files\teams1.txt"
 
+
+# Expressions to query in the conversation 
+$TimePattern        = [regex]'\d{1,2}:\d{2} [AP]M'
+$Reaction           = [regex]'\d \w{1,8} reaction.' 
+$ByTheirName        = [regex]"\w* by $($TheirName)"
+$ByYourName         = [regex]"\w* by $($YourName)"
+$ContextMenu        = "has context menu"
+$LastRead           = "Last read"
+
+
+
+
+
+# Get the names of the two having a conversation
+function Conversation {
+    $script:TheirName = read-host -prompt "Enter the name of the user"
+    $script:YourName = read-host -prompt "Enter your name"
+}
+
+# Replace strings in the conversation
+function StringExpressions {
+    $script:Replacements = @{
+    # Replace common text in the chat
+    $ContextMenu        = $null
+    $Reaction           = $null
+    $LastRead           = $null
+    $ReplaceTheirName   = [regex]"$($script:TheirName)\n$($script:TimePattern)"
+    $ReplaceYourName    = [regex]"$($script:TimePattern)\n$($script:YourName)"
+    }
+}
+
+# 
+function ReplaceFileValues {
+    # Display chat contents 
+    try {
+        $FileContents = get-content -path $ConversationFile
+    } catch {
+        Write-error "Failed to read file: $ConversationFile"
+        return
+    }
+        
+    # Foreach loop to replace the text
+    Foreach ($item in $Replacements.Keys) {
+        $FileContents = $FileContents -replace $item, $Replacements[$item]
+    }
+    
+    # Update the replaced content in the file 
+    try {
+        Set-content -path $ConversationFile -value $FileContents
+    } catch {
+        Write-error "Failed to overwrite file: $ConversationFile"
+    }
+
+}
 
 # Main function to run individual functions
 function CleanUpConversation {
-
-    # Get the names of the two having a conversation
-    function global:Conversation {
-        $TheirName = read-host -prompt "Enter the name of the user"
-        $YourName = read-host -prompt "Enter your name"
-    }
-
-    # Contains expressions to look for and replace in the conversation
-    function global:StringExpressions {
-        # Query expressions in the conversation 
-        $TimePattern    = [regex]'\d{1,2}:\d{2} [AP]M'
-        $Reaction       = [regex]'\d \w{1,8} reaction.' 
-        $ByTheirName    = [regex]"\w* by $($TheirName)"
-        $ByYourName     = [regex]"\w* by $($YourName)"
-        $Number1        = [regex]'\d{1} \s'
-        $ContextMenu    = "has context menu"
-        $LastRead       = "Last read"
-
-        $replacements = @{
-        # Replace common text in the chat
-        $ContextMenu        = $null
-        $Reaction           = $null
-        $Number1            = $null
-        $LastRead           = $null
-        $ReplaceTheirName   = [regex]"$($TheirName)+\s$($TimePattern)"
-        $ReplaceYourName    = [regex]"$($TimePattern)+\s$($YourName)"
-        }
-    }
-
-# 
-    function global:ReplaceFileValues {
-        # Display chat contents 
-        $FileContents = get-content -path $ConversationFile
-            
-        # Foreach loop to replace the text
-        Foreach ($item in $replacements.Keys) {
-            $FileContents = $FileContents -replace $item, $replacements[$item]
-        }
-        
-        # Update the replaced content in the file 
-        Set-content -path $ConversationFile -value $FileContents
-        Get-content -path $ConversationFile
-    }
+    # Call functions
+    Conversation
+    StringExpressions
+    ReplaceFileValues
 } 
 
 # Call the function
