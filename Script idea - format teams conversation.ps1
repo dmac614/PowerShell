@@ -73,68 +73,45 @@ You are super welcome!
 Have a great day!You're the bestThank you!
 
 
-
-
-
-# Idea
-Get the content of the conversation which is stored in a file
-Get the name of the user and your name
-
-Put $user + time on the same line
-Put $yourname + time on the same line
-Remove text that contains "... by $user" / "... by $yourname"
-Remove text that contains "has context menu"
-Remove text that contains "... reaction"
-
-#>
-
-
 <#
-https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expression-language-quick-reference
-https://learn.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#word-character-w
-https://learn.microsoft.com/en-us/dotnet/api/system.string.endswith?view=net-8.0
-https://www.sharepointdiary.com/2021/11/powershell-string-manipulation-comprehensive-guide.html
+    .Add in later
+$num1           = [regex]'\b1\b' 
+$num1           = $null
 
-get-help select-string -full
-get-help about_Regular_Expressions
 #>
 
-
-# Location of the Teams chat 
-$ConversationFile = "C:\PS Demo\Working with files\teams1.txt"
+# Location of conversation
+$ConversationFile = "C:\Users\macdond_a\Documents\My Files\PowerShell\teamschat.txt"
 
 
 # Expressions to query in the conversation 
-$TimePattern        = [regex]'\d{1,2}:\d{2} [AP]M'
-$Reaction           = [regex]'\d \w{1,8} reaction.' 
-$ByTheirName        = [regex]"\w* by $($TheirName)"
-$ByYourName         = [regex]"\w* by $($YourName)"
-$ContextMenu        = "has context menu"
-$LastRead           = "Last read"
-
-
-
+$ContextMenu    = "has context menu"
+$LastRead       = "Last read"
+$Reaction       = [regex]'\d \w{1,8} reaction.' 
+$ByMyName       = [regex]"\w*.+ by $($MyName)"
+$ByTheirName    = [regex]"\w*.+ by $($TheirName)"
 
 
 # Get the names of the two having a conversation
 function Conversation {
+    $script:MyName = "Daniel Macdonald"
     $script:TheirName = read-host -prompt "Enter the name of the user"
-    $script:YourName = read-host -prompt "Enter your name"
 }
 
-# Replace strings in the conversation
+
 function StringExpressions {
     $script:Replacements = @{
     # Replace common text in the chat
-    $ContextMenu        = $null
-    $Reaction           = $null
-    $LastRead           = $null
-    $ReplaceTheirName   = [regex]"$($script:TheirName)\n$($script:TimePattern)"
-    $ReplaceYourName    = [regex]"$($script:TimePattern)\n$($script:YourName)"
+    $ContextMenu    = $null
+    $Reaction       = $null
+    $LastRead       = $null
+    $ByMyName       = $null
+    $ByTheirName    = $null
     }
 }
 
-# 
+
+# Re-write the file with the removed text
 function ReplaceFileValues {
     # Display chat contents 
     try {
@@ -155,16 +132,14 @@ function ReplaceFileValues {
     } catch {
         Write-error "Failed to overwrite file: $ConversationFile"
     }
-
 }
 
-# Main function to run individual functions
-function CleanUpConversation {
-    # Call functions
+# Contain each function inside the main function
+function TeamsConversation {
     Conversation
     StringExpressions
     ReplaceFileValues
-} 
+}
 
-# Call the function
-CleanUpConversation
+# Run the main function
+TeamsConversation
