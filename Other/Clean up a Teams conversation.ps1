@@ -4,19 +4,19 @@
 Clean up a Teams conversation
 
 .DESCRIPTION
-Remove text and tidy up the format fron an unorganised Teams conversation. Query regular expressions in the conversation and replace them as empty strings.
+Remove text and tidy up the formatting in an unorganised Teams conversation. Query regular expressions in the conversation and replace them as empty strings.
 
 .NOTES
 Author: Daniel Macdonald
 
 Future plans to add to this script:
 Put the names + the subsequent time of the sent message on the same line
-Paste the conversation into a text box; save this to a file; read from the file
+Paste the conversation into a text box; save this to a file... tbc
 
 #>
 
 # Location of conversation
-$ConversationFile = "C:\PS Demo\Working with files\teams1.txt"
+$ConversationFile = "C:\Users\%username%\Documents\My Files\PowerShell\teamschat.txt"
 
 
 # Get the names of the two having a conversation
@@ -30,13 +30,13 @@ function StringExpressions {
     $script:ContextMenu    = "has context menu"
     $script:LastRead       = "Last read"
     $script:Today          = [regex]'\bToday\b'
-    $script:num1           = [regex]'\b1\b'
-    $script:Reaction       = [regex]'\d \w{1,8} reaction.' 
+    $script:num1           = [regex]'\b1^1:\b'
+    $script:Reaction       = [regex]'\d .+ reaction.' 
     $script:ByMyName       = [regex]"\w*.+ by $($MyName)"
     $script:ByTheirName    = [regex]"\w*.+ by $($TheirName)"
 
     $script:Replacements = @{
-    # Replace common text in the chat
+    # Replace expressions in the conversation
     $ContextMenu    = $null
     $Reaction       = $null
     $Today          = $null
@@ -48,9 +48,9 @@ function StringExpressions {
 }
 
 
-# Re-write the file with the removed text
+# Update the conversation file with the replaced expressions
 function ReplaceFileValues {
-    # Display chat contents 
+    # Get content of the conversation 
     try {
         $FileContents = get-content -path $ConversationFile
     } catch {
@@ -58,12 +58,12 @@ function ReplaceFileValues {
         return
     }
         
-    # Foreach loop to replace the text
+    # Foreach loop to replace the expressions
     Foreach ($item in $Replacements.Keys) {
         $FileContents = $FileContents -replace $item, $Replacements[$item]
     }
     
-    # Update the replaced content in the file 
+    # Write to the conversation file  
     try {
         Set-content -path $ConversationFile -value $FileContents
     } catch {
@@ -78,5 +78,5 @@ function TeamsConversation {
     ReplaceFileValues
 }
 
-# Run the main functionc
+# Run the main function
 TeamsConversation
