@@ -1,0 +1,27 @@
+<#
+
+Documentation: 
+https://www.dell.com/support/manuals/en-uk/command-update/dellcommandupdate_311_ug/command-line-interface-reference?guid=guid-92619086-5f7c-4a05-bce2-0d560c15e8ed&lang=en-us
+
+1. Install location: %programfiles%\Dell\CommandUpdate
+2. Process name: dcu-cli.exe
+
+Syntax
+dcu-cli.exe /option -option=value 
+
+#>
+
+# Help and usage commands
+dcu-cli.exe /help
+dcu-cli.exe /? -?
+
+# Get the application version
+dcu-cli.exe /version
+
+# Configure
+dcu-cli.exe /configure
+
+# Scan for updates
+dcu-cli.exe /scan -silent
+
+# Apply updates
