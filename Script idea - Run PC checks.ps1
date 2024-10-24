@@ -40,26 +40,27 @@ GreetHost
 # Get uptime of the device
 function DeviceUptime {
 
-	# Device last boot time
-	$LastBoot = (get-ciminstance -classname win32_operatingsystem).LastBootUpTime
+# Device last boot time
+$LastBoot = (get-ciminstance -classname win32_operatingsystem).LastBootUpTime
 
-	# Current time and date
-	$CurrentDate = get-date
+# Current time and date
+$CurrentDate = get-date
 
-	# Time difference from last boot to current time
-	$Uptime = ($CurrentDate - $LastBoot).totaldays
-	$UptimeFormatted = $Uptime.ToString("F2")
+# Time difference from last boot to current time
+$Uptime = ($CurrentDate - $LastBoot).totaldays
+$UptimeFormatted = $Uptime.ToString("F2")
 
-	# Tell the host the device uptime
-	Write-host "Your device was last restarted $UptimeFormatted days ago."
+# Tell the host the device uptime
+Write-host "Your device was last restarted $UptimeFormatted days ago."
 
-			if ($Uptime -ge 3) {
-			Write-warning "Your computer is about to be restarted."
-			Restart-computer -Confirm
-			} else {
-			Write-host "Consider starting your computer in the next couple of days."
-			}
+	if ($Uptime -ge 3) {
+	Write-warning "Your computer is about to be restarted."
+	Restart-computer -Confirm
+	} else {
+	Write-host "Consider starting your computer in the next couple of days."
 	}
+}
+
 # Call function
 DeviceUptime
 
