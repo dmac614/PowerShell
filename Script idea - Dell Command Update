@@ -1,28 +1,32 @@
 <#
 
-Documentation: 
+# Information about the progam
+# Documentation
 https://www.dell.com/support/manuals/en-uk/command-update/dellcommandupdate_311_ug/command-line-interface-reference?guid=guid-92619086-5f7c-4a05-bce2-0d560c15e8ed&lang=en-us
 
 1. Install location: %programfiles%\Dell\CommandUpdate | 'C:\program files\Dell\CommandUpdate' 
 2. Process name: dcu-cli.exe
 
-Syntax
+# Syntax
 dcu-cli.exe /option -option=value 
 
+# Ideas to add to the script
+$logFile = $null
+$TextPattern = [regex]'\d updates available'
+
+if ($logFile -contains $TextPattern) {
+    dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable
+}
 #>
 
-# Help and usage commands
-dcu-cli.exe /help
-dcu-cli.exe /? -?
 
-# Get the application version
-dcu-cli.exe /version
+# Navigate to dcu-cli location
+Set-Location 'C:\program files\Dell\CommandUpdate'
 
-# Configure
-dcu-cli.exe /configure
+# Display app version
+# Scan the computer for updates
+.\dcu-cli.exe /version 
+.\dcu-cli.exe /scan -outputlog=C:\temp\dcuScan.log -silent
 
-# Scan for updates
-dcu-cli.exe /scan -silent
-.\dcu-cli.exe /scan -outputlog=C:\temp\dcu.log
-
-# Apply updates
+# Read the log file
+Get-Content C:\temp\dcuScan.log
