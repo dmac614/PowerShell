@@ -1,0 +1,38 @@
+<#
+
+# Information about the progam
+# Documentation
+https://www.dell.com/support/manuals/en-uk/command-update/dellcommandupdate_311_ug/command-line-interface-reference?guid=guid-92619086-5f7c-4a05-bce2-0d560c15e8ed&lang=en-us
+
+1. Install location: %programfiles%\Dell\CommandUpdate | 'C:\program files\Dell\CommandUpdate' 
+2. Process name: dcu-cli.exe
+
+# Syntax
+dcu-cli.exe /option -option=value 
+
+#>
+
+# Example of what the log file will say when updates are avilable
+# <-- "Number of applicable updates for the current system configuration: 2" --> #
+
+# This query will match if the log file contains 1+ update(s)
+$TextPattern = [regex]'Number of applicable updates .+ [1-9]{1,2}'
+
+# Navigate to dcu-cli location
+Set-Location 'C:\program files\Dell\CommandUpdate'
+
+# Display app version and scan the computer for updates
+.\dcu-cli.exe /version
+.\dcu-cli.exe /scan -outputlog=C:\temp\dcuScan.log -silent
+
+# Read the log file
+$logFile = Get-Content C:\temp\dcuScan.log
+$logFile
+
+# Apply available updates
+if ($logFile -contains $TextPattern) {
+    dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable
+} else {
+    Write-Host "`nNo updates are available.`nThis system is up to date." -ForegroundColor Green
+}
+
