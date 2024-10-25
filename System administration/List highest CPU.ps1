@@ -10,7 +10,7 @@ Author: Daniel Macdonald
 
 #>
 
-$highestCPU = get-process | Sort-Object CPU -Descending -Top 10 | Select-Object name,@{
+$highestCPU = get-process | Sort-Object CPU -Descending | Select-Object -First 10 name,@{
     n='CPU';
     e={ '{0:P1}' -f ($_.CPU / 1KB) }
 }
