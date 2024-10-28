@@ -43,7 +43,7 @@ Clear-RecycleBin -driveletter C -Confirm
 # Delete temp files
 (get-childitem -Path $env:localappdata\temp).count
 
-get-childitem -Path $env:localappdata\temp | Remove-Item -Recurse -ProgressAction
+get-childitem -Path $env:localappdata\temp | Remove-Item -Recurse
 
 
 # Check Timezone; Set Timezone if it's incorrect
