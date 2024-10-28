@@ -15,24 +15,39 @@ dcu-cli.exe /option -option=value
 # Example of what the log file will say when updates are avilable
 # <-- "Number of applicable updates for the current system configuration: 2" --> #
 
-# This query will match if the log file contains 1+ update(s)
+# The first query will match if the log file contains 1+ update(s)
+# The second query will match when the dcuApplyUpdate.log file installs the updates
 $TextPattern = [regex]'Number of applicable updates .+ [1-9]{1,2}'
+$FinishedUpdates = 'Finished installing the updates.'
 
 # Navigate to dcu-cli location
 Set-Location 'C:\program files\Dell\CommandUpdate'
+
+# Message to the host
+Write-Host "`nScanning the computer for updates...`n" -ForegroundColor Yellow
 
 # Display app version and scan the computer for updates
 .\dcu-cli.exe /version
 .\dcu-cli.exe /scan -outputlog=C:\temp\dcuScan.log -silent
 
 # Read the log file
-$logFile = Get-Content C:\temp\dcuScan.log
-$logFile
+$LogFile = Get-Content C:\temp\dcuScan.log
+$LogFile
 
 # Apply available updates
-if ($logFile -contains $TextPattern) {
-    dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable
+if ($LogFile -match $TextPattern) {
+    # Message to the host
+    Write-Host "`nApplying updates to the system...`n" -ForegroundColor Yellow  
+    .\dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable -reboot=disable
+    Get-Content C:\temp\dcuApplyUpdate.log
 } else {
     Write-Host "`nNo updates are available.`nThis system is up to date." -ForegroundColor Green
 }
 
+# Store the dcuApplyUpdate.log in a variable
+# Write a message to the host if the dcuApplyUpdate.log file contains a regular expression 
+$UpdateFile = Get-content C:\temp\dcuApplyUpdate.log
+
+if ($UpdateFile -match $FinishedUpdates) {
+    Write-Host "`nUpdates have been installed successfully. `nConsider restarting your computer to complete the installation.`n" -ForegroundColor Green
+}
