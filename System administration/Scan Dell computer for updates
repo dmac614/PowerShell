@@ -20,8 +20,24 @@ dcu-cli.exe /option -option=value
 $TextPattern = [regex]'Number of applicable updates .+ [1-9]{1,2}'
 $FinishedUpdates = 'Finished installing the updates.'
 
+# Dell Command Update folder locations
+$64BitLocation = 'C:\Program Files\Dell\CommandUpdate'
+$32BitLocation = 'C:\Program Files (x86)\Dell\CommandUpdate'
+
 # Navigate to dcu-cli location
-Set-Location 'C:\program files\Dell\CommandUpdate'
+if (Test-Path -Path $64BitLocation) {
+
+    # Change folder path
+    Set-Location $64BitLocation
+
+} elseif (Test-Path -Path $32BitLocation) {
+
+    # Change folder path
+    Set-Location $32BitLocation
+
+} else {
+    Write-Host "`nDell Command | Update is not installed on this computer. " -ForegroundColor Red
+}
 
 # Message to the host
 Write-Host "`nScanning the computer for updates...`n" -ForegroundColor Yellow
@@ -36,18 +52,23 @@ $LogFile
 
 # Apply available updates
 if ($LogFile -match $TextPattern) {
+
     # Message to the host
-    Write-Host "`nApplying updates to the system...`n" -ForegroundColor Yellow  
+    Write-Host "`nUpdates are available. Applying updates to the system...`n" -ForegroundColor Yellow  
+    
+    # Apply updates
     .\dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable -reboot=disable
-    Get-Content C:\temp\dcuApplyUpdate.log
-} else {
+
+    # Get the content of the update log file
+    $UpdateFile = Get-content C:\temp\dcuApplyUpdate.log
+    $UpdateFile
+    
+    if ($UpdateFile -match $FinishedUpdates) {
+        # Write a message to the host if the dcuApplyUpdate.log file contains a regular expression 
+        Write-Host "`nUpdates have been installed successfully. `nConsider restarting your computer to complete the installation.`n" -ForegroundColor Green
+    }
+} 
+
+else {
     Write-Host "`nNo updates are available.`nThis system is up to date." -ForegroundColor Green
-}
-
-# Store the dcuApplyUpdate.log in a variable
-# Write a message to the host if the dcuApplyUpdate.log file contains a regular expression 
-$UpdateFile = Get-content C:\temp\dcuApplyUpdate.log
-
-if ($UpdateFile -match $FinishedUpdates) {
-    Write-Host "`nUpdates have been installed successfully. `nConsider restarting your computer to complete the installation.`n" -ForegroundColor Green
 }
