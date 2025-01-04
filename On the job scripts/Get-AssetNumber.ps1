@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Get the device name.
 .DESCRIPTION
@@ -12,11 +12,11 @@ Used at the Public Trustee, QLD Government.
 Author: Daniel Macdonald
 #>
 
-param( [string]$FullName = "" )
+param( [string]$FullName = "Daniel Macdonald" )
 #$GetName = Read-Host -Prompt "What is the user's full name?"
 
 # Get the user's SamAccountName
-$SAM = Get-ADUser -Filter {name -eq $($FullName)} | Select-Object SamAccountName   
+$SAM = Get-ADUser -Filter "name -eq '$FullName'" | Select-Object SamAccountName   
 
 # Load SCCM module to be able to run SCCM commands
 Import-module -Name ConfigurationManager
@@ -37,6 +37,5 @@ Select-Object Name
 Write-Output "`nThe username $($SAM.SamAccountName) is currently logged into: $($CurrentLogon.Name)"
 Write-Output "The username $($SAM.SamAccountName) was last logged into: $($LastLogon.Name)"
 
-
 # Return to the C: drive
-#Set-Location $HOME
+Set-Location 'C:\Users\macdond_a\Documents\My Files\PowerShell\'
