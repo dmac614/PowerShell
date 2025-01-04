@@ -1,14 +1,15 @@
 ﻿<#
 .SYNOPSIS
-Get the PA number of a laptop 
-
+Get the device name.
 .DESCRIPTION
-Get the device name of a currently logged in and last logged in user. 
-Used at the Public Trustee.
-
+Get the name of a device by specifying the user's full name. This finds who the current and last logged in user is based on the SAMAccountName.
+.PARAMETER FullName
+The full name of the computer user
+.EXAMPLE
+Get-AssetNumber -FullName
 .NOTES
+Used at the Public Trustee, QLD Government.
 Author: Daniel Macdonald
-
 #>
 
 param( [string]$FullName = "" )
