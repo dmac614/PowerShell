@@ -1,9 +1,10 @@
 ﻿<#
 .SYNOPSIS
-Short description of the script. 
+Get the PA number of a laptop 
 
 .DESCRIPTION
-Longer description of the script with more details.
+Get the device name of a currently logged in and last logged in user. 
+Used at the Public Trustee.
 
 .NOTES
 Author: Daniel Macdonald
@@ -32,4 +33,4 @@ Write-Output "The username $($SAM.SamAccountName) was last logged into: $($LastL
 
 
 # Return to the C: drive
-Set-Location $HOME
+#Set-Location $HOME
