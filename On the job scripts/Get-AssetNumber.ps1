@@ -11,11 +11,11 @@ Author: Daniel Macdonald
 
 #>
 
-# Enter the user's name
-$GetName = Read-Host -Prompt "What is the user's full name?"
+param( [string]$FullName = "" )
+#$GetName = Read-Host -Prompt "What is the user's full name?"
 
 # Get the user's SamAccountName
-$SAM = Get-ADUser -Filter {name -eq $GetName} | Select-Object SamAccountName   
+$SAM = Get-ADUser -Filter {name -eq $($FullName)} | Select-Object SamAccountName   
 
 # Load SCCM module to be able to run SCCM commands
 Import-module -Name ConfigurationManager
@@ -24,8 +24,13 @@ Import-module -Name ConfigurationManager
 Set-location PTO:
 
 # Get the computer name based on the current user logged into it
-$CurrentLogon = Get-CMDevice -Name * | ? {$_.CurrentLogonUser -match $SAM.SamAccountName } | Select-Object Name
-$LastLogon = Get-CMDevice -Name * | ? {$_.LastLogonUser -match $SAM.SamAccountName } | Select-Object Name
+$CurrentLogon = Get-CMDevice -Name * | 
+Where-Object {$_.CurrentLogonUser -match $SAM.SamAccountName } |
+Select-Object Name
+
+$LastLogon = Get-CMDevice -Name * |
+Where-Object {$_.LastLogonUser -match $SAM.SamAccountName } |
+Select-Object Name
 
 # Write message
 Write-Output "`nThe username $($SAM.SamAccountName) is currently logged into: $($CurrentLogon.Name)"
