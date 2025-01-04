@@ -14,12 +14,13 @@ Author: Daniel Macdonald
 
 ## First script -- run PShell as admin ##
 
+param( [int]$Workstation = $null )
+
 
 # Regular expression for the serial number
 $SerialNumber = [regex]",(.{7}),"
 
 # Get the workstation number
-[string]$Workstation = read-host "What is the workstation number?"
 
 # cd to 'C:\Program files\Dell\Dell Display Manager 2'
 .\ddm.exe /Log C:\temp\dell\"ddm$($Workstation)".txt /1:readassetattributes /2:readassetattributes
@@ -42,12 +43,13 @@ if ($file -match $SerialNumber) {
 
 ## Second script -- run a normal PShell session ##
 
+param( [int]$Workstation = $null )
 
 # Enter the same workstation number 
-$WSNumber = Read-Host -Prompt "DDM number?"
+#$Workstation = Read-Host -Prompt "DDM number?"
 
 # Copy the serial number data
-$TxtFileContent = get-content -path C:\temp\dell\ddm$($WSNumber).txt | clip
+$TxtFileContent = get-content -path C:\temp\dell\ddm$($Workstation).txt | clip
 
 # Start the Word document process
-Start-process -filepath C:\temp\dell\ddm$($WSNumber).docx
+Start-process -filepath C:\temp\dell\ddm$($Workstation).docx
