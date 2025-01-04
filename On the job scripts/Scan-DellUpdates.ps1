@@ -1,14 +1,16 @@
 <#
+.SYNOPSIS
+Scan computer for Dell updates
 
-# Information about the progam
-# Documentation
+.DESCRIPTION
+Utilise Dell CLI tools to scan a computer for Dell updates 
+
+- Documentation:
 https://www.dell.com/support/manuals/en-uk/command-update/dellcommandupdate_311_ug/command-line-interface-reference?guid=guid-92619086-5f7c-4a05-bce2-0d560c15e8ed&lang=en-us
+- Syntax: dcu-cli.exe /option -option=value 
 
-1. Install location: %programfiles%\Dell\CommandUpdate | 'C:\program files\Dell\CommandUpdate' 
-2. Process name: dcu-cli.exe
-
-# Syntax
-dcu-cli.exe /option -option=value 
+.NOTES
+Author: Daniel Macdonald
 
 #>
 
@@ -36,11 +38,11 @@ if (Test-Path -Path $64BitLocation) {
     Set-Location $32BitLocation
 
 } else {
-    Write-Host "`nDell Command | Update is not installed on this computer. " -ForegroundColor Red
+    Write-Warning "`nDell Command | Update is not installed on this computer. "
 }
 
 # Message to the host
-Write-Host "`nScanning the computer for updates...`n" -ForegroundColor Yellow
+Write-Output "`nScanning the computer for updates...`n"
 
 # Display app version and scan the computer for updates
 .\dcu-cli.exe /version
@@ -54,7 +56,7 @@ $LogFile
 if ($LogFile -match $TextPattern) {
 
     # Message to the host
-    Write-Host "`nUpdates are available. Applying updates to the system...`n" -ForegroundColor Yellow  
+    Write-Output "`nUpdates are available. Applying updates to the system...`n"
     
     # Apply updates
     .\dcu-cli.exe /applyUpdates -outputlog=C:\temp\dcuApplyUpdate.log -silent -autoSuspendBitLocker=enable -reboot=disable
@@ -65,10 +67,10 @@ if ($LogFile -match $TextPattern) {
     
     if ($UpdateFile -match $FinishedUpdates) {
         # Write a message to the host if the dcuApplyUpdate.log file contains a regular expression 
-        Write-Host "`nUpdates have been installed successfully. `nConsider restarting your computer to complete the installation.`n" -ForegroundColor Green
+        Write-Output "`nUpdates have been installed successfully. `nConsider restarting your computer to complete the installation.`n"
     }
 } 
 
 else {
-    Write-Host "`nNo updates are available.`nThis system is up to date." -ForegroundColor Green
+    Write-Output "`nNo updates are available.`nThis system is up to date."
 }
