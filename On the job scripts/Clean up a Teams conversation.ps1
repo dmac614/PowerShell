@@ -1,18 +1,10 @@
 <#
-
 .SYNOPSIS
 Clean up a Teams conversation
-
 .DESCRIPTION
 Remove text and tidy up the formatting in an unorganised Teams conversation. Query regular expressions in the conversation and replace them as empty strings.
-
 .NOTES
 Author: Daniel Macdonald
-
-Future plans to add to this script:
-Put the names + the subsequent time of the sent message on the same line
-Paste the conversation into a text box; save this to a file... tbc
-
 #>
 
 # Location of conversation
