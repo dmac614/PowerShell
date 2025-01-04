@@ -10,7 +10,7 @@ Author: Daniel Macdonald
 
 #>
 
-$highestRAM = get-process | Sort-Object WorkingSet -Descending | Select-Object -First 10 name,@{
-    n='Memory';
-    e={'{0:P1}' -f ($_.WorkingSet / 1GB) }
-}
+$highestRAM = get-process |
+    Sort-Object WorkingSet -Descending |
+    Select-Object -First 10 name,
+    @{n='Memory';e={'{0:P1}' -f ($_.WorkingSet / 1GB) }}
