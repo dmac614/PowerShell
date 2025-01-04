@@ -3,7 +3,7 @@
 Retrieves the uptime of a Windows system. 
 
 .DESCRIPTION
-The following cmdlets retriev information about when the Windows computer system was last booted. There are cmdlets for Powershell v5 and v6+.
+The following cmdlets retrieve information about when the Windows computer system was last booted. There are cmdlets for Powershell v5 and v6+.
 
 .NOTES
 Author: Daniel Macdonald
@@ -20,8 +20,7 @@ Get-ComputerInfo -Property OsLastBootUpTime
 (Get-CimInstance -ClassName win32_operatingsystem).LastBootUpTime
 
 
-## The following method works in PowerShell v6+
-
+## The following method works in PowerShell Core
 get-uptime
 
 # Format the total hours to a number with two decimal places
