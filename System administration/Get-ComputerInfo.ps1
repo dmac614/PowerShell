@@ -16,28 +16,20 @@ Author: Daniel Macdonald
 function ComputerDetails {
 
     # Gather specs about the computer system
-    "Gathering information...`n"
+    Write-Output "Specifications about the computer system."
 
-    "Specifications about the computer system."
     Get-ComputerInfo | 
-    Select-Object csname,csusername,CsDomain,OsName,osversion,BiosSeralNumber,BiosSMBIOSBIOSVersion,CsManufacturer,CsModel,@{
-        n='CsTotalPhysicalMemory';
-        e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }
-    }
+    Select-Object csname,csusername,CsDomain,OsName,osversion,BiosSeralNumber,BiosSMBIOSBIOSVersion,CsManufacturer,CsModel,
+    @{n='CsTotalPhysicalMemory';e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }}
 
     # Gather disk size and free space
-    "Disk information in gigabytes.`n"
+    Write-Output "Disk information in gigabytes.`n"
     Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" | 
     Select-object DeviceID,
-    @{
-        n='size';
-        e={ '{0:N2}' -f ($_.size/1gb) }
-    },
-    @{
-        n='freespace';
-        e={ '{0:N2}' -f ($_.freespace/1gb) }
-    }
-}
+    @{n='size';e={ '{0:N2}' -f ($_.Size / 1GB) }},
+    @{n='freespace';e={ '{0:N2}' -f ($_.FreeSpace / 1GB) }}
+
+} # end function
 
 # Invoke the function
 ComputerDetails
