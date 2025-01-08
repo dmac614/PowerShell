@@ -14,7 +14,7 @@ Author: Daniel Macdonald
 
 ## First script -- run PShell as admin ##
 
-param( [int]$Workstation = $null )
+param([string]$Workstation = "1.00")
 
 
 # Regular expression for the serial number
@@ -43,7 +43,7 @@ if ($file -match $SerialNumber) {
 
 ## Second script -- run a normal PShell session ##
 
-param( [int]$Workstation = $null )
+param([string]$Workstation = "1.00")
 
 # Enter the same workstation number 
 #$Workstation = Read-Host -Prompt "DDM number?"
