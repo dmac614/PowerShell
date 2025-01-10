@@ -11,9 +11,11 @@ ScriptName -<parameter>
 
 .NOTES
 Author: Daniel Macdonald
+JSON data being used
+  $objData.scoreboard.games
+  $objData.scoreboard.games.gameleaders
 #>
-
-
+#region store data in variables
 # JSON data of the NBA live scores
 $URi = 'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json'
 
@@ -21,12 +23,9 @@ $URi = 'https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.
 $LiveScores = Invoke-WebRequest -Uri $URi
 $WebContent = $LiveScores.Content
 $objData = $WebContent | ConvertFrom-Json
+#endregion store data in variables
 
-<# JSON data being used
-$objData.scoreboard.games
-$objData.scoreboard.games.gameleaders
-#>
-
+#region data for home and away teams & players
 # Home teams and their game leaders
 $HomeTeam = $objData.scoreboard.games.hometeam
 $HomeLeaders = $objData.scoreboard.games.gameleaders.homeleaders
@@ -34,28 +33,9 @@ $HomeLeaders = $objData.scoreboard.games.gameleaders.homeleaders
 # Away teams and their game leaders
 $AwayTeam = $objData.scoreboard.games.awayteam
 $AwayLeaders = $objData.scoreboard.games.gameleaders.awayleaders
+#endregion data for home and away teams & players
  
-<# Used this code before converting each object to CSV files then merging them as one CSV file
-# Home and Away games
-Write-Host "`nHOME TEAMS" -ForegroundColor Green
-$HomeTeam |
-Select-Object wins,losses,teamName,score |
-Format-Table @{n='Wins';e={$_.wins}},
-@{n='Losses';e={$_.losses}},
-@{n='Team';e={$_.teamName}},
-@{n='Game Score';e={$_.score}}
-
-Write-Host "AWAY TEAMS" -ForegroundColor Green
-$AwayTeam | 
-Select-Object wins,losses,teamName,score |
-Format-Table @{n='Game Score';e={$_.score}},
-@{n='Team';e={$_.teamName}},
-@{n='Wins';e={$_.wins}},
-@{n='Losses';e={$_.losses}}
-#>
-
-# Reformatting game scores using CSV files
-
+#region reformatting game scores using CSV files
 $HomeTeam | Select-Object wins,losses,teamName,score | ConvertTo-Csv | Out-File 'C:\PS Demo\homeTeam.csv'
 $AwayTeam | Select-Object score,teamName,wins,losses | ConvertTo-Csv | Out-File 'C:\PS Demo\awayTeam.csv'
 
@@ -87,7 +67,9 @@ for ( $i=0; $i -lt $maxLength; $i++ ) {
 
 $merged | Export-Csv -Path 'C:\PS Demo\mergedTeams.csv' # Required help here: end
 Import-CSV -Path 'C:\PS Demo\mergedTeams.csv' | Format-Table
+#endregion reformatting game scores using CSV files
 
+#region stat leaders
 # All stats leaders
 Write-Host "GAME LEADERS: Points, rebounds, and assists." -ForegroundColor Green
 $leadersH = @($HomeLeaders)
@@ -101,3 +83,4 @@ Format-Table @{n='Player';e={$_.name}},
 @{n='Points';e={$_.points}},
 @{n='Rebounds';e={$_.rebounds}},
 @{n='Assists';e={$_.assists}}
+#endregion stat leaders
