@@ -1,9 +1,6 @@
 <# 
-
-This script works with Powershell 7 but not Powershell 5.1. 
-
+This script works with Powershell core but not Windows Powershell. 
 #>
-
 
 #region all possible password characters
 $lowercaseArray = 'a'..'z'
