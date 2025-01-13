@@ -1,21 +1,31 @@
 <#
 .SYNOPSIS
-Clean up a Teams conversation
+Trim text in a Teams conversation
 .DESCRIPTION
 Remove text and tidy up the formatting in an unorganised Teams conversation. Query regular expressions in the conversation and replace them as empty strings.
+.PARAMETER MyName
+An invariable param as I'll always be in the conversation
+.PARAMETER TheirName
+The name of the person in the conversation
+.EXAMPLE
+Trim-TeamsConversation.ps1 -TheirName <String>
+
 .NOTES
 Author: Daniel Macdonald
 #>
 
 # Location of conversation
-$ConversationFile = "C:\Users\%username%\Documents\My Files\PowerShell\teamschat.txt"
+[CmdletBinding()]
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$MyName = "Daniel MacDonald",
 
+    [Parameter(Mandatory=$true)]
+    [string]$TheirName
+)
 
-# Get the names of the two having a conversation
-function Conversation {
-    $script:MyName         = read-host -prompt "Enter your name"
-    $script:TheirName      = read-host -prompt "Enter the name of the user"
-}
+# Location of conversation
+$ConversationFile = "C:\Users\macdond_a\Documents\My Files\PowerShell\teamschat.txt"
 
 function StringExpressions {
     # Expressions to query in the conversation 
@@ -65,7 +75,6 @@ function ReplaceFileValues {
 
 # Contain each function inside the main function
 function TeamsConversation {
-    Conversation
     StringExpressions
     ReplaceFileValues
 }
