@@ -32,7 +32,7 @@ function StringExpressions {
     $script:ContextMenu    = "has context menu"
     $script:LastRead       = "Last read"
     $script:Today          = [regex]'\bToday\b'
-    $script:num1           = [regex]'\b1^1:\b'
+    $script:num1           = [regex]'^\b1$'
     $script:Reaction       = [regex]'\d .+ reaction.' 
     $script:ByMyName       = [regex]"\w*.+ by $($MyName)"
     $script:ByTheirName    = [regex]"\w*.+ by $($TheirName)"
