@@ -10,32 +10,6 @@ ScriptName -<parameter>
 
 .NOTES
 Author: Daniel Macdonald
-
-
-#idea
-
-Workout Tracker
-
-Full body (1): Hamstrings; incline chest; back thickness 
-Full body (2): Quads; inner chest; back width
-Arms: Triceps; biceps; Front delt; side delt; rear delt
-- store in separate hashtables
-
-Get input from the user -- which workout did you do (date)?
-If they did workout X, retrieve respective hashtable
-Ask the user how many reps and weight they lifted on exercise X
--- add the input data to the respective empty array
-Make changes to the data: change reps and weight on each exercise 
-Write the new data to the hashtable
-
-
-
-Save the workouts to a file named with the date of the workout
-
-
-Date of workout | Exercise | Sets x Reps | Weight (KG) | Notes
-
-Monitor progress: you have increased exercise X by X KG since (date) 
 #>
 [cmdletbinding()]
 param(
@@ -53,51 +27,77 @@ $FB2  = "Full Body 2"
 $Arms = "Arms"
 #endregion
 
-#region First workout
-$FullBody1 = [PSCustomObject]@{
-    "Lying Leg Curl" = @{
-        Reps = @()
-        Weight = @()
+#region FullBody1 Class
+class FullBody1 {
+    [string]$Exercise
+    #[int]$Reps
+    #[int]$Weight
+    #[string]$Notes
+
+    FullBody1([string]$Exercise) {
+        $this.Exercise = $Exercise
+        #$this.Reps = $Reps
+        #$this.Weight = $Weight
     }
-    "Seated Leg Curl" = @{
-        Reps = @()
-        Weight = @()
+    #I MAY REMOVE THIS: This method performs an action
+    #[void] DisplayExercise() {
+    #   Write-Host "Exercise: $($this.Exercise)"
+        #Write-Host "Reps: $($this.Reps)"
+        #Write-Host "Weight: $($this.Weight)"
     }
 }
+
+#FullBody1 new Objects
+$LyingLegCurl = [FullBody1]::new('Lying Leg Curl')
+$SeatedLegCurl = [FullBody1]::new('Seated Leg Curl')
+$SeatedRow = [FullBody1]::new('Seated Row')
+$SeatedCableRow = [FullBody1]::new('Seated Cable Row')
+$InclineBench = [FullBody1]::new('Incline Bench Press')
+$InclineFly = [FullBody1]::new('Incline Fly (dumbbell)')
+$StandingCalf = [FullBody1]::new('Standing Calf Raise')
 #endregion
 
-#region Display workout options
-function Show-Workouts {
-    Write-Output "1. $FB1"
-    Write-Output "2. $FB2"
-    Write-Output "3. $Arms"
-    Write-Output "4. Exit"
-}
+
+#region Workout
 function Get-Workout {
     param (
-        [array]$Workouts
-        # TODO: List the above workouts
-        # TODO: Fix the above function -- potentially no need for 
+        [array]$Workouts = @(
+            Write-Host "1. $FB1" -ForegroundColor Blue
+            Write-Host "2. $FB2" -ForegroundColor Green
+            Write-Host "3. $Arms" -ForegroundColor Yellow
+            Write-Host "4. Exit`n" -ForegroundColor Red
+        )
     )
-
-
-    [int]$script:WhichWorkout = Read-Host -prompt "Which workout did you perform today?"
-    Switch ([int]$script:WhichWorkout) {
+    # Display the workouts
+    $Workouts
+    # Get input to select a workout
+    $WhichWorkout = Read-Host -prompt "Which workout did you perform today?"
+    
+    Switch ($WhichWorkout) {
         1 {
-            Write-Output "You chose: $($FB1)"
-            $FullBody1.'Lying Leg Curl'
-            $FullBody1.'Seated Leg Curl'
+            Write-Host "You chose: $($FB1)" -ForegroundColor Blue
+            $LyingLegCurl,$SeatedLegCurl,$SeatedRow,$SeatedCableRow,$InclineBench,$InclineFly,$StandingCalf # Find an easier way to write this
+        }
+
+        2 {
+            Write-Host "You chose: $($FB1)" -ForegroundColor Green
+        }
+
+        3 {
+            Write-Host "You chose: $($Arms)" -ForegroundColor Yellow
+        }
+
+        4 {
+            Write-Host "Exiting the program." -ForegroundColor Red
+            exit 0
+        }
+
+        Default {
+            Write-Host "Invalid choice: try again." -ForegroundColor Red
         }
     }
 }
-        
-<#
-2 { $FullBody2 }
-3 { $Arms }
-4 { exit 0 }
-Default { Write-Output "Invalid choice: try again." }
-#>
 
+Get-Workout
 #endregion
 
-#region 
