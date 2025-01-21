@@ -29,42 +29,50 @@ $Arms = "Arms"
 
 #region FullBody1 Class
 class FullBody1 {
+    #[datetime]$Date
     [string]$Exercise
     #[int]$Reps
+    [string]$FirstSet
+    [string]$SecondSet
     #[int]$Weight
     #[string]$Notes
 
-    FullBody1([string]$Exercise) {
+    FullBody1(
+    [string]$Exercise,
+    [string]$FirstSet,
+    [string]$SecondSet
+    ){
+        #$this.Date = $Date
         $this.Exercise = $Exercise
         #$this.Reps = $Reps
+        $this.FirstSet = $FirstSet
+        $this.SecondSet = $SecondSet
         #$this.Weight = $Weight
-    }
-    #I MAY REMOVE THIS: This method performs an action
-    #[void] DisplayExercise() {
-    #   Write-Host "Exercise: $($this.Exercise)"
-        #Write-Host "Reps: $($this.Reps)"
-        #Write-Host "Weight: $($this.Weight)"
+        #$this.Notes = $Notes
+        #Add these params to the FullBody1() constructor
     }
 }
 
 #FullBody1 new Objects
-$LyingLegCurl = [FullBody1]::new('Lying Leg Curl')
-$SeatedLegCurl = [FullBody1]::new('Seated Leg Curl')
-$SeatedRow = [FullBody1]::new('Seated Row')
-$SeatedCableRow = [FullBody1]::new('Seated Cable Row')
-$InclineBench = [FullBody1]::new('Incline Bench Press')
-$InclineFly = [FullBody1]::new('Incline Fly (dumbbell)')
-$StandingCalf = [FullBody1]::new('Standing Calf Raise')
+$LyingLegCurl = [FullBody1]::new('Lying Leg Curl','8 reps @ 54KG','4 reps @ 54KG')
+$SeatedLegCurl = [FullBody1]::new('Seated Leg Curl','','')
+<# TODO: Add the remaining exercises as objects 
+$SeatedRow = [FullBody1]::new('Seated Row','','')
+$SeatedCableRow = [FullBody1]::new('Seated Cable Row','','')
+$InclineBench = [FullBody1]::new('Incline Bench Press','','')
+$InclineFly = [FullBody1]::new('Incline Fly (dumbbell)','','')
+$StandingCalf = [FullBody1]::new('Standing Calf Raise','','')
+#>
 #endregion
 
 
-#region Workout
+#region DisplayWorkout
 function Get-Workout {
     param (
         [array]$Workouts = @(
-            Write-Host "1. $FB1" -ForegroundColor Blue
+            Write-Host "`n1. $FB1" -ForegroundColor Blue
             Write-Host "2. $FB2" -ForegroundColor Green
-            Write-Host "3. $Arms" -ForegroundColor Yellow
+            Write-Host "3. $Arms" -ForegroundColor White
             Write-Host "4. Exit`n" -ForegroundColor Red
         )
     )
@@ -75,20 +83,22 @@ function Get-Workout {
     
     Switch ($WhichWorkout) {
         1 {
-            Write-Host "You chose: $($FB1)" -ForegroundColor Blue
-            $LyingLegCurl,$SeatedLegCurl,$SeatedRow,$SeatedCableRow,$InclineBench,$InclineFly,$StandingCalf # Find an easier way to write this
+            Write-Host "`nYou chose: $($FB1)" -ForegroundColor Blue
+            $LyingLegCurl,$SeatedLegCurl
+            #,$SeatedRow,$SeatedCableRow,$InclineBench,$InclineFly,$StandingCalf 
+            # Find an easier way to write this
         }
 
         2 {
-            Write-Host "You chose: $($FB1)" -ForegroundColor Green
+            Write-Host "`nYou chose: $($FB2)" -ForegroundColor Green
         }
 
         3 {
-            Write-Host "You chose: $($Arms)" -ForegroundColor Yellow
+            Write-Host "`nYou chose: $($Arms)" -ForegroundColor White
         }
 
         4 {
-            Write-Host "Exiting the program." -ForegroundColor Red
+            Write-Host "`nNo workout performed. `nExiting the program.`n" -ForegroundColor Red
             exit 0
         }
 
@@ -101,3 +111,8 @@ function Get-Workout {
 Get-Workout
 #endregion
 
+
+
+#region UpdateWorkout
+# function Update-Workout { }
+#endregion
