@@ -28,8 +28,8 @@ function ComputerDetails {
     Write-Output "Disk information in gigabytes.`n"
     Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" | 
     Select-object DeviceID,
-    @{n='size';e={ '{0:N2}' -f ($_.Size / 1GB) }},
-    @{n='freespace';e={ '{0:N2}' -f ($_.FreeSpace / 1GB) }}
+    @{n='Size';e={ '{0:N2}' -f ($_.Size / 1GB) }},
+    @{n='FreeSpace';e={ '{0:N2}' -f ($_.FreeSpace / 1GB) }}
     #endregion disk space
 } # end function
 
