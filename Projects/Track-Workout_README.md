@@ -32,9 +32,9 @@ Rough idea -- this will be elaborated as time goes on
 4. Write updated data to the new workout based on the date
 5. Monitor progress: you have increased exercise X by X KG since (date)
 
-Create the FullBody1 class first
-Test the methods and properties
-Create functions: UpdateWorkout; ? 
+- Create the FullBody1 class first
+- Test the methods and properties
+- Create functions: UpdateWorkout; ? 
 
 Structure:
 Workout Date | Exercise | Reps | Weight | Notes
