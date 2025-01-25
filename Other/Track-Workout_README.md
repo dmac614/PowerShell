@@ -1,20 +1,36 @@
 # Workout Tracker
 
-## Plan
-Full body (1): Hamstrings; incline chest; back thickness 
-Full body (2): Quads; inner chest; back width
-Arms: Triceps; biceps; Front delt; side delt; rear delt
-- store in separate hashtables
+## Workouts
 
-Get input from the user -- which workout did you do (date)?
-If they did workout X, retrieve respective hashtable
-Ask the user how many reps and weight they lifted on exercise X
--- add the input data to the respective empty array
-Make changes to the data: change reps and weight on each exercise 
-Write the new data to the hashtable
+Each workout is its own class
 
-Save the workouts to a file named with the date of the workout
+1. Full body (1): Hamstrings; incline chest; back thickness 
+2. Full body (2): Quads; inner chest; back width
+3. Arms: Triceps; biceps; Front delt; side delt; rear delt
 
-Date of workout | Exercise | Sets x Reps | Weight (KG) | Notes
+### Properties
+- Exercise name
+- Weight
+- Reps
+- Notes
 
-Monitor progress: you have increased exercise X by X KG since (date) 
+### Methods
+- AddSet()
+- ModifyWeight()
+- ModifyReps()
+- AddExercise()
+- RemoveExercise()
+
+
+## Plan 
+
+Rough idea -- this will be elaborated as time goes on
+
+1.Get input about which workout was performed (date)? -- display the workouts
+2. If workout X is selected, retrieve the data from the previous workout
+3. Invoke methods to modify weight and reps
+4. Write updated data to the new workout based on the date
+5. Monitor progress: you have increased exercise X by X KG since (date)
+
+Structure:
+Workout Date | Exercise | Reps | Weight | Notes
