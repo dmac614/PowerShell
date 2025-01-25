@@ -26,7 +26,7 @@ Each workout is its own class
 
 Rough idea -- this will be elaborated as time goes on
 
-1.Get input about which workout was performed (date)? -- display the workouts
+1. Get input about which workout was performed (date)? -- display the workouts
 2. If workout X is selected, retrieve the data from the previous workout
 3. Invoke methods to modify weight and reps
 4. Write updated data to the new workout based on the date
