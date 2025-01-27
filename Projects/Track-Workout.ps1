@@ -116,7 +116,7 @@ function Get-Workout {
     $Workouts
 
     # Get input to select a workout
-    $WhichWorkout = Read-Host -prompt "Which workout did you perform today?"
+    [ValidateRange(1,4)]$WhichWorkout = Read-Host -prompt "Which workout did you perform today?"
     
     Switch ($WhichWorkout) {
         1 {
@@ -138,7 +138,7 @@ function Get-Workout {
         }
 
         Default {
-            Write-Host "Invalid choice: try again." -ForegroundColor Red
+            Write-Host "Invalid choice: choose a number between 1-4." -ForegroundColor Red
         }
     }
 }
