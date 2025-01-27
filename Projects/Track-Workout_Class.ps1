@@ -1,12 +1,35 @@
-class FullBody1
+class WorkoutTemplate
 {
+    # Properties
     [string]$ExerciseName
+    [ValidateRange(1,150)]
     [int]$Weight
+    [ValidateRange(1,30)]
     [int]$Reps
     [string]$Notes
 
+    # Methods
+    [void]ModifyWeight() { 
+        $this.Weight = [int](Read-Host -prompt "Enter the new weight")
+    }
+
+    [void]ModifyReps() {
+        $this.Reps = [int](Read-Host -prompt "Enter the new reps")
+      }
+
+    [WorkoutTemplate] AddSet(
+        [string]$name,
+        [int]$weight,
+        [int]$reps
+        ){
+          return [WorkoutTemplate]::new($name,$weight,$reps)
+    }
+
+    # Empty constructor
+    WorkoutTemplate(){}
+
     # Primary Constructor
-    FullBody1(
+    WorkoutTemplate(
         [string]$ExerciseName,
         [int]$Weight,
         [int]$Reps
@@ -16,9 +39,3 @@ class FullBody1
             $this.Reps = $Reps
     }
 }
-
-$LyingLegCurl1 = [FullBody1]::new("Lying Leg Curl",54,8)
-$LyingLegCurl2 = [FullBody1]::new("Lying Leg Curl",54,4)
-
-
-$LyingLegCurl1,$LyingLegCurl2
