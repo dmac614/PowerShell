@@ -22,20 +22,18 @@ param(
 
 
 #region Variables
-$FB1  = "Full Body #1"
-$FB2  = "Full Body #2"
-$Arms = "Arms"
+$Upper_Chest    = "Upper #1: Chest and Biceps"
+$Legs           = "Legs and Delts"
+$Upper_Back     = "Upper #2: Back and Triceps"
 #endregion
 
 #region WorkoutTemplate class
 class WorkoutTemplate 
 {
     # Properties
-    [string]$ExerciseName
-    [ValidateRange(1,150)]
-    [double]$Weight
-    [ValidateRange(1,30)]
-    [int]$Reps
+    [string]$Exercise
+    [ValidateRange(0,150)][double]$Weight
+    [ValidateRange(1,30)][int]$Reps
     [string]$Notes
 
     # Methods
@@ -55,93 +53,145 @@ class WorkoutTemplate
           return [WorkoutTemplate]::new($name,$weight,$reps)
     }
 
-    # Empty constructor
+    # Empty constructor for adding a new set
     WorkoutTemplate(){}
 
     # Primary Constructor
     WorkoutTemplate(
-        [string]$ExerciseName,
+        [string]$Exercise,
         [double]$Weight,
         [int]$Reps
         ){
-            $this.ExerciseName = $ExerciseName
+            $this.Exercise = $Exercise
             $this.Weight = $Weight
             $this.Reps = $Reps
     }
 }
+#endregion
 
-#region WorkoutTemplate instance: FullBody1
-#$FullBody1 = @()
-$LyingLegCurl                   = [WorkoutTemplate]::new("Lying Leg Curl",53,8)
-$LyingLegCurl1                  = $LyingLegCurl.AddSet("Lying Leg Curl",53,6)
 
-$SeatedLegCurl                  = [WorkoutTemplate]::new("Seated Leg Curl",20,11)
-$SeatedLegCurl1                 = $SeatedLegCurl.AddSet("Seated Leg Curl",53,6)
-
-$SeatedRowCable                 = [WorkoutTemplate]::new("Seated Row Cable",31.8,10)
-$SeatedRowCable1                = $SeatedRowCable.AddSet("Seated Row Cable",31.8,10)
-
-$SeatedRowMachine_UpperBack     = [WorkoutTemplate]::new("Seated Row Machine (upper back)",65,6)
-$SeatedRowMachine_UpperBack1    = $SeatedRowMachine_UpperBack.AddSet("Seated Row Machine (upper back)",65,6)
-
+#region WorkoutTemplate instance: Upper_Chest
 $InclineBenchPress              = [WorkoutTemplate]::new("Incline Bench Press",20,9)
 $InclineBenchPress1             = $InclineBenchPress.AddSet("Incline Bench Press",20,9)
 
 $InclineChestFly                = [WorkoutTemplate]::new("Incline Chest Fly",12.5,10)
 $InclineChestFly1               = $InclineChestFly.AddSet("Incline Chest Fly",12.5,10)
 
+$ChestPress                     = [WorkoutTemplate]::new("Chest Press",67.5,8)
+
+$BicepCurl                      = [WorkoutTemplate]::new("Bicep Curl",20.4,5)
+
 $StandingCalves                 = [WorkoutTemplate]::new("Standing Calf Raise",18,10)
 $StandingCalves1                = $StandingCalves.AddSet("Standing Calf Raise",18,10)
 
 
-# FullBody1 workout
-$FullBody1 = $LyingLegCurl,$LyingLegCurl1,$SeatedLegCurl,$SeatedLegCurl1,$SeatedRowCable,$SeatedRowCable1,$SeatedRowMachine_UpperBack,$SeatedRowMachine_UpperBack1,$InclineBenchPress,$InclineBenchPress1,$InclineChestFly,$InclineChestFly1,$StandingCalves,$StandingCalves1
-# plan: make an empty array; add the results of the workout to the array; call the array
+# Upper1 workout
+$Upper1 = @()
 
-$FullBody1
-#endregion
+$Upper1 += $InclineBenchPress,$InclineBenchPress1,$InclineChestFly,$InclineChestFly1,$ChestPress,$BicepCurl,$StandingCalves,$StandingCalves1
+#endregion Upper_Chest
+
+
+#region WorkoutTemplate instance: Legs
+$SeatedLegPress                 = [WorkoutTemplate]::new("Seated Leg Press",108,14)
+
+$LegExt                         = [WorkoutTemplate]::new("Leg Extension", 52.3,10)
+
+$LyingLegCurl                   = [WorkoutTemplate]::new("Lying Leg Curl",53.4,7)
+$LyingLegCurl1                  = $LyingLegCurl.AddSet("Lying Leg Curl",53.4,5)
+
+$LateralRaise                   = [WorkoutTemplate]::new("Lateral Raise",8,8)
+$LateralRaise1                  = [WorkoutTemplate]::new("Lateral Raise",8,8)
+
+$OHeadPress                     = [WorkoutTemplate]::new("Overhead Press",16,5)
+$OHeadPress1                    = [WorkoutTemplate]::new("Overhead Press",16,5)
+
+
+# LegsDelts workout
+$LegsDelts = @()
+
+$LegsDelts = $SeatedLegPress,$LegExt,$LyingLegCurl,$LyingLegCurl1,$LateralRaise,$LateralRaise1,$OHeadPress,$OHeadPress1
+#endregion Legs
+
+
+#region WorkoutTemplate instance: Upper_Back
+$PullUp                         = [WorkoutTemplate]::new("Pull Ups",0,7)
+
+$LatPD                          = [WorkoutTemplate]::new("Lat Pulldown",50,11)
+$LatPD1                         = [WorkoutTemplate]::new("Lat Pulldown",50,7)
+
+$SR_Upper_Back                  = [WorkoutTemplate]::new("Seated Row Machine (upper back)",65,6)
+$SR_Upper_Back1                 = $SR_Upper_Back.AddSet("Seated Row Machine (upper back)",65,6)
+
+$TriPD                          = [WorkoutTemplate]::new("Tricep Pushdown",20,10)
+
+$RearDelt                       = [WorkoutTemplate]::new("Rear Delt Row",12,10)
+$RearDelt1                      = [WorkoutTemplate]::new("Rear Delt Row",12,10)
+
+$StandingCalves                 = [WorkoutTemplate]::new("Standing Calf Raise",18,10)
+$StandingCalves1                = $StandingCalves.AddSet("Standing Calf Raise",18,10)
+
+
+# Upper2 workout
+$Upper2 = @()
+
+$Upper2 += $PullUp,$LatPD,$LatPD1,$SR_Upper_Back,$SR_Upper_Back1,$TriPD,$RearDelt,$RearDelt1,$StandingCalves,$StandingCalves1
+#endregion Upper_Back
+
+
+#region Inactive exercises
+<#
+$SRCable,$SRCable1,$SeatedLegCurl,$SeatedLegCurl1
+
+$SRCable                        = [WorkoutTemplate]::new("Seated Row Cable",31.8,10)
+$SRCable1                       = $SRCable.AddSet("Seated Row Cable",31.8,10)
+
+$SeatedLegCurl                  = [WorkoutTemplate]::new("Seated Leg Curl",20,11)
+$SeatedLegCurl1                 = $SeatedLegCurl.AddSet("Seated Leg Curl",53,6)
+#>
+#endregion Inactive exercises
 
 
 #region Get-Workout
 function Get-Workout {
-    param (
-            [array]$Workouts = @(
-            Write-Host "`n1. $FB1" -ForegroundColor Blue
-            Write-Host "2. $FB2" -ForegroundColor Green
-            Write-Host "3. $Arms" -ForegroundColor White
-            Write-Host "4. Exit`n" -ForegroundColor Red
+
+    [array]$Workouts = @(
+        Write-Host "`n1. $Upper_Chest" -ForegroundColor Green
+        Write-Host "2. $Legs" -ForegroundColor Green
+        Write-Host "3. $Upper_Back" -ForegroundColor Green
+        Write-Host "4. Exit`n" -ForegroundColor Green
         )
-    ) 
-    # Display the workouts
-    $Workouts
 
     # Get input to select a workout
-    [ValidateRange(1,4)]$WhichWorkout = Read-Host -prompt "Which workout did you perform today?"
+    $script:WhichWorkout = Read-Host -prompt "Which workout did you perform?"
     
     Switch ($WhichWorkout) {
         1 {
-            Write-Host "`nYou chose: $($FB1)" -ForegroundColor Blue
-            $FullBody1
+            Write-Host "`nWorkout performed: $($Upper_Chest)" -ForegroundColor Green
+            $Upper1
         }
 
         2 {
-            Write-Host "`nYou chose: $($FB2)" -ForegroundColor Green
+            Write-Host "`nWorkout performed: $($Legs)" -ForegroundColor Green
+            $LegsDelts
         }
 
         3 {
-            Write-Host "`nYou chose: $($Arms)" -ForegroundColor White
+            Write-Host "`nWorkout performed: $($Upper_Back)" -ForegroundColor Green
+            $Upper2
         }
 
         4 {
             Write-Host "`nNo workout performed. `nExiting the program.`n" -ForegroundColor Red
-            exit 0
         }
 
         Default {
-            Write-Host "Invalid choice: choose a number between 1-4." -ForegroundColor Red
+            Write-Host "`nInvalid choice: try again." -ForegroundColor Red
+            Get-Workout
         }
     }
 }
+
 
 Get-Workout
 #endregion
@@ -149,7 +199,16 @@ Get-Workout
 
 
 #region UpdateWorkout
-# function Update-Workout { }
+function Update-Workout { 
+
+    #$WorkoutChoice = Read-Host -Prompt "Modify values from: $($WhichWorkout)"
+
+
+}
+
+# Call function
+#Update-Workout
+
 #ModifyWeight() {}
 #ModifyReps() {}
 #endregion
