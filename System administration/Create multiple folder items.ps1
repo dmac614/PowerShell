@@ -3,7 +3,7 @@
 Creates multiple folders
 
 .DESCRIPTION
-Uses a foreach-object loop to create multiple folders. 
+Uses a foreach loop to create multiple folders. 
 
 .NOTES
 Author: Daniel Macdonald
