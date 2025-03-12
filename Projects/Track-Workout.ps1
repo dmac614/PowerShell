@@ -33,7 +33,7 @@ class WorkoutTemplate
     # Properties
     [string]$Exercise
     [ValidateRange(0,150)][double]$Weight
-    [ValidateRange(1,30)][int]$Reps
+    [ValidateRange(1,50)][int]$Reps
     [string]$Notes
 
     # Methods
@@ -101,10 +101,10 @@ $LyingLegCurl                   = [WorkoutTemplate]::new("Lying Leg Curl",53.4,7
 $LyingLegCurl1                  = $LyingLegCurl.AddSet("Lying Leg Curl",53.4,5)
 
 $LateralRaise                   = [WorkoutTemplate]::new("Lateral Raise",8,8)
-$LateralRaise1                  = [WorkoutTemplate]::new("Lateral Raise",8,8)
+$LateralRaise1                  = $LateralRaise.AddSet("Lateral Raise",8,8)
 
 $OHeadPress                     = [WorkoutTemplate]::new("Overhead Press",16,5)
-$OHeadPress1                    = [WorkoutTemplate]::new("Overhead Press",16,5)
+$OHeadPress1                    = $OHeadPress.AddSet("Overhead Press",16,5)
 
 
 # LegsDelts workout
@@ -118,7 +118,7 @@ $LegsDelts = $SeatedLegPress,$LegExt,$LyingLegCurl,$LyingLegCurl1,$LateralRaise,
 $PullUp                         = [WorkoutTemplate]::new("Pull Ups",0,7)
 
 $LatPD                          = [WorkoutTemplate]::new("Lat Pulldown",50,11)
-$LatPD1                         = [WorkoutTemplate]::new("Lat Pulldown",50,7)
+$LatPD1                         = $LatPD.AddSet("Lat Pulldown",50,7)
 
 $SR_Upper_Back                  = [WorkoutTemplate]::new("Seated Row Machine (upper back)",65,6)
 $SR_Upper_Back1                 = $SR_Upper_Back.AddSet("Seated Row Machine (upper back)",65,6)
@@ -126,7 +126,7 @@ $SR_Upper_Back1                 = $SR_Upper_Back.AddSet("Seated Row Machine (upp
 $TriPD                          = [WorkoutTemplate]::new("Tricep Pushdown",20,10)
 
 $RearDelt                       = [WorkoutTemplate]::new("Rear Delt Row",12,10)
-$RearDelt1                      = [WorkoutTemplate]::new("Rear Delt Row",12,10)
+$RearDelt1                      = $LatPD.AddSet("Rear Delt Row",12,10)
 
 $StandingCalves                 = [WorkoutTemplate]::new("Standing Calf Raise",18,10)
 $StandingCalves1                = $StandingCalves.AddSet("Standing Calf Raise",18,10)
@@ -150,6 +150,7 @@ $SeatedLegCurl                  = [WorkoutTemplate]::new("Seated Leg Curl",20,11
 $SeatedLegCurl1                 = $SeatedLegCurl.AddSet("Seated Leg Curl",53,6)
 #>
 #endregion Inactive exercises
+
 
 
 #region Get-Workout
