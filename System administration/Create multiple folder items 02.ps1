@@ -3,7 +3,7 @@
 Creates multiple folders
 
 .DESCRIPTION
-Uses a foreach-object loop to create multiple folders. Joins the file path with the file directory + file name.
+Uses a foreach loop to create multiple folders. Joins the file path with the file directory + file name.
 
 .NOTES
 Author: Daniel Macdonald
