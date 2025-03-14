@@ -49,7 +49,6 @@ function Connect-VirtualMachine
     {
         try 
         {
-            # the error is here: I need to check if the process window is open or not
             $CheckVM = (Get-Process).MainWindowTitle.Contains("Client02-dmac (Win11) on DMAC-PF3DE7NR - Virtual Machine Connection")
             if ($CheckVM)
             {
