@@ -29,7 +29,7 @@ function Connect-VirtualMachine
         try 
         {
             # Start Virtual Machine
-            Start-VM -Name $vmName -WarningAction Stop
+            Start-VM -Name $vmName -ErrorAction Stop
             Write-Output "'$vmName' has started"
             Write-Output "Starting VM services. Wait 10s"
             Start-Sleep -Seconds 10
