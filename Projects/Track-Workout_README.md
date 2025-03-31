@@ -4,9 +4,9 @@
 
 The class is a template for each of the following workouts. 
 
-1. Full body (1): Hamstrings; incline chest; back thickness 
-2. Full body (2): Quads; inner chest; back width
-3. Arms: Triceps; biceps; Front delt; side delt; rear delt
+1. Upper #1: Chest and Biceps
+2. Legs and Delts
+3. Upper #2: Back and Triceps
 
 ### Properties
 - Exercise name
@@ -34,7 +34,7 @@ Rough idea -- this will be elaborated as time goes on
 
 - Create the WorkoutTemplate class
 - Each object will represent an exercise and will be stored in a variable i.e $LyingLegCurl
-- All objects in one workout will be stored in a variable i.e $FullBody1
+- All objects in one workout will be stored in a variable i.e $Upper1
 - Test the methods and properties
 - Create functions: UpdateWorkout; ? 
 
