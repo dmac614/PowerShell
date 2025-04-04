@@ -110,7 +110,7 @@ $OHeadPress1                    = $OHeadPress.AddSet("Overhead Press",16,5)
 # LegsDelts workout
 $LegsDelts = @()
 
-$LegsDelts = $SeatedLegPress,$LegExt,$LyingLegCurl,$LyingLegCurl1,$LateralRaise,$LateralRaise1,$OHeadPress,$OHeadPress1
+$LegsDelts += $SeatedLegPress,$LegExt,$LyingLegCurl,$LyingLegCurl1,$LateralRaise,$LateralRaise1,$OHeadPress,$OHeadPress1
 #endregion Legs
 
 
