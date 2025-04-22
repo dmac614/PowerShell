@@ -3,7 +3,7 @@
 function Get-GraphUsers {
 param(
     [Parameter(Mandatory, Position=0)]
-    [ValidateSet("v1.0", "beta")]
+    [ValidateSet("v1.0", "Beta")]
     [string]$Version
     )
 
@@ -12,9 +12,9 @@ param(
         Start-Sleep -Seconds 5
         Connect-MgGraph -NoWelcome
 
-        # Pause for 10s
+        # Pause for 5s
         Write-Output "Pulling user data in 5s..."
-        Start-Sleep -Seconds 10
+        Start-Sleep -Seconds 5
 
         # Get user data
         $Users = Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/$Version/users"
