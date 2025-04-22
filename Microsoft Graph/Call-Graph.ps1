@@ -15,7 +15,7 @@ param(
         # Auth to graph
         Write-Output "Connecting to Graph..."
         Start-Sleep -Seconds 2
-        Connect-MgGraph
+        Connect-MgGraph -NoWelcome
 
         # Pause for 10s
         Write-Output "Pulling data in 10s..."
