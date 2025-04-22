@@ -6,20 +6,20 @@
 function Get-GraphAPI {
 param(
     [Parameter(Mandatory=$true, Position=0)]
-    [ValidateSet("v1.0", "beta")]
+    [ValidateSet("v1.0", "Beta")]
     [string]$Version,
     [Parameter(Mandatory=$true, Position=1)]
-    [ValidateSet("users", "groups", "devicemanagement/manageddevices")]
+    [ValidateSet("Users", "Groups", "DeviceManagement/ManagedDevices")]
     [string]$Data
     )   
         # Auth to graph
         Write-Output "Connecting to Graph..."
-        Start-Sleep -Seconds 2
+        Start-Sleep -Seconds 5
         Connect-MgGraph -NoWelcome
 
-        # Pause for 10s
-        Write-Output "Pulling data in 10s..."
-        Start-Sleep -Seconds 10
+        # Pause for 5
+        Write-Output "Pulling data in 5s..."
+        Start-Sleep -Seconds 5
 
         # Get Graph data
         $Objects = Invoke-MgGraphRequest -Method GET -Uri "https://graph.microsoft.com/$Version/$Data"
