@@ -43,7 +43,10 @@ function Reassign_CalendarPerms {
                 if      ($Question -eq 'No' ) { Return }
                 elseif  ($Question -eq 'Yes') { Remove-MailboxFolderPermission -Identity $MailboxUPN -User $UserDisplayName -Confirm:$false }
             }
-            else { Write-Output "Could not retrieve permissions" }
+            else { 
+                Write-Output "Could not retrieve permissions"
+                Return
+            }
             
         }
         catch [System.Exception] {
