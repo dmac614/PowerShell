@@ -49,7 +49,7 @@ param([string]$Workstation = "1.00")
 #$Workstation = Read-Host -Prompt "DDM number?"
 
 # Copy the serial number data
-$TxtFileContent = get-content -path C:\temp\dell\ddm$($Workstation).txt | clip
+$TxtFileContent = get-content -path "C:\temp\dell\ddm$($Workstation).txt" | clip
 
 # Start the Word document process
-Start-process -filepath C:\temp\dell\ddm$($Workstation).docx
+Start-process -filepath "C:\temp\dell\ddm$($Workstation).docx"
