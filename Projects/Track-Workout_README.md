@@ -40,3 +40,12 @@ Rough idea -- this will be elaborated as time goes on
 
 Structure:
 Workout Date | Exercise | Reps | Weight | Notes
+
+
+#### UpdateWorkout function
+
+1. The results from $WhichWorkout need to be stored and reused for the UpdateWorkout function.
+-- potentially store them in an empty array
+2. Possibly use a while loop to keep the chosen workout listed
+3. Modify the reps, weight or both for a single exercise of the listed workout
+
