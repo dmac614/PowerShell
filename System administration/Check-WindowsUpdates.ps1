@@ -28,8 +28,8 @@ Else, install the module
                 "Module successfully imported"
             } 
             else {
-            "Installing the module $($UpdatesModule.Name)" 
-            Install-Module -Name $UpdatesModule.Name
+                "Installing the module $($UpdatesModule.Name)" 
+                Install-Module -Name $UpdatesModule.Name
             }
         } 
         catch [System.Exception] {
