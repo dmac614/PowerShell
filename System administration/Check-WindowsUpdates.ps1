@@ -16,6 +16,11 @@ If it's installed, continue/import the module
 Else, install the module
 
 #>
+#region
+    <#  
+        Check the PowerShell repository
+        Trust PSGallery
+    #>    
     [Cmdletbinding()]
     param ()
 
@@ -27,7 +32,7 @@ Else, install the module
     $PSGallery = Get-PSRepository
     try {
         if ($PSGallery.Name -eq "PSGallery" -and $PSGallery.InstallationPolicy -eq "Untrusted") {
-            Set-PSRepository -Name $PSGallery.Name -InstallationPolicy Trusted
+            Set-PSRepository -Name $PSGallery.Name -InstallationPolicy Trusted -Verbose
             Write-Output "Installation Policy is now set to 'Trusted'"
         }
         else {
@@ -44,6 +49,7 @@ Else, install the module
 #region
     <#
         Check for the PsWindowsUpdate module
+        Install it if it's missing
     #>
     $UpdatesModule = Get-Module -ListAvailable | ? { $_.name -match 'PsWindowsUpdate' }
     try {
@@ -66,4 +72,12 @@ Else, install the module
         }
 #endregion
 
-
+#region
+        <#
+            Check for updates to install
+            Allow the user to manually reboot
+        #>
+            #$CheckForUpdates = Get-WindowsUpdate -Verbose # | Select-String "found updates"
+            Get-WindowsUpdate -Download -AcceptAll -Verbose
+            Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose
+#endregion
