@@ -26,6 +26,27 @@ Else, install the module
 
 #region
     <#  
+        Check the NuGet package provider is installed
+        Install NuGet
+    #>
+    $NuGet = (Get-PackageProvider).name
+    try {
+        if ($NuGet -notcontains "NuGet"){
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Verbose
+        }
+        else {
+            Write-Output "The package provider NuGet is installed"
+        }
+    } 
+    catch [System.Exception] {
+        Write-Error "Could not install the package provider NuGet" 
+        Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
+        Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+    }
+#endregion
+
+#region
+    <#  
         Check the PowerShell repository
         Trust PSGallery
     #>
