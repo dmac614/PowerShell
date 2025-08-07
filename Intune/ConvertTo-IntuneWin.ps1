@@ -27,7 +27,7 @@ param(
     [string]$Output = "C:\MicrosftWin32ContentPrepTool\Intune files"
 )
 # Move item from Downloads
-Move-Item "C:\Users\D_MacDonald\Downloads\$AppExe" C:\MicrosftWin32ContentPrepTool\Apps\ -Verbose
+Move-Item "${env:USERPROFILE}\Downloads\$AppExe" C:\MicrosftWin32ContentPrepTool\Apps\ -Verbose
 
 # Convert to .intunewin file
 & $IntuneUtil -c $Source -s $AppExe -o $Output
