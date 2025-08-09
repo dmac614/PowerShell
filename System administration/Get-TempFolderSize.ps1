@@ -31,6 +31,7 @@ function Get-TempFolderSize {
         Write-Output "Read the log file at $TempFolderPath\EmptyFolderLog.txt"
         }
         else { 
+            Write-Output "The $TempFolderPath folder is $(($FormattedNumber) -f $TotalSize.'Folder size (GB)')GB"
             "$TempFolderPath is less than 5GB in size"
         }
 }
