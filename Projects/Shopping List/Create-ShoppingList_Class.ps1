@@ -15,12 +15,12 @@ class ShoppingList {
         #[bool]$true
     }
 
-    [void]TotalQuantity() {
-        $this.FoodQuantity * $this.TimesPerWeek
+    [int]TotalQuantity() {
+        return $this.FoodQuantity * $this.TimesPerWeek
     }
 
-    [void]TotalWeight() {
-        $this.FoodWeight * $this.TimesPerWeek
+    [int]TotalWeight() {
+        return $this.FoodWeight * $this.TimesPerWeek
     }
 
     # Test this
@@ -48,6 +48,9 @@ ShoppingList() {}
         [int]$FoodQuantity,
         [int]$FoodWeight
         ){
+            $this.FoodName = $FoodName
+            $this.FoodQuantity = $FoodQuantity
+            $this.FoodWeight = $FoodWeight
     }
 #endregion
 
