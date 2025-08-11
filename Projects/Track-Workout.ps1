@@ -14,18 +14,14 @@ Author: Daniel Macdonald
 [cmdletbinding()]
 param(
     [Parameter(Mandatory=$false)]
-    [string]$WorkoutDate
+    [string]$WorkoutDate,
+    [string]$Upper_Chest = "Upper #1: Chest and Biceps",
+    [string]$Legs = "Legs and Delts",
+    [string]$Upper_Back = "Upper #2: Back and Triceps"
 )
 
 # TODO: rough idea
 #Get-Content -Path "C:\pathtofile\$WorkoutDate.csv"
-
-
-#region Variables
-$Upper_Chest    = "Upper #1: Chest and Biceps"
-$Legs           = "Legs and Delts"
-$Upper_Back     = "Upper #2: Back and Triceps"
-#endregion
 
 #region WorkoutTemplate class
 class WorkoutTemplate 
@@ -164,6 +160,7 @@ function Get-Workout {
         )
 
     # Get input to select a workout
+    #$Choices = @()
     $script:WhichWorkout = Read-Host -prompt "Which workout did you perform?"
     
     Switch ($WhichWorkout) {
@@ -191,8 +188,9 @@ function Get-Workout {
             Get-Workout
         }
     }
-}
 
+    # Add WhichWorkout output to the $Choices array
+}
 
 Get-Workout
 #endregion
@@ -202,13 +200,12 @@ Get-Workout
 #region UpdateWorkout
 function Update-Workout { 
 
-    #$WorkoutChoice = Read-Host -Prompt "Modify values from: $($WhichWorkout)"
-
+    $WorkoutChoice = Read-Host -Prompt "Modify values from: $($WhichWorkout)"    
 
 }
 
 # Call function
-#Update-Workout
+Update-Workout
 
 #ModifyWeight() {}
 #ModifyReps() {}
