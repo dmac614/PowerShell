@@ -3,24 +3,11 @@
 Install Windows updates 
 
 .DESCRIPTION
-Install Windows updates 
+Install Windows updates. The verbose output is displayed on the screen and saved in a log file: %localappdata%\Temp\UpdatesOutput.log
 
 .NOTES
 Author: Daniel Macdonald
-
--------------- unfinished --------------
-
-## Tasks ##
-Check for the installed module: PsWindowsUpdate
-If it's installed, continue/import the module
-Else, install the module
-
-#>
-#region
-    <#  
-        Check the PowerShell repository
-        Trust PSGallery
-    #>    
+#>  
     [Cmdletbinding()]
     param (
         $LogFile = "UpdatesOutput.log"
@@ -34,7 +21,7 @@ Else, install the module
     $NuGet = (Get-PackageProvider).name
     try {
         if ($NuGet -notcontains "NuGet"){
-            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Verbose
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Verbose
         }
         else {
             Write-Output "The package provider NuGet is installed"
@@ -45,7 +32,7 @@ Else, install the module
         Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
         Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
     }
-#endregion
+#end
 
 #region
     <#  
@@ -74,13 +61,17 @@ Else, install the module
         Check for the PsWindowsUpdate module
         Install it if it's missing
     #>
-    $UpdatesModule = Get-Module -ListAvailable | ? { $_.name -match 'PsWindowsUpdate' }
+    $UpdatesModule = Get-Module -ListAvailable | Where-Object { $_.name -match 'PsWindowsUpdate' }
     try {
         # If null -- install the module
         if ([string]::IsNullOrEmpty($UpdatesModule)) {
             Write-Output "Installing the module 'PsWindowsUpdate'" 
             Install-Module -Name PsWindowsUpdate -Verbose
-            Write-Output "Module has successfully been installed"
+            Write-Output "Module successfully installed"
+
+            # Import the installed module
+            Import-Module -Name PsWindowsUpdate -Verbose
+            Write-Output "Module successfully imported"
         } 
         else {
             Write-Output "The module $(($UpdatesModule).Name) is already installed. Importing the module:"
@@ -99,8 +90,8 @@ Else, install the module
         <#
             Check for updates to install
             Allow the user to manually reboot
+            Store verbose output in a log file
         #>
-            # Test the following 
-            #Get-WindowsUpdate -Download -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath $env:LOCALAPPDATA\$LogFile
-            #Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose 4>&1 | Tee-Object -FilePath $env:LOCALAPPDATA\$LogFile
+            Get-WindowsUpdate -Download -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath "$env:LOCALAPPDATA\Temp\$LogFile"
+            Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose 4>&1 | Tee-Object -FilePath "$env:LOCALAPPDATA\Temp\$LogFile"
 #endregion
