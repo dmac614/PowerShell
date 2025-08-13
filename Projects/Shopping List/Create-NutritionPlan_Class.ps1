@@ -1,4 +1,15 @@
-class ShoppingList {
+<#
+
+Child classes
+
+    Class: shopping list i.e food items
+    Class: meal 1
+    Class: meal 2
+    Class: meal 3
+
+#>
+
+class NutritionPlan {
 
     # The properties of this class
     [ValidateSet('A','B','C')][string]$MealOption
@@ -24,26 +35,26 @@ class ShoppingList {
     }
 
     # Test this
-    [ShoppingList] AddFoodItem(
+    [NutritionPlan] AddFoodItem(
         [string]$FoodName,
         [int]$FoodQuantity,
         [int]$FoodWeight
     ) {
         $this.FoodName = [string](Read-Host "Name of the food item")
-        return [ShoppingList]::new($FoodName,$FoodQuantity,$FoodWeight)
+        return [NutritionPlan]::new($FoodName,$FoodQuantity,$FoodWeight)
     }
 
-    #[ShoppingList]AddMeal() {}
+    #[NutritionPlan]AddMeal() {}
 
-    #[ShoppingList]CreateMeal() {}
+    #[NutritionPlan]CreateMeal() {}
 
 #endregion
 
 #region Primary Constructor
 # Constructor template
-ShoppingList() {}
+NutritionPlan() {}
 
-    ShoppingList(
+    NutritionPlan(
         [string]$FoodName,
         [int]$FoodQuantity,
         [int]$FoodWeight

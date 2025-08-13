@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Calculate the weight and quantity of shopping list items
+Calculate the weight and quantity of shopping list items based on my meals
 .DESCRIPTION
 Longer description of the script with more details.
 .PARAMETER <parameter>
