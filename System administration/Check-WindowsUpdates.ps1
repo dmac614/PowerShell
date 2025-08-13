@@ -22,7 +22,9 @@ Else, install the module
         Trust PSGallery
     #>    
     [Cmdletbinding()]
-    param ()
+    param (
+        $LogFile = "UpdatesOutput.log"
+    )
 
 #region
     <#  
@@ -98,7 +100,7 @@ Else, install the module
             Check for updates to install
             Allow the user to manually reboot
         #>
-            #$CheckForUpdates = Get-WindowsUpdate -Verbose # | Select-String "found updates"
-            Get-WindowsUpdate -Download -AcceptAll -Verbose
-            Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose
+            # Test the following 
+            #Get-WindowsUpdate -Download -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath $env:LOCALAPPDATA\$LogFile
+            #Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose 4>&1 | Tee-Object -FilePath $env:LOCALAPPDATA\$LogFile
 #endregion
