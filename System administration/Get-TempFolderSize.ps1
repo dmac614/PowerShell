@@ -24,7 +24,7 @@ function Get-TempFolderSize {
     Measure-Object -Property Length -Sum |
     Select-Object @{name="Folder size (GB)";expression={$_.Sum / 1GB} }
 
-        # Empty folder when greater than 1gb
+        # Empty folder when greater than 5gb
         if ($TotalSize.'Folder size (GB)' -ge 5){ 
         Write-Output "The $TempFolderPath folder is $(($FormattedNumber) -f $TotalSize.'Folder size (GB)')GB`nProceeding to empty the folder"
         $Items | Remove-Item -Recurse -Verbose *>&1 | Out-File "$TempFolderPath\EmptyFolderLog.txt"
