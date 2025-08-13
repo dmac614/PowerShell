@@ -26,15 +26,16 @@ function ComputerDetails {
             @{n='FreeSpace';e={ '{0:N2}' -f ($_.FreeSpace / 1GB) }}
         )
     )
-        # Gather specs about the computer system
-        Write-Output "Specifications about the computer system:"
+    
+    # Gather specs about the computer system
+    Write-Output "Specifications about the computer system:"
 
-        # Computer specs
-        Get-ComputerInfo | Select-Object $CompInfoProps
-        
-        # Disk space
-        Write-Output "Disk information in gigabytes:`n"
-        Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" | Select-object $DiskProps
+    # Computer specs
+    Get-ComputerInfo | Select-Object $CompInfoProps
+    
+    # Disk space
+    Write-Output "Disk information in gigabytes:`n"
+    Get-CimInstance -ClassName Win32_LogicalDisk -Filter "drivetype=3" | Select-object $DiskProps
 } # end function
 
 # Invoke the function
