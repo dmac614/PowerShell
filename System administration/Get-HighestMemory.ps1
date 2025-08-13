@@ -10,7 +10,24 @@ Author: Daniel Macdonald
 
 #>
 
-$highestRAM = get-process |
-    Sort-Object WorkingSet -Descending |
-    Select-Object -First 10 name,
-    @{n='Memory';e={'{0:P1}' -f ($_.WorkingSet / 1GB) }}
+function Get-HighestRAM {
+    param(
+        $SortObjProps = @{
+            Property = "WorkingSet"
+            Descending = $true
+        },
+
+        $MemoryProps = @{
+            First = 10
+            Property = @(
+                "Name",
+                @{n='Memory';e={'{0:P1}' -f ($_.WorkingSet / 1GB) }}
+            )
+        }
+    )
+    
+    # List the top 10 processes with the highest memory
+    Get-Process | Sort-Object @SortObjProps | Select-Object @MemoryProps
+}
+
+Get-HighestRAM
