@@ -11,23 +11,23 @@ Author: Daniel Macdonald
 #>
 
 function Get-HighestCPU {
-  param(
-    $SortObjProps = @{
-      Property = "CPU"
-      Descending = $true 
-    },
+    param(
+        $SortObjProps = @{
+            Property = "CPU"
+            Descending = $true 
+        },
 
-    $CPUProps = @{
-      First = 10
-      Property = @(
-        "Name",
-        @{n='CPU';e={ '{0:P1}' -f ($_.CPU / 1KB) }}
-      )
-    }
-  )
+        $CPUProps = @{
+            First = 10
+            Property = @(
+                "Name",
+                @{n='CPU';e={ '{0:P1}' -f ($_.CPU / 1KB) }}
+            )
+        }
+    )
   
-  # List the top 10 processes with the highest CPU
-  Get-Process | Sort-Object @SortObjProps  | Select-Object @CPUProps
+    # List the top 10 processes with the highest CPU
+    Get-Process | Sort-Object @SortObjProps  | Select-Object @CPUProps
 }
 
 Get-HighestCPU
