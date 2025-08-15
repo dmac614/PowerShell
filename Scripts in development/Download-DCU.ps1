@@ -1,6 +1,4 @@
 <#
-    ## unfinished ##
-
     Install Dell Command Update from the internet
 
     Potential URLS
@@ -11,27 +9,73 @@
     https://learn.microsoft.com/en-us/dotnet/api/system.net.webclient.downloadfile?view=net-9.0
     https://garytown.com/dell-command-update-install-manage-via-powershell
     https://github.com/gwblok/garytown
+
+
+    Identifying the incompatible "Dell Command | Update for Windows 10" app
+    Each identifying number appears to be different (based on the app version)
+
+
 #>
 #region Temp folder
+# The installer file will be downloaded here 
 function Get-TempFolder {
     param(
         [string]$TempFolder = 'C:\Temp',
         [string]$script:AppName = "Dell Command | Update Windows Universal"
     )       
-    # Verify Temp folder exists
-    if (! (Test-Path -Path $TempFolder)) {
-        New-Item -Path ${env:SystemDrive}\ -Name Temp -ItemType Directory
-        Write-Output "$TempFolder has been created"
-        Write-Output "Proceeding to download $AppName"
-    } 
-    else {
-        Write-Output "$TempFolder already exists."
-        Write-Output "Proceeding to download $AppName"
+        # Verify Temp folder exists
+        if (! (Test-Path -Path $TempFolder)) {
+            New-Item -Path ${env:SystemDrive}\ -Name Temp -ItemType Directory
+            Write-Output "$TempFolder has been created`nProceeding to download $AppName"
+        } else {
+            Write-Output "$TempFolder already exists."
+            Write-Output "Proceeding to download $AppName"
+        }
     }
-}
+
     # evoke function
     Get-TempFolder
 #endregion
+
+#region
+function Check-IncompatibleDCU {
+    param(
+        $IncompatibleApp = "Dell Command | Update for Windows 10"
+    )
+
+    # Container for the app ID required for msiexec
+    $AppIdentifyingNumber = @()
+
+        # Check if the incompatible app is installed
+        $CheckForApp = Get-CimInstance -ClassName Win32_Product | ? { $_.name -eq $IncompatibleApp }
+        if ($CheckForApp) {
+            Write-Output "Incompatible app '$IncompatibleApp' detected`nPreparing for uninstallation"
+            $AppIdentifyingNumber += $CheckForApp.IdentifyingNumber
+
+            try {
+                # Uninstall the app silently
+                msiexec.exe /X"$AppIdentifyingNumber" /qn
+                Write-Output "Uninstalling $IncompatibleApp`nWaiting 2 minutes to complete the uninstall"
+                Start-Sleep -Seconds 120
+                if (-not ($CheckForApp)){ ### this doesn't appear to work
+                    Write-Output "$IncompatibleApp successfully uninstalled"
+                } else {
+                    Write-Output "$IncompatibleApp is still installed"
+                }
+
+            } catch [System.Exception] {
+                Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
+                Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+                }
+        } else {
+            Write-Output "$IncompatibleApp is not installed`nProceed to download $AppName"
+        }
+    }
+
+    # evoke function
+    Check-IncompatibleDCU
+#endregion
+
 
 #region
 function Get-DCU {
