@@ -55,9 +55,11 @@ function Check-IncompatibleDCU {
             try {
                 # Uninstall the app silently
                 msiexec.exe /X"$AppIdentifyingNumber" /qn
-                Write-Output "Uninstalling $IncompatibleApp`nWaiting 2 minutes to complete the uninstall"
-                Start-Sleep -Seconds 120
-                if (-not ($CheckForApp)){ ### this doesn't appear to work
+                Write-Output "Uninstalling $IncompatibleApp`nWaiting 60 seconds to complete the uninstall"
+                Start-Sleep -Seconds 60
+
+                $ReCheckApp = Get-CimInstance -ClassName Win32_Product | ? { $_.name -eq $IncompatibleApp }
+                if ($ReCheckApp.Name -notmatch $IncompatibleApp){
                     Write-Output "$IncompatibleApp successfully uninstalled"
                 } else {
                     Write-Output "$IncompatibleApp is still installed"
