@@ -26,9 +26,9 @@ function Get-TempFolderSize {
 
         # Empty folder when greater than 5gb
         if ($TotalSize.'Folder size (GB)' -ge 5){ 
-        Write-Output "The $TempFolderPath folder is $(($FormattedNumber) -f $TotalSize.'Folder size (GB)')GB`nProceeding to empty the folder"
-        $Items | Remove-Item -Recurse -Verbose *>&1 | Out-File "$TempFolderPath\EmptyFolderLog.txt"
-        Write-Output "Read the log file at $TempFolderPath\EmptyFolderLog.txt"
+            Write-Output "The $TempFolderPath folder is $(($FormattedNumber) -f $TotalSize.'Folder size (GB)')GB`nProceeding to empty the folder"
+            $Items | Remove-Item -Recurse -Verbose *>&1 | Out-File "$TempFolderPath\EmptyFolderLog.txt"
+            Write-Output "Read the log file at $TempFolderPath\EmptyFolderLog.txt"
         }
         else { 
             Write-Output "The $TempFolderPath folder is $(($FormattedNumber) -f $TotalSize.'Folder size (GB)')GB"
