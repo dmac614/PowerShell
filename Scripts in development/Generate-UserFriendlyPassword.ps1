@@ -3,6 +3,11 @@
 Short description of the script. 
 .DESCRIPTION
 Longer description of the script with more details.
+
+Example of a password
+Word-word-00
+the second word will need to use ToLower()
+
 .PARAMETER <parameter>
 Description of the parameter
 .EXAMPLE
