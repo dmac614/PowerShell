@@ -24,16 +24,19 @@ class NutritionPlan {
     [ValidateSet('A','B','C')]
     [string]$MealOption # for child class
     
-    [ValidateRange(1,7)]
-    [int]$TimesPerWeek
-
     [bool]$Snack 
-    #[int]$Snack = 0 # Meal 0 should be fixed as a pre training snack    
     hidden [int]$GymDays = 3
+
+    [ValidateRange(1,7)]
+    hidden [int]$TimesPerWeek
+    # Not to be used as a property
+    # The items from a meal will be calculated against this property
+    # e.g all items in meal 1 option A * TimesPerWeek
 
 #endregion
 
 #region Primary Constructor
+<#
 NutritionPlan(
     [string]$FoodName,
     [int]$FoodQuantity,
@@ -50,47 +53,54 @@ NutritionPlan(
         $this.MealNumber = $MealNumber
         $this.MealOption = $MealOption
         $this.TimesPerWeek = $TimesPerWeek
-}
+    }
+#>
 
 # Default constructor
 NutritionPlan(){}
 #endregion
 
 #region Child classes
-# Constructor for the ShoppingList child class
-#NutritionPlan(){}
 
-# Constructor for pre-training snacks
-NutritionPlan([string]$FoodName, [int]$FoodQuantity, [bool]$Snack) {
-    $this.FoodName = $FoodName
-    $this.FoodQuantity = $FoodQuantity
-    $this.Snack = $Snack
+# Meal 0 constructor  
+NutritionPlan(
+    [string]$FoodName, 
+    [int]$FoodQuantity,
+    [bool]$Snack
+    ) {
+        $this.FoodName = $FoodName
+        $this.FoodQuantity = $FoodQuantity
+        $this.Snack = $Snack
+}
+
+# Meal 1-3 constructor
+NutritionPlan(
+    [string]$FoodName,
+    [int]$FoodWeight,
+    [int]$FoodQuantity,
+    [string]$MealOption
+    ) {
+        $this.$FoodName = $FoodName
+        $this.$FoodWeight = $FoodWeight
+        $this.$FoodQuantity = $FoodQuantity
+        $this.$MealOption = $MealOption
+}
+
+# Constructor for the ShoppingList child class
+NutritionPlan(
+    [string]$FoodName,
+    [string]$MealNumber,
+    [string]$MealOption
+    ) {
+        $this.$FoodName = $FoodName
+        $this.$MealNumber = $MealNumber
+        $this.$MealOption = $MealOption
 }
 
 #endregion
 
 
 #region Methods
-#[int]IsSnack($FoodQuantity) {
-    #return $this.FoodQuantity * $this.GymDays
-#}
-
-#return $this.FoodWeight * $this.GymDays
-
-<#
-   [int]IsSnack($MealNumber){
-    #if ($this.MealNumber = 0) {
-        $this.MealNumber = 0
-            return $this.FoodQuantity * $this.GymDays
-            return $this.FoodWeight * $this.GymDays
-        #} else {
-            # Specify that it's not a snack
-            # I'm thinking of a property which says true or false
-            #    Write-Output "This is not a snack"
-        #}   
-    }
-#>
-
     [int]TotalQuantity() {
         return $this.FoodQuantity * $this.TimesPerWeek
     }
@@ -108,9 +118,37 @@ NutritionPlan([string]$FoodName, [int]$FoodQuantity, [bool]$Snack) {
         return [NutritionPlan]::new($this.FoodName,$FoodQuantity,$FoodWeight)
     }
 
-    #[NutritionPlan]AddMeal() {}
+    <#
+    [NutritionPlan] Meal0(
+        [string]$FoodName, 
+        [int]$FoodQuantity,
+        [bool]$Snack
+        ) {
+            return [NutritionPlan]::new($FoodName,$FoodQuantity,$Snack)
+        }
+    #>
+        
+    #[int]CalculateSnack() {
+    #return $this.FoodQuantity * $this.GymDays
+#}
 
-    #[NutritionPlan]CreateMeal() {}
+#return $this.FoodWeight * $this.GymDays
+
+<# 
+   [int]CalculateSnack($MealNumber){
+    #if ($this.MealNumber = 0) {
+        $this.MealNumber = 0
+            return $this.FoodQuantity * $this.GymDays
+            return $this.FoodWeight * $this.GymDays
+        #} else {
+            # Specify that it's not a snack
+            # I'm thinking of a property which says true or false
+            #    Write-Output "This is not a snack"
+        #}   
+    }
+#>
+
+    #[NutritionPlan]AddMeal() {}
 
 #endregion
 
@@ -119,6 +157,9 @@ NutritionPlan([string]$FoodName, [int]$FoodQuantity, [bool]$Snack) {
 } #end baseline class
 #endregion Baseline Class
 
+
+
+## Do separate .ps1 files for each child class ##
 
 #region ShoppingList class
 
