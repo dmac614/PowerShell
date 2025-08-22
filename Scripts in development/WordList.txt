@@ -1,100 +1,396 @@
-1. Apple
-2. Bread
-3. Chair
-4. Dance
-5. Earth
-6. Flame
-7. Ghost
-8. Heart
-9. Ivory
-10. Jelly
-11. Knife
-12. Lemon
-13. Magic
-14. Night
-15. Olive
-16. Pearl
-17. Quiet
-18. River
-19. Stone
-20. Tiger
-21. Unity
-22. Vivid
-23. Water
-24. Xerox
-25. Yacht
-26. Zebra
-27. Blaze
-28. Cloud
-29. Dream
-30. Equal
-31. Frost
-32. Grape
-33. Honey
-34. Ideal
-35. Juice
-36. Kneel
-37. Latch
-38. Metal
-39. Nurse
-40. Oasis
-41. Paint
-42. Quilt
-43. Realm
-44. Scale
-45. Taper
-46. Urban
-47. Voice
-48. Wheat
-49. Xenon
-50. Yield
-1. Alder
-2. Beach
-3. Bloom
-4. Blaze
-5. Brook
-6. Cedar
-7. Chive
-8. Cloud
-9. Coast
-10. Coral
-11. Daisy
-12. Dunes
-13. Earth
-14. Fawnz
-15. Flora
-16. Frost
-17. Gorse
-18. Grass
-19. Hazel
-20. Honey
-21. Icier
-22. Ivory
-23. Junco
-24. Larch
-25. Lotus
-26. Maple
-27. Mossy
-28. Ocean
-29. Olive
-30. Onion
-31. Petal
-32. Ponds
-33. Quartz
-34. Rainy
-35. River
-36. Rocks
-37. Rosey
-38. Sands
-39. Seeds
-40. Sheep
-41. Shore
-42. Snowy
-43. Sprig
-44. Stone
-45. Storm
-46. Tides
-47. Trees
-48. Tulip
-49. Vines
-50. Wheat
+Apple
+Bread
+Chair
+Dance
+Earth
+Flame
+Ghost
+Heart
+Ivory
+Jelly
+Knife
+Lemon
+Magic
+Night
+Olive
+Pearl
+Quiet
+River
+Stone
+Tiger
+Unity
+Vivid
+Water
+Xerox
+Yacht
+Zebra
+Blaze
+Cloud
+Dream
+Equal
+Frost
+Grape
+Honey
+Ideal
+Juice
+Kneel
+Latch
+Metal
+Nurse
+Oasis
+Paint
+Quilt
+Realm
+Scale
+Taper
+Urban
+Voice
+Wheat
+Xenon
+Yield
+Alder
+Beach
+Bloom
+Blaze
+Brook
+Cedar
+Chive
+Cloud
+Coast
+Coral
+Daisy
+Dunes
+Earth
+Fawnz
+Flora
+Frost
+Gorse
+Grass
+Hazel
+Honey
+Icier
+Ivory
+Junco
+Larch
+Lotus
+Maple
+Mossy
+Ocean
+Olive
+Onion
+Petal
+Ponds
+Quartz
+Rainy
+River
+Rocks
+Rosey
+Sands
+Seeds
+Sheep
+Shore
+Snowy
+Sprig
+Stone
+Storm
+Tides
+Trees
+Tulip
+Vines
+Wheat
+Amber
+Brisk
+Crisp
+Dwell
+Ember
+Fancy
+Gloom
+Hasty
+Ivory
+Jolly
+Knack
+Latch
+Mirth
+Nifty
+Orbit
+Plush
+Quest
+Ripple
+Spire
+Tonic
+Usher
+Vigor
+Whirl
+Yield
+Zebra
+Bloom
+Creek
+Drift
+Ferns
+Grove
+Hilly
+Isles
+Joint
+Knees
+Ledge
+Moors
+Nests
+Oasis
+Pines
+Quail
+Reeds
+Shore
+Thaws
+Urban
+Valle
+Wheat
+Yawns
+Alert
+Brave
+Clear
+Dream
+Eagle
+Fancy
+Grace
+Happy
+Ideal
+Jumps
+Knock
+Laugh
+Magic
+Noble
+Ocean
+Peace
+Quick
+Relax
+Smart
+Trust
+Unity
+Voice
+Watch
+Youth
+Zesty
+Angle
+Block
+Crisp
+Dance
+Earth
+Fresh
+Giant
+House
+Input
+Joint
+Light
+Money
+North
+Olive
+Power
+Royal
+Shine
+Train
+Under
+Value
+World
+Young
+Zebra
+Zonal
+Able
+Acid
+Aged
+Area
+Army
+Atom
+Baby
+Back
+Ball
+Band
+Bank
+Base
+Bath
+Bear
+Beat
+Bell
+Belt
+Best
+Bill
+Bird
+Bite
+Blue
+Boat
+Body
+Book
+Born
+Boss
+Both
+Bowl
+Busy
+Call
+Calm
+Camp
+Card
+Care
+Case
+Cash
+Cast
+Cell
+Chat
+City
+Club
+Coal
+Coat
+Cold
+Come
+Cook
+Cool
+Copy
+Cost
+Crew
+Crop
+Dark
+Data
+Date
+Deal
+Desk
+Dial
+Diet
+Door
+Draw
+Drop
+Dust
+Duty
+Each
+Earn
+Easy
+Edge
+Even
+Ever
+Face
+Fact
+Fair
+Farm
+Fast
+Fear
+Feel
+File
+Film
+Find
+Fine
+Fire
+Fish
+Food
+Foot
+Form
+Four
+Free
+Full
+Game
+Gate
+Gift
+Girl
+Goal
+Gold
+Good
+Grey
+Grow
+Hair
+Half
+Accept
+Access
+Action
+Adjust
+Advice
+Afford
+Agency
+Agenda
+Almost
+Amount
+Animal
+Answer
+Appeal
+Assist
+Assume
+Attack
+Attend
+Author
+Backup
+Banner
+Battle
+Beauty
+Become
+Before
+Belief
+Better
+Beyond
+Bottle
+Branch
+Bright
+Broken
+Budget
+Button
+Camera
+Cancel
+Career
+Castle
+Cattle
+Center
+Chance
+Change
+Charge
+Choice
+Choose
+Circle
+Client
+Coffee
+Common
+Corner
+Cotton
+Course
+Create
+Credit
+Custom
+Damage
+Danger
+Dealer
+Debate
+Decide
+Demand
+Design
+Detail
+Device
+Doctor
+Dollar
+Double
+Drawer
+Driver
+Easier
+Effect
+Effort
+Energy
+Engine
+Enough
+Escape
+Estate
+Export
+Family
+Famous
+Father
+Figure
+Finish
+Flight
+Flower
+Follow
+Forest
+Forget
+Formal
+Friend
+Future
+Garage
+Garden
+Gather
+Gentle
+Global
+Golden
+Ground
+Growth
+Handle
+Health
