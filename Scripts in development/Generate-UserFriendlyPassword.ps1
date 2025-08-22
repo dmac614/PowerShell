@@ -1,33 +1,45 @@
 <#
 .SYNOPSIS
-Short description of the script. 
+Generate a password that is user friendly, readable, and secure
 .DESCRIPTION
-Longer description of the script with more details.
-
-Example of a password
-Word-word-00
-the second word will need to use ToLower()
-
-.PARAMETER <parameter>
-Description of the parameter
+Combines a word with X letters, another word with X letters, and two numbers. These are separated by a hyphen -
+Example of a password: Word-test-00
 .EXAMPLE
-ScriptName -<parameter>
-
+Generate-UserFriendlyPassword.ps1
 .NOTES
 Author: Daniel Macdonald
 
 #>
+#region Variables and data
+param( $Num = '0'..'9' )
+    
+    # This file contains the words to generate passwords with
+    $Content = Get-Content -Path ".\WordList.txt"
+    
+    # Password criteria
+    $FourLetters = $Content | Where-Object { $_.Length -eq 4 } | Get-Random
+    $FiveLetters = $Content | Where-Object { $_.Length -eq 5 } | Get-Random 
+    $SixLetters  = $Content | Where-Object { $_.Length -eq 6 } | Get-Random
+    
+    $TwoNumbers  = $Num     | Get-Random -Count 2
+#endregion
 
-#region variables
-    param( 
-        [regex]$RegEx = "\d{1,2}\.\s",
-        [string[]]$WordList = @("Dance","Earth","Flame","Ghost","Heart","Ivory","Jelly","Knife","Lemon","Magic","Night","Olive","Pearl","Quiet","River","Stone","Tiger",
-        "Unity","Vivid","Water","Xerox","Yacht","Zebra","Blaze","Cloud","Dream","Equal","Frost","Grape","Honey","Ideal","Juice","Kneel","Latch","Metal","Nurse","Oasis","Paint","Quilt","Realm","Scale","Taper","Urban","Voice","Wheat","Xenon","Yield","Alder","Beach","Bloom","Blaze","Brook","Cedar","Chive","Cloud","Coast","Coral","Daisy","Dunes","Earth","Fawnz","Flora","Frost","Gorse","Grass","Hazel","Honey","Icier","Ivory","Junco","Larch","Lotus","Maple","Mossy","Ocean","Olive","Onion","Petal","Ponds","Quartz","Rainy","River","Rocks","Rosey","Sands","Seeds","Sheep","Shore","Snowy","Sprig","Stone","Storm","Tides","Trees","Tulip","Vines","Wheat")
-    )
-#end region
+#region Generate the password
+    $Content | Get-Random | ForEach-Object {
 
-    foreach ($Word in $WordList) {
-        $Modified = $Word -replace "^$RegEx", ""
-        $AddToString = '"' + $Modified + '",'
-        Write-Output $AddToString
+        if ($_.Length -match $SixLetters.Length) {
+            $Pass1 = Write-Output "$_-" "$( ($FourLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
+            $Pass1 | Join-String
+        } 
+        
+        elseif ($_.Length -match $FiveLetters.Length) {
+            $Pass2 = Write-Output "$_-" "$( ($FiveLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
+            $Pass2 | Join-String
+        }
+
+       elseif ($_.Length -match $FourLetters.Length) {
+            $Pass3 = Write-Output "$_-" "$( ($SixLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
+            $Pass3 | Join-String
+        }
     }
+#endregion
