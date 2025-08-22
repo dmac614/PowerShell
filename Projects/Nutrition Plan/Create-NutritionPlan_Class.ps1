@@ -66,12 +66,15 @@ NutritionPlan(){}
 NutritionPlan(
     [string]$FoodName, 
     [int]$FoodQuantity,
+    [int]$FoodWeight,
     [bool]$Snack
     ) {
         $this.FoodName = $FoodName
         $this.FoodQuantity = $FoodQuantity
+        $this.FoodWeight = $FoodWeight
         $this.Snack = $Snack
 }
+
 
 # Meal 1-3 constructor
 NutritionPlan(
@@ -128,11 +131,13 @@ NutritionPlan(
         }
     #>
         
-    #[int]CalculateSnack() {
-    #return $this.FoodQuantity * $this.GymDays
-#}
+    [int]CalculateSnack() {
+        return $this.FoodQuantity * $this.GymDays 
+    }
+    
+    # return $this.FoodWeight * $this.GymDays
 
-#return $this.FoodWeight * $this.GymDays
+
 
 <# 
    [int]CalculateSnack($MealNumber){
