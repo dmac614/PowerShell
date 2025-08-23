@@ -32,8 +32,8 @@ param( $Num = '0'..'9' )
     $Content | Get-Random | ForEach-Object {
 
         if ($_.Length -match $FourLetters.Length) {
-            $Pass3 = Write-Output "$_-" "$( ($SixLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
-            $Pass3 | Join-String
+            $Pass1 = Write-Output "$_-" "$( ($SixLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
+            $Pass1 | Join-String
         }
         
         elseif ($_.Length -match $FiveLetters.Length) {
@@ -42,8 +42,8 @@ param( $Num = '0'..'9' )
         }
         
         elseif ($_.Length -match $SixLetters.Length) {
-            $Pass1 = Write-Output "$_-" "$( ($FourLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
-            $Pass1 | Join-String
+            $Pass3 = Write-Output "$_-" "$( ($FourLetters).ToLower() )-" "$( $TwoNumbers | Join-String )"
+            $Pass3 | Join-String
         } 
     }
 #endregion
