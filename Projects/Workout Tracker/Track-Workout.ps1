@@ -10,6 +10,15 @@ ScriptName -<parameter>
 
 .NOTES
 Author: Daniel Macdonald
+
+<#
+    As I learn more about Classes in my Nutrition Plan project
+    I realise that this needs revised
+
+    This project will be updated in future
+#>
+
+
 #>
 [cmdletbinding()]
 param(
