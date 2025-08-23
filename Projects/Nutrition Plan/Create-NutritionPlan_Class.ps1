@@ -11,7 +11,8 @@ Child classes
 class NutritionPlan {
 
 #region Properties
-    # The properties of this class
+    [System.Collections.ArrayList]$FoodItems
+
     [string]$FoodName
     [int]$FoodQuantity
     
@@ -28,39 +29,19 @@ class NutritionPlan {
     hidden [int]$GymDays = 3
 
     [ValidateRange(1,7)]
-    hidden [int]$TimesPerWeek
+    [int]$TimesPerWeek
     # Not to be used as a property
     # The items from a meal will be calculated against this property
     # e.g all items in meal 1 option A * TimesPerWeek
 
 #endregion
 
-#region Primary Constructor
-<#
-NutritionPlan(
-    [string]$FoodName,
-    [int]$FoodQuantity,
-    [int]$FoodWeight,
-    [bool]$Snack,
-    [int]$MealNumber,
-    [string]$MealOption,
-    [int]$TimesPerWeek
-    ){
-        $this.FoodName = $FoodName
-        $this.FoodQuantity = $FoodQuantity
-        $this.FoodWeight = $FoodWeight
-        $this.Snack = $Snack
-        $this.MealNumber = $MealNumber
-        $this.MealOption = $MealOption
-        $this.TimesPerWeek = $TimesPerWeek
-    }
-#>
+#region Constructors
 
-# Default constructor
-NutritionPlan(){}
-#endregion
-
-#region Child classes
+# FoodItems constructor
+NutritionPlan() {
+    $this.FoodItems = [System.Collections.ArrayList]::new()
+}
 
 # Meal 0 constructor  
 NutritionPlan(
@@ -75,7 +56,6 @@ NutritionPlan(
         $this.Snack = $Snack
 }
 
-
 # Meal 1-3 constructor
 NutritionPlan(
     [string]$FoodName,
@@ -83,60 +63,43 @@ NutritionPlan(
     [int]$FoodQuantity,
     [string]$MealOption
     ) {
-        $this.$FoodName = $FoodName
-        $this.$FoodWeight = $FoodWeight
-        $this.$FoodQuantity = $FoodQuantity
-        $this.$MealOption = $MealOption
+        $this.FoodName = $FoodName
+        $this.FoodWeight = $FoodWeight
+        $this.FoodQuantity = $FoodQuantity
+        $this.MealOption = $MealOption
 }
-
-# Constructor for the ShoppingList child class
-NutritionPlan(
-    [string]$FoodName,
-    [string]$MealNumber,
-    [string]$MealOption
-    ) {
-        $this.$FoodName = $FoodName
-        $this.$MealNumber = $MealNumber
-        $this.$MealOption = $MealOption
-}
-
 #endregion
 
 
 #region Methods
-    [int]TotalQuantity() {
-        return $this.FoodQuantity * $this.TimesPerWeek
-    }
-
     [int]TotalWeight() {
         return $this.FoodWeight * $this.TimesPerWeek
     }
 
-    [NutritionPlan] AddFoodItem(
-        [string]$FoodName,
-        [int]$FoodQuantity,
-        [int]$FoodWeight
-    ) {
-        $this.FoodName = [string](Read-Host "Name of the food item")
-        return [NutritionPlan]::new($this.FoodName,$FoodQuantity,$FoodWeight)
+    [int]TotalQuantity() {
+        return $this.FoodQuantity * $this.TimesPerWeek
     }
 
-    <#
-    [NutritionPlan] Meal0(
-        [string]$FoodName, 
-        [int]$FoodQuantity,
-        [bool]$Snack
-        ) {
-            return [NutritionPlan]::new($FoodName,$FoodQuantity,$Snack)
-        }
-    #>
-        
-    [int]CalculateSnack() {
+    [int]TotalSnack() {
         return $this.FoodQuantity * $this.GymDays 
     }
-    
-    # return $this.FoodWeight * $this.GymDays
 
+    [void]AddFoodItem(
+        [string]$FoodName,
+        [int]$FoodQuantity,
+        [int]$FoodWeight,
+        [string]$MealOption
+    ) {
+            $item = [PSCustomObject]@{
+                Name = $FoodName
+                Quantity = $FoodQuantity
+                Weight = $FoodWeight
+                Option = $MealOption 
+            }
+
+        $this.FoodItems.Add($item)
+    }
+        
 
 
 <# 
