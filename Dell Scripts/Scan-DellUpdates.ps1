@@ -32,7 +32,6 @@ The second query will match when the dcuApplyUpdate.log file installs the update
             else    { Write-Error "Dell Command | Update is not installed on this computer. " -ErrorAction Stop }
 
             # Verify Temp folder exists
-            try {
                 if (!(Test-Path -Path $TempFolder)) {
                     New-Item -Path ${env:SystemDrive}\ -Name Temp -ItemType Directory
                     Write-Output "$TempFolder has been created"
@@ -40,12 +39,6 @@ The second query will match when the dcuApplyUpdate.log file installs the update
                 else {
                     Write-Output "The $TempFolder directory for the log files already exists."
                 }
-            } 
-            catch {
-                Write-Error "Could not create $TempFolder folder"
-                Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-                Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
-            }
 
             Write-Output "Scanning the computer for updates..."
 

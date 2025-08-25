@@ -14,10 +14,10 @@ Author: Daniel Macdonald
 
 # Function to split the tmp module name and search for its commands
 function Get-EXOCommands {
-    $ModuleName = Get-ConnectionInformation | Select-Object ModuleName
-    $Split = $ModuleName.ModuleName.Split("$env:LOCALAPPDATA\Temp\")
+    $ModuleName = Get-ConnectionInformation | Select-Object ModuleName
+    $Split = $ModuleName.ModuleName.Split("$env:LOCALAPPDATA\Temp\")
 
-    Get-Command -Module $Split
+    Get-Command -Module $Split
 }
 
 # Evoke the function
