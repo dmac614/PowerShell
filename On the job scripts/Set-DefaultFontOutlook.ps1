@@ -31,7 +31,7 @@ $hexTextComplex = $ValueTextComplex.Split(',') | % { "0x$_"}
 
 ## If the mailsettings reg path does not exist, create the new items with their binary values 
 ## Otherwise, set the items with their binary values
-If(!(Test-Path $registryPath)) {
+if(!(Test-Path $registryPath)) {
     try {
         Write-Output "Registry path does not exist. Creating the new keys under $registryPath"
         New-Item -Path $registryPath -Force | Out-Null
@@ -44,11 +44,10 @@ If(!(Test-Path $registryPath)) {
         New-ItemProperty -Path $registryPath -Name $Name3Complex -Value ([byte[]]$hexTextComplex) -PropertyType Binary -Force
     } catch [System.Exception] {
         Write-Output "ERROR: failed to create new registry keys."
-        Write-Output "The fully qualified error ID is: $($_.FullyQualifiedErrorId)"
-        Write-Output "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)"
+        Write-Error $Error[0] -ErrorAction Stop
     }
 
-} Else {
+} else {
     Write-Output "Registry keys exist. Setting the new keys for Arial font size 12."
     Set-ItemProperty -Path $registryPath -name NewTheme -value $null
     Set-ItemProperty -Path $registryPath -name ThemeFont -value 2

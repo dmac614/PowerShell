@@ -56,8 +56,8 @@ function ReplaceFileValues {
     try {
         $FileContents = get-content -path $ConversationFile
     } catch {
-        Write-error "Failed to read file: $ConversationFile"
-        return
+        Write-Error "Failed to read file: $ConversationFile"
+        Write-Error $Error[0] -ErrorAction Stop
     }
         
     # Foreach loop to replace the expressions
@@ -69,7 +69,8 @@ function ReplaceFileValues {
     try {
         Set-content -path $ConversationFile -value $FileContents
     } catch {
-        Write-error "Failed to overwrite file: $ConversationFile"
+        Write-Error "Failed to overwrite file: $ConversationFile"
+        Write-Error $Error[0] -ErrorAction Stop
     }
 }
 
