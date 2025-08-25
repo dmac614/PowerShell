@@ -29,8 +29,7 @@ Author: Daniel Macdonald
     } 
     catch [System.Exception] {
         Write-Error "Could not install the package provider NuGet" 
-        Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-        Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+        Write-Error $Error[0] -ErrorAction Stop
     }
 #end
 
@@ -51,8 +50,7 @@ Author: Daniel Macdonald
     }
     catch [System.Exception] {
         Write-Error "Could not configure the PowerShell package management repository" 
-        Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-        Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+        Write-Error $Error[0] -ErrorAction Stop
     }
 #endregion
 
@@ -81,8 +79,7 @@ Author: Daniel Macdonald
         }
     catch [System.Exception] {
         Write-Error "Failed to install 'PsWindowsUpdate'"
-        Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-        Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+        Write-Error $Error[0] -ErrorAction Stop
         }
 #endregion
 

@@ -26,7 +26,7 @@ function Connect-VirtualMachine
     Write-Output "Attempting to start '$vmName'"
     $GetVM = Get-VM -Name $vmName
 
-    If ($GetVM.State -eq 'Off') 
+    if ($GetVM.State -eq 'Off') 
     {
         try 
         {
@@ -41,8 +41,8 @@ function Connect-VirtualMachine
         }
         catch 
         {
-            Write-Output "'$vmName' failed to start"
-            Write-Output $_.Exception.Message
+            Write-Error "'$vmName' failed to start"
+            Write-Error $Error[0] -ErrorAction Stop
         }
     }
 }
