@@ -10,7 +10,9 @@ Author: Daniel Macdonald
 #>  
     [Cmdletbinding()]
     param (
-        $LogFile = "UpdatesOutput.log"
+        $LogFile = "Test.log",
+        $TempFolder = "$env:LOCALAPPDATA\Temp",
+        $LocalAppData = "$env:LOCALAPPDATA"
     )
 
 #region
@@ -21,7 +23,7 @@ Author: Daniel Macdonald
     $NuGet = (Get-PackageProvider).name
     try {
         if ($NuGet -notcontains "NuGet"){
-            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Verbose
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Verbose
         }
         else {
             Write-Output "The package provider NuGet is installed"
@@ -31,7 +33,7 @@ Author: Daniel Macdonald
         Write-Error "Could not install the package provider NuGet" 
         Write-Error $Error[0] -ErrorAction Stop
     }
-#end
+#endregion
 
 #region
     <#  
@@ -59,7 +61,7 @@ Author: Daniel Macdonald
         Check for the PsWindowsUpdate module
         Install it if it's missing
     #>
-    $UpdatesModule = Get-Module -ListAvailable | Where-Object { $_.name -match 'PsWindowsUpdate' }
+    $UpdatesModule = Get-Module -ListAvailable | ? { $_.name -match 'PsWindowsUpdate' }
     try {
         # If null -- install the module
         if ([string]::IsNullOrEmpty($UpdatesModule)) {
@@ -67,7 +69,7 @@ Author: Daniel Macdonald
             Install-Module -Name PsWindowsUpdate -Verbose
             Write-Output "Module successfully installed"
 
-            # Import the installed module
+            # import the installed module 
             Import-Module -Name PsWindowsUpdate -Verbose
             Write-Output "Module successfully imported"
         } 
@@ -84,11 +86,16 @@ Author: Daniel Macdonald
 #endregion
 
 #region
-        <#
+    <#
             Check for updates to install
             Allow the user to manually reboot
-            Store verbose output in a log file
-        #>
-            Get-WindowsUpdate -Download -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath "$env:LOCALAPPDATA\Temp\$LogFile"
-            Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose 4>&1 | Tee-Object -FilePath "$env:LOCALAPPDATA\Temp\$LogFile"
+    #>
+    $GetUpdates = Get-WindowsUpdate
+        if ($GetUpdates.Count -eq 0) {
+            Write-Output "Checked for updates. The system is up to date"
+        }
+        else {
+            # Incase the Temp folder does not exist within appdata\local
+            Install-WindowsUpdate -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath ( ("$TempFolder\$LogFile") -or ("$LocalAppData\$LogFile") )
+        }
 #endregion
