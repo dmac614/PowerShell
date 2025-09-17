@@ -50,10 +50,8 @@ function Reassign_CalendarPerms {
             
         }
         catch [System.Exception] {
-            Write-Error  "Exception encountered."
-            Write-Output "The fully qualified error ID is: $($_.FullyQualifiedErrorId)"
-            Write-Output "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)"
-            Return
+            Write-Error "Exception encountered"
+            Write-Error $Error[0] -ErrorAction Stop
         }
     
         # Phase 2: confirm removal; reassign permissions
@@ -82,9 +80,7 @@ function Reassign_CalendarPerms {
             else { Write-Output "Could not reassign permissions." }
         }
         catch [System.Exception] {
-            Write-Error  "Exception encountered."
-            Write-Output "The fully qualified error ID is: $($_.FullyQualifiedErrorId)"
-            Write-Output "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)"
-            Return
+            Write-Error "Exception encountered"
+            Write-Error $Error[0] -ErrorAction Stop
         }
     }

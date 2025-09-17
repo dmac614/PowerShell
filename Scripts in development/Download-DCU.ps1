@@ -66,8 +66,7 @@ function Check-IncompatibleDCU {
                 }
 
             } catch [System.Exception] {
-                Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-                Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+                    Write-Error $Error[0] -ErrorAction Stop
                 }
         } else {
             Write-Output "$IncompatibleApp is not installed`nProceed to download $AppName"
@@ -113,8 +112,7 @@ function Get-DCU {
         }
         catch [System.Exception] {
             Write-Error "Could not install $AppName" 
-            Write-Error "The fully qualified error ID is: $($_.FullyQualifiedErrorId)" 
-            Write-Error "Error at line $($_.InvocationInfo.ScriptLineNumber): $($_.Exception.Message)" -ErrorAction Stop
+            Write-Error $Error[0] -ErrorAction Stop
     }
 
 }
