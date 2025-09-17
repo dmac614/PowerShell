@@ -95,7 +95,7 @@ Author: Daniel Macdonald
             Write-Output "Checked for updates. The system is up to date"
         }
         else {
-            # Incase the Temp folder does not exist within appdata\local
+            # Incase appdata\local\temp does not exist
             Install-WindowsUpdate -AcceptAll -Verbose 4>&1 | Tee-Object -FilePath ( ("$TempFolder\$LogFile") -or ("$LocalAppData\$LogFile") )
         }
 #endregion
