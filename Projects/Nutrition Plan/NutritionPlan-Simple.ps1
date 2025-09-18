@@ -1,8 +1,9 @@
 <#
     Aim: multiply the values of items within a hashtable by the value of the respective "Day" variable
+
+    Create a third function which combines the totals of items in low and high days to give me a final shopping list
 #>
 param(
-    #[int]$SnackDays = 7,
     [int]$GymDays = 3,
     [int]$HighDays = 3,
     [int]$LowDays = 4 # $Snack * LowDays
@@ -37,7 +38,7 @@ param(
         }
         
     # Meal 2
-        $BeefLow = @{
+        $BeefLow = [ordered]@{
             "Ground Beef" = 200
             Feta = 30
             "Bell pepper" = 1
@@ -63,7 +64,7 @@ param(
             Passata = 125
         }
 
-        $SalmonLow = @{
+        $SalmonLow = [ordered]@{
             Salmon = 200
             "Avocado (small)" = 1
             "Bell pepper" = 1
@@ -108,7 +109,7 @@ param(
             Kiwi = 2
         }
 
-        $ChickenHigh = [ordered]@{
+        $ChickenSourdough = [ordered]@{
             "Chicken breast" = 200
             Sourdough = 125
             Jam = 50
@@ -119,61 +120,145 @@ param(
 
 #endregion All meals
 
-
-#region combine meals
-$AllLowMeals = @(
-    "$BeefEggsLow","$BeefLow","$ChickenLow","$SteakLow","$SalmonLow"
-)
-
-$AllHighMeals = @(
-    "$SmoothieHigh","$BeefEggsHigh","$ChickenHigh","$BeefHigh","$SteakHigh","$ChickenHigh"
-)
-#endregion
-
-
-
-
 #region Create functions
-    function CalculateSnack {
-        "The following totals are for the weekly snack meals`n"
+    function SmallMeals {
+        "Weekly snack meals"
         $Snack.GetEnumerator().ForEach({
-            "$($_.Key): $($_.Value * $SnackDays)"
+            "$($_.Key): $($_.Value * $LowDays)"
         })
-    }
 
-    function CalculatePreGym {
-        "The following totals are for the weekly pre-gym meals`n"
+        "`nWeekly pre-gym meals"
         $PreGym.GetEnumerator().ForEach({
             "$($_.Key): $($_.Value * $GymDays)"
         })
+
+        "`n#########################`n"
     }
 
-    function FirstMeal_Low {
+
+    ## Low meals ##
+    function LowDay_Meals {
+        [CmdletBinding()]
         param(
-            # Choose which meal to have
-            [ValidateSet("Smoothie","Beef and eggs")]$MealOption
+            [Parameter(Mandatory)]
+            [ValidateSet("Smoothie","Beef and eggs")]$MealOne,
+
+            [Parameter(Mandatory)]
+            [ValidateSet("Chicken","Beef")]$MealTwo,
+
+            [Parameter(Mandatory)]
+            [ValidateSet("Steak","Salmon")]$MealThree
         )
+
+        "`nThe following totals are for 4 x low carb days`n"
+        "Meal 1:"
+            if ($MealOne -eq "Smoothie"){
+                $SmoothieLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } elseif ($MealOne -eq "Beef and eggs"){
+                $BeefEggsLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+            }
+
+            "`nMeal 2:"
+            if ($MealTwo -eq "Chicken"){
+                $ChickenLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } elseif ($MealTwo -eq "Beef"){
+                $BeefLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+            }
+
+        "`nMeal 3:"
+            if ($MealThree -eq "Steak"){
+                $SteakLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } elseif ($MealThree -eq "Salmon"){
+                $SalmonLow.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $LowDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+        }
+
+            "`n#########################`n"
     }
 
-    function SecondMeal_Low {
-        param(
-            # Choose which meal to have
-            [ValidateSet("Chicken","Beef")]$MealOption
-        )
-    }
 
-    function ThirdMeal_Low {
+    ## High meals ##
+    function HighDay_Meals {
+        [CmdletBinding()]
         param(
             # Choose which meal to have
-            [ValidateSet("Steak","Salmon")]$MealOption
+            [Parameter(Mandatory)]
+            [ValidateSet("Smoothie","Beef and eggs")]$MealOne,
+
+            [Parameter(Mandatory)]
+            [ValidateSet("Chicken","Beef")]$MealTwo,
+            
+            [Parameter(Mandatory)]
+            [ValidateSet("Steak","Chicken")]$MealThree
         )
-    }
+
+        "`nThe following totals are for 3 x high carb days`n"
+
+        "Meal 1:"
+            if ($MealOne -eq "Smoothie"){
+                $SmoothieHigh.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } elseif ($MealOne -eq "Beef and eggs"){
+                $BeefEggsHigh.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+            }
+
+        "`nMeal 2:"
+            if ($MealTwo -eq "Chicken"){
+                $ChickenHigh.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } elseif ($MealTwo -eq "Beef"){
+                $BeefHigh.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+            }
+
+        "`nMeal 3:"
+            if ($MealThree -eq "Steak"){
+                $SteakHigh.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } elseif ($MealThree -eq "Chicken"){
+                $ChickenSourdough.GetEnumerator().ForEach({
+                    "$($_.Key): $($_.Value * $HighDays)"
+                })
+            } else {
+                Write-Error "This didn't work"
+            }
+    
+            "`n#########################`n"
+        } #end function
 #endregion
 
 
 #region Call functions
-    CalculateSnack
-    CalculatePreGym
+    SmallMeals
+    LowDay_Meals -MealOne Smoothie -MealTwo Beef -MealThree Salmon
+    HighDay_Meals -MealOne Smoothie -MealTwo Beef -MealThree Chicken
 #endregion
 
 
