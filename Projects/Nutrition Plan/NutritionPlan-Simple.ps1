@@ -2,6 +2,7 @@
     Aim: multiply the values of items within a hashtable by the value of the respective "Day" variable
 
     Create a third function which combines the totals of items in low and high days to give me a final shopping list
+    -- store the totals in an array so they can be retrieved
 #>
 param(
     [int]$GymDays = 3,
@@ -122,15 +123,12 @@ param(
 
 #region Create functions
     function SmallMeals {
+        
         "Weekly snack meals"
-        $Snack.GetEnumerator().ForEach({
-            "$($_.Key): $($_.Value * $LowDays)"
-        })
+        $Snack.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
 
         "`nWeekly pre-gym meals"
-        $PreGym.GetEnumerator().ForEach({
-            "$($_.Key): $($_.Value * $GymDays)"
-        })
+        $PreGym.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $GymDays)" })
 
         "`n#########################`n"
     }
@@ -153,41 +151,41 @@ param(
         "`nThe following totals are for 4 x low carb days`n"
         "Meal 1:"
             if ($MealOne -eq "Smoothie"){
-                $SmoothieLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } elseif ($MealOne -eq "Beef and eggs"){
-                $BeefEggsLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } else {
-                Write-Error "This didn't work"
+                $SmoothieLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            elseif ($MealOne -eq "Beef and eggs"){
+                $BeefEggsLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            else {
+                Write-Error "Please choose a correct meal"
             }
 
             "`nMeal 2:"
             if ($MealTwo -eq "Chicken"){
-                $ChickenLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } elseif ($MealTwo -eq "Beef"){
-                $BeefLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } else {
-                Write-Error "This didn't work"
+                $ChickenLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            elseif ($MealTwo -eq "Beef"){
+                $BeefLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            else {
+                Write-Error "Please choose a correct meal"
             }
 
         "`nMeal 3:"
             if ($MealThree -eq "Steak"){
-                $SteakLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } elseif ($MealThree -eq "Salmon"){
-                $SalmonLow.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $LowDays)"
-                })
-            } else {
-                Write-Error "This didn't work"
+                $SteakLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            elseif ($MealThree -eq "Salmon"){
+                $SalmonLow.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $LowDays)" })
+            } 
+            
+            else {
+                Write-Error "Please choose a correct meal"
         }
 
             "`n#########################`n"
@@ -213,41 +211,29 @@ param(
 
         "Meal 1:"
             if ($MealOne -eq "Smoothie"){
-                $SmoothieHigh.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $SmoothieHigh.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } elseif ($MealOne -eq "Beef and eggs"){
-                $BeefEggsHigh.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $BeefEggsHigh.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } else {
-                Write-Error "This didn't work"
+                Write-Error "Please choose a correct meal"
             }
 
         "`nMeal 2:"
             if ($MealTwo -eq "Chicken"){
-                $ChickenHigh.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $ChickenHigh.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } elseif ($MealTwo -eq "Beef"){
-                $BeefHigh.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $BeefHigh.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } else {
-                Write-Error "This didn't work"
+                Write-Error "Please choose a correct meal"
             }
 
         "`nMeal 3:"
             if ($MealThree -eq "Steak"){
-                $SteakHigh.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $SteakHigh.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } elseif ($MealThree -eq "Chicken"){
-                $ChickenSourdough.GetEnumerator().ForEach({
-                    "$($_.Key): $($_.Value * $HighDays)"
-                })
+                $ChickenSourdough.GetEnumerator().ForEach({ "$($_.Key): $($_.Value * $HighDays)" })
             } else {
-                Write-Error "This didn't work"
+                Write-Error "Please choose a correct meal"
             }
     
             "`n#########################`n"
