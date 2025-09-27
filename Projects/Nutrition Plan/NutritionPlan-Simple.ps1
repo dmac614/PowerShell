@@ -4,11 +4,10 @@
     Create a third function which combines the totals of items in low and high days to give me a final shopping list
     -- store the totals in an array so they can be retrieved
 #>
-param(
-    [int]$GymDays = 3,
-    [int]$HighDays = 3,
-    [int]$LowDays = 4 # $Snack * LowDays
-)
+[int]$GymDays = 3
+[int]$HighDays = 3
+[int]$LowDays = 4 # $Snack * LowDays
+
 #region All meals
 
     #region Small meals
