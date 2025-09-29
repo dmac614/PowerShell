@@ -13,15 +13,20 @@ function FolderSize {
         [string]$FormattedNumber = "{0:N}"
     )
 
+    # File and folder enumeration configs  
+    $opt = [IO.EnumerationOptions]::new()
+    $opt.AttributesToSkip = [IO.FileAttributes]::None
+    $opt.IgnoreInaccessible = $true
+    $opt.RecurseSubdirectories = $true
+
     if (-not (Test-Path $Path)) { 
         Write-Error "The path entered does not exist: $Path" -ErrorAction Stop
     }
 
     try {
-        # This doesnt recurse -- still testing
-        $Files = [IO.Directory]::EnumerateFiles($Path,"*", [System.IO.SearchOption]::AllDirectories)
-
-        $Size = $Files | Measure-Object -Property Length -Sum
+        # This is not returning the full length of the specified file. Something is missing
+        $dinfo = [IO.DirectoryInfo]::new($Path)
+        $Size = $dinfo.EnumerateFileSystemInfos("*",$opt) | Measure-Object -Property Length -Sum
     }
 
     catch {
