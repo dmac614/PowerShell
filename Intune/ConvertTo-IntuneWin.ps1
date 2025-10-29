@@ -21,11 +21,14 @@ Author: Daniel Macdonald
 #>
 [CmdletBinding()]
 param(
-    [string]$IntuneUtil = "C:\MicrosftWin32ContentPrepTool\IntuneWinAppUtil.exe",
-    [string]$Source = "C:\MicrosftWin32ContentPrepTool\Apps",    
-    [Parameter(Mandatory)][string]$AppExe,
-    [string]$Output = "C:\MicrosftWin32ContentPrepTool\Intune files"
+    [Parameter(Mandatory)][string]$AppExe
 )
+
+# Variables 
+[string]$IntuneUtil = "C:\MicrosftWin32ContentPrepTool\IntuneWinAppUtil.exe"
+[string]$Source = "C:\MicrosftWin32ContentPrepTool\Apps"
+[string]$Output = "C:\MicrosftWin32ContentPrepTool\Intune files"
+
 # Move item from Downloads
 Move-Item "${env:USERPROFILE}\Downloads\$AppExe" C:\MicrosftWin32ContentPrepTool\Apps\ -Verbose
 
