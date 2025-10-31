@@ -53,3 +53,31 @@ $EightHours = (Get-Date).AddHours(-8)
 Get-MgDeviceManagementManagedDevice -All | 
 ? { $_.LastSyncDateTime -gt $EightHours } | 
 Select-Object DeviceName,OperatingSystem,LastSyncDateTime | Sort-Object LastSyncDateTime
+
+
+
+##########################
+# Added from personal PC #
+##########################
+
+
+
+# Check when a device last checked-in
+Get-MgDeviceManagementManagedDevice | select DeviceName,id,LastSyncDateTime
+
+# Devices synced in the last 8hrs 
+$8hrs = (Get-Date).AddHours(-8)
+Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -ge $8hrs } | select devicename,id,LastSyncDateTime
+
+# Devices synced more than 30 days ago
+$ThirtyDays = (Get-Date).AddDays(-30)
+Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -lt $ThirtyDays } | select devicename,id,LastSyncDateTime
+
+
+# Android devices #
+$AndroidProps = @('ManagedDeviceName','ManagedDeviceOwnerType','OSVersion','SerialNumber','ComplianceState','EnrollmentProfileName','EnrolledDateTime','LastSyncDateTime')
+Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "Android" } | Select $AndroidProps
+
+# iOS devices 
+$iOSProps = @('ManagedDeviceName','ManagedDeviceOwnerType','OSVersion','SerialNumber','ComplianceState','EnrollmentProfileName','EnrolledDateTime','LastSyncDateTime')
+Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "iOS" } | Select $iOSProps
