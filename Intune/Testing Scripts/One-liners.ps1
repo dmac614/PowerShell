@@ -18,7 +18,8 @@ $DeviceProps = @(
 $Today = (Get-Date)
 Get-MgDeviceManagementManagedDevice -All | 
 ? { $_.ComplianceGracePeriodExpirationDateTime -lt $Today } |
-Select-Object DeviceName,OperatingSystem,ComplianceState,ComplianceGracePeriodExpirationDateTime | sort ComplianceGracePeriodExpirationDateTime
+Select-Object DeviceName,OperatingSystem,ComplianceState,ComplianceGracePeriodExpirationDateTime | 
+Sort-Object ComplianceGracePeriodExpirationDateTime
 
 # All noncompliant devices #
 
@@ -41,3 +42,14 @@ Select-Object DeviceName,OperatingSystem,ComplianceState,ComplianceGracePeriodEx
 Get-MgDeviceManagementManagedDevice -All | 
 ? { $_.OperatingSystem -eq "iOS" -and $_.ComplianceState -eq "noncompliant" -or $_.ComplianceState -eq "inGracePeriod"} |
 Select-Object DeviceName,OperatingSystem,ComplianceState,ComplianceGracePeriodExpirationDateTime
+
+
+#################
+# Sync devices  #
+#################
+
+# Synced in the last 8 hours
+$EightHours = (Get-Date).AddHours(-8)
+Get-MgDeviceManagementManagedDevice -All | 
+? { $_.LastSyncDateTime -gt $EightHours } | 
+Select-Object DeviceName,OperatingSystem,LastSyncDateTime | Sort-Object LastSyncDateTime
