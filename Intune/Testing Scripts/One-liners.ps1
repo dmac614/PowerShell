@@ -6,9 +6,8 @@ $DeviceID = "26a4d4fe-c271-4111-82fc-fe9eeacd5b3d"
 Get-MgDeviceManagementManagedDevice -ManagedDeviceId $DeviceID | Select-Object -Property *
 
 # Device properties
-$DeviceProps = @(
-    ""
-)
+$DeviceProps = @("")
+
 
 #####################
 # Device compliance #
@@ -63,21 +62,21 @@ Select-Object DeviceName,OperatingSystem,LastSyncDateTime | Sort-Object LastSync
 
 
 # Check when a device last checked-in
-Get-MgDeviceManagementManagedDevice | select DeviceName,id,LastSyncDateTime
+Get-MgDeviceManagementManagedDevice -All | Select-Object DeviceName,OperatingSystem,id,LastSyncDateTime
 
 # Devices synced in the last 8hrs 
 $8hrs = (Get-Date).AddHours(-8)
-Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -ge $8hrs } | select devicename,id,LastSyncDateTime
+Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -ge $8hrs } | Select-Object devicename,OperatingSystem,id,LastSyncDateTime
 
 # Devices synced more than 30 days ago
 $ThirtyDays = (Get-Date).AddDays(-30)
-Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -lt $ThirtyDays } | select devicename,id,LastSyncDateTime
+Get-MgDeviceManagementManagedDevice | ? { $_.LastSyncDateTime -lt $ThirtyDays } | Select-Object devicename,id,LastSyncDateTime
 
 
 # Android devices #
 $AndroidProps = @('ManagedDeviceName','ManagedDeviceOwnerType','OSVersion','SerialNumber','ComplianceState','EnrollmentProfileName','EnrolledDateTime','LastSyncDateTime')
-Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "Android" } | Select $AndroidProps
+Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "Android" } | Select-Object $AndroidProps
 
 # iOS devices 
 $iOSProps = @('ManagedDeviceName','ManagedDeviceOwnerType','OSVersion','SerialNumber','ComplianceState','EnrollmentProfileName','EnrolledDateTime','LastSyncDateTime')
-Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "iOS" } | Select $iOSProps
+Get-MgDeviceManagementManagedDevice -All | ? { $_.OperatingSystem -eq "iOS" } | Select-Object $iOSProps
