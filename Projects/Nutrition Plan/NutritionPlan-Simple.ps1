@@ -1,4 +1,7 @@
 <#
+
+    # This method is ok, however the meals are already set in the code #
+
     Aim: multiply the values of items within a hashtable by the value of the respective "Day" variable
 
     Create a third function which combines the totals of items in low and high days to give me a final shopping list
