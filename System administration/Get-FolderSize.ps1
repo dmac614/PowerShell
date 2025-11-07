@@ -1,5 +1,23 @@
-## length only works on files, not on folders
+<#
+.SYNOPSIS
+Short description of the script. 
+.DESCRIPTION
+Longer description of the script with more details.
+.PARAMETER <parameter>
+Description of the parameter
+.EXAMPLE
+Get-FolderSize.ps1 -Path C:\Temp
 
+
+.NOTES
+Author: Daniel Macdonald
+
+The .NET objects work with PowerShell 7+
+The length property only works on files, not on folders
+
+#>
+
+## 
 param(
         [Parameter(Mandatory)]
         [string]$Path,
@@ -12,6 +30,18 @@ function FolderSize {
         [string]$Path,
         [string]$FormattedNumber = "{0:N}"
     )
+
+    ## TODO: fix this logic
+    # # pwsh path
+    # $Pwsh = "C:\Program Files\PowerShell\7\pwsh.exe"
+
+    # # Check for PowerShell Core
+    # if ($PSVersionTable.PSVersion -lt 7.01 -xor (Test-Path $Pwsh)) { 
+    #     Write-Output "Starting PowerShell 7"
+    #     Start-Process "$Pwsh" -NoNewWindow 
+
+    # } elseif (!(Test-Path $Pwsh)) { Write-Error "PowerShell 7 is not installed" }
+    
 
     # File and folder enumeration configs  
     $opt = [IO.EnumerationOptions]::new()
