@@ -36,11 +36,11 @@ $AwayLeaders = $objData.scoreboard.games.gameleaders.awayleaders
 #endregion data for home and away teams & players
  
 #region reformatting game scores using CSV files
-$HomeTeam | Select-Object wins,losses,teamName,score | ConvertTo-Csv | Out-File 'C:\PS Demo\homeTeam.csv'
-$AwayTeam | Select-Object score,teamName,wins,losses | ConvertTo-Csv | Out-File 'C:\PS Demo\awayTeam.csv'
+$HomeTeam | Select-Object wins,losses,teamName,score | ConvertTo-Csv | Out-File "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\homeTeam.csv"
+$AwayTeam | Select-Object score,teamName,wins,losses | ConvertTo-Csv | Out-File "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\awayTeam.csv"
 
-$homeCSV = Import-Csv -Path 'C:\PS Demo\homeTeam.csv'
-$awayCSV = Import-Csv -Path 'C:\PS Demo\awayTeam.csv'
+$homeCSV = Import-Csv -Path "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\homeTeam.csv"
+$awayCSV = Import-Csv -Path "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\awayTeam.csv"
 
 # Required help here: start
 $maxLength = [math]::Max($homeCSV.count, $awayCSV.count)
@@ -65,8 +65,8 @@ for ( $i=0; $i -lt $maxLength; $i++ ) {
     }
 }
 
-$merged | Export-Csv -Path 'C:\PS Demo\mergedTeams.csv' # Required help here: end
-Import-CSV -Path 'C:\PS Demo\mergedTeams.csv' | Format-Table
+$merged | Export-Csv -Path "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\mergedTeams.csv" # Required help here: end
+Import-CSV -Path "C:\PowerShell Dev\PowerShell\Projects\Get NBA Scores\mergedTeams.csv" | Format-Table
 #endregion reformatting game scores using CSV files
 
 #region stat leaders
