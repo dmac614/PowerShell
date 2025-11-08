@@ -11,7 +11,7 @@ Author: Daniel Macdonald
 #>
 
 function Get-HighestRAM {
-    param(
+
         $SortObjProps = @{
             Property = "WorkingSet"
             Descending = $true
@@ -24,7 +24,6 @@ function Get-HighestRAM {
                 @{n='Memory';e={'{0:P1}' -f ($_.WorkingSet / 1GB) }}
             )
         }
-    )
     
     # List the top 10 processes with the highest memory
     Get-Process | Sort-Object @SortObjProps | Select-Object @MemoryProps

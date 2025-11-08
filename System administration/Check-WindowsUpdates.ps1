@@ -8,12 +8,10 @@ Install Windows updates. The verbose output is displayed on the screen and saved
 .NOTES
 Author: Daniel Macdonald
 #>  
-    [Cmdletbinding()]
-    param (
-        $LogFile = "Test.log",
-        $TempFolder = "$env:LOCALAPPDATA\Temp",
-        $LocalAppData = "$env:LOCALAPPDATA"
-    )
+    $LogFile = "Test.log"
+    $TempFolder = "$env:LOCALAPPDATA\Temp"
+    $LocalAppData = "$env:LOCALAPPDATA"
+
 
 #region
     <#  

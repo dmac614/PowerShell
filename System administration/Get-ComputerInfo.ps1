@@ -14,7 +14,7 @@ Author: Daniel Macdonald
 
 # Function which contains the commands to gather the information
 function ComputerDetails {
-    param(
+    
         $CompInfoProps = @(
             "csname","csusername","CsDomain","OsName","osversion","BiosSeralNumber","BiosSMBIOSBIOSVersion","CsManufacturer","CsModel",
             @{n='CsTotalPhysicalMemory'; e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }}
@@ -25,7 +25,6 @@ function ComputerDetails {
             @{n='Size';e={ '{0:N2}' -f ($_.Size / 1GB) }},
             @{n='FreeSpace';e={ '{0:N2}' -f ($_.FreeSpace / 1GB) }}
         )
-    )
     
     # Gather specs about the computer system
     Write-Output "Specifications about the computer system:"

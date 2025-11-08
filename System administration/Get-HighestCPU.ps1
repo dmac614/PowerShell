@@ -11,7 +11,7 @@ Author: Daniel Macdonald
 #>
 
 function Get-HighestCPU {
-    param(
+    
         $SortObjProps = @{
             Property = "CPU"
             Descending = $true 
@@ -24,7 +24,6 @@ function Get-HighestCPU {
                 @{n='CPU';e={ '{0:P1}' -f ($_.CPU / 1KB) }}
             )
         }
-    )
   
     # List the top 10 processes with the highest CPU
     Get-Process | Sort-Object @SortObjProps  | Select-Object @CPUProps
