@@ -30,18 +30,37 @@ function FolderSize {
         [string]$Path,
         [string]$FormattedNumber = "{0:N}"
     )
+        
+    if ($PSEdition -ne "Core") {
+        $Pwsh = (Get-Command pwsh.exe -ErrorAction SilentlyContinue).Source
+        if (-not $Pwsh) {
+            Write-Error "PowerShell 7 is required to run the .NET objects in this script"
+            return 
+        }
+        
+        # Still not working as intended
+        # A new window is opened and the rest of the script runs there opposed to the $PSCommandPath
+        # Read more about Start-Process
+        # Test this: $ProcObj = [system.diagnostics.processstartinfo]::new()
+        Write-Output "Starting PowerShell 7"
+        $argList = @{
+            ExecutionPolicy = 'Bypass'
+            File = $PSCommandPath
+            Path = $Path
+            Wait = $true
+        }
 
-    ## TODO: fix this logic
-    # # pwsh path
-    # $Pwsh = "C:\Program Files\PowerShell\7\pwsh.exe"
+        <# another possiblity to use
+        $argList = @(
+            '-NoProfile',
+            '-ExecutionPolicy', 'Bypass',
+            '-File', "`"$PSCommandPath`"",
+            '-Path', "`"$Path`"")
+        #>
+            Start-Process -FilePath $Pwsh -ArgumentList @argList -NoNewWindow
+            return
+    }
 
-    # # Check for PowerShell Core
-    # if ($PSVersionTable.PSVersion -lt 7.01 -xor (Test-Path $Pwsh)) { 
-    #     Write-Output "Starting PowerShell 7"
-    #     Start-Process "$Pwsh" -NoNewWindow 
-
-    # } elseif (!(Test-Path $Pwsh)) { Write-Error "PowerShell 7 is not installed" }
-    
 
     # File and folder enumeration configs  
     $opt = [IO.EnumerationOptions]::new()
