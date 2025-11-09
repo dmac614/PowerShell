@@ -38,7 +38,7 @@ function Get-TempFolder {
 #endregion
 
 #region
-function Check-IncompatibleDCU {
+function IncompatibleDCU {
     param(
         $IncompatibleApp = "Dell Command | Update for Windows 10"
     )
@@ -74,7 +74,7 @@ function Check-IncompatibleDCU {
     }
 
     # evoke function
-    Check-IncompatibleDCU
+    IncompatibleDCU
 #endregion
 
 
