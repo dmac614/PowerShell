@@ -15,7 +15,7 @@ function Get-HighestCPU {
         $SortObjProps = @{
             Property = "CPU"
             Descending = $true 
-        },
+        }
 
         $CPUProps = @{
             First = 10

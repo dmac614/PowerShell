@@ -15,7 +15,7 @@ function Get-HighestRAM {
         $SortObjProps = @{
             Property = "WorkingSet"
             Descending = $true
-        },
+        }
 
         $MemoryProps = @{
             First = 10
