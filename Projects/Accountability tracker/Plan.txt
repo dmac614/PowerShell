@@ -36,3 +36,58 @@
     ...
     28-31
 #>
+
+
+
+# psuedocode
+You’ll:
+
+Define your goals/tasks for the day.
+
+Check if the monthly CSV exists.
+
+Create or load the file.
+
+Add a new record for today.
+
+Save the updated data.
+add: file versioning -- Save backups or log changes to prevent overwriting data.
+
+BEGIN
+
+DEFINE taskList = [
+    "Follow nutrition plan",
+    "Drink 3L water",
+    "Take vitamins",
+    "Workout",
+    "Check-in",
+    "Follow sleep pattern"
+]
+
+SET currentMonth = get current month name
+SET currentYear = get current year
+SET fileName = "Accountability_" + currentYear + "_" + currentMonth + ".csv"
+
+IF fileName does not exist THEN
+    CREATE new file with headers:
+        Date, Task, Completed, Notes
+ENDIF
+
+FOR each task in taskList DO
+    DISPLAY task
+    PROMPT user for completion status (Yes/No)
+    PROMPT user for notes (optional)
+
+    CREATE dailyRecord as object {
+        Date = today’s date
+        Task = current task
+        Completed = user input
+        Notes = user input
+    }
+
+    APPEND dailyRecord to fileName
+END FOR
+
+DISPLAY message "Today's updates saved to " + fileName
+
+END
