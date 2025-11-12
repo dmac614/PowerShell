@@ -77,6 +77,8 @@ FOR each task in taskList DO
     DISPLAY task
     PROMPT user for completion status (Yes/No)
     PROMPT user for notes (optional)
+        did you complete all tasks? If yes mark completed as yes
+        if no, ask the user one by one for their answer
 
     CREATE dailyRecord as object {
         Date = today’s date
