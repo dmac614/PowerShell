@@ -1,5 +1,19 @@
-Import-Module PSCalendar
+# Check for required module
+$CalendarModule = Get-Module -ListAvailable | ? { $_.name -eq "PSCalendar" }
+    if (-not $CalendarModule){
+    try {
+            Write-Output "The PSCalendar module is not installed`nInstalling... "
+            Install-Module -Name PSCalendar -AllowClobber
+            Import-Module PSCalendar } 
+    catch { Write-Error $Error[0] }
 
+        } elseif ($CalendarModule){ 
+            Write-Output "Importing the PSCalendar module"
+            Import-Module PSCalendar } 
+        else { Write-Output "The required module installed"; break }
+
+
+# Testing a pscustomobject
 $Table = [pscustomobject]@{
     "Follow nutrition plan" = ""
     "Drink 3L water" = ""
@@ -9,11 +23,49 @@ $Table = [pscustomobject]@{
     "Follow sleep pattern" = ""
 }
 
-Show-Calendar 
+# Testing a hashtable
+$CustomProps = @{n='Name'; e={'Variable'}} 
+
+#,"@{n='Value';e={'Completed'}}" )
+
+$Tracker = @{
+
+    "Follow nutrition plan" = ""
+    "Drink 3L water" = ""
+    "Take vitamins" = ""
+    "Workout" = ""
+    "Check-in" = ""
+    "Follow sleep pattern" = ""
+}
+
+$Tracker | Select-Object @CustomProps
+
+
+
+# Display the monthly calendar
+$CurrentMonth = (Get-Date).Month
+Write-Output "Displaying calendar for the month"
+Show-Calendar -MonthOnly
 
 $Table
 
+
+
 # write up a command to get all of the dates which Tuesdays, Fridays, and Saturdays fall on for a month
+$Nov = 11
+
+function GymDays([int]$Month) {
+    $DateFormat = @('DayOfWeek','Day','Month','Year')
+    $GymDays = @('Tuesday', 'Friday', 'Saturday')
+    $d = [system.datetime]::DaysInMonth(2025,$Month)
+            for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | Select-Object $DateFormat
+            }
+} GymDays(10)
+
+
+
+
 
 <#
 
@@ -49,12 +101,13 @@ $Table
 
 
 #     #region List the days of a single month
-#     $Nov = 11
-#     $DateFormat = @('DayOfWeek','Day','Month','Year')
-#     $d = [system.datetime]::DaysInMonth(2025,$Nov)
-#             for ($i = 1; $i -le $d; $i++) {
-#                 Get-Date -Month $Nov -Day $i | Select-Object $DateFormat
-#             }
+    $Nov = 11
+    $DateFormat = @('DayOfWeek','Day','Month','Year')
+    $GymDays = @('Tuesday', 'Friday', 'Saturday')
+    $d = [system.datetime]::DaysInMonth(2025,$Nov)
+            for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $Nov -Day $i | ? {$_.DayOfWeek -in $GymDays}  | Select-Object $DateFormat
+            }
 #     #endregion
             
 
