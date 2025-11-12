@@ -1,53 +1,83 @@
-# Check for required module
-$CalendarModule = Get-Module -ListAvailable | ? { $_.name -eq "PSCalendar" }
-    if (-not $CalendarModule){
-    try {
-            Write-Output "The PSCalendar module is not installed`nInstalling... "
-            Install-Module -Name PSCalendar -AllowClobber
-            Import-Module PSCalendar } 
-    catch { Write-Error $Error[0] }
+#region Check for required module
+function CheckForModule($m) {
+    if (Get-Module | ? { $_.name -eq $m }) {
+        Write-Host "Module is imported"
+        break
+    }
 
-        } elseif ($CalendarModule){ 
-            Write-Output "Importing the PSCalendar module"
-            Import-Module PSCalendar } 
-        else { Write-Output "The required module installed"; break }
+    else {
+            try {
 
+                if (Get-Module -ListAvailable | ? { $_.name -eq $m }) {
+                    "Located module: importing $m"
+                    Import-Module -Name $m -Verbose
+                }
+                
+                elseif (Get-Module -ListAvailable | ? {$_.name -ne $m}) {
+                    "Module is not installed: installing $m"
+                    Install-Module $m -Verbose
+                }
+            } catch { Write-Error $Error[0] }
+    }
+} 
 
-# Testing a pscustomobject
-$Table = [pscustomobject]@{
-    "Follow nutrition plan" = ""
-    "Drink 3L water" = ""
-    "Take vitamins" = ""
-    "Workout" = ""
-    "Check-in" = ""
-    "Follow sleep pattern" = ""
-}
-
-# Testing a hashtable
-$CustomProps = @{n='Name'; e={'Variable'}} 
-
-#,"@{n='Value';e={'Completed'}}" )
-
-$Tracker = @{
-
-    "Follow nutrition plan" = ""
-    "Drink 3L water" = ""
-    "Take vitamins" = ""
-    "Workout" = ""
-    "Check-in" = ""
-    "Follow sleep pattern" = ""
-}
-
-$Tracker | Select-Object @CustomProps
+CheckForModule("PSCalendar")
+#endregion
 
 
+##################### Testing a pscustomobject ####################
+$Variables = @( 
+    "Follow nutrition plan",
+    "Drink 3L water",
+    "Take vitamins",
+    "Workout",
+    "Check-in",
+    "Follow sleep pattern"
+    )
+
+# Change all completed variables to Yes
+function AllCompleted() {}
+
+
+function CreateResults() {
+    param(
+        [ValidateSet("Yes", "No")]
+        [string]$AllCompleted
+    )
+    
+    $Results = @()
+    foreach ($item in $Variables) {
+        
+        $completed  = $AllCompleted
+        $notes      = "Notes"
+
+        $trackerObjects = [pscustomobject]@{   
+            "Variables to complete" = $item
+            "Completed"             = $AllCompleted
+            "Notes"                 = $notes
+        }
+        
+        $Results += $trackerObjects
+    }
+    
+    
+    $Results
+
+} #endfunction
+
+# Call function
+CreateResults -AllCompleted Yes
+
+################################################################################
+
+
+
+#################### working with the calendar ####################
 
 # Display the monthly calendar
 $CurrentMonth = (Get-Date).Month
 Write-Output "Displaying calendar for the month"
 Show-Calendar -MonthOnly
-
-$Table
 
 
 
@@ -64,7 +94,7 @@ function GymDays([int]$Month) {
 } GymDays(10)
 
 
-
+############################################################
 
 
 <#
