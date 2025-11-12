@@ -2,7 +2,6 @@
 function CheckForModule($m) {
     if (Get-Module | ? { $_.name -eq $m }) {
         Write-Host "Module is imported"
-        break
     }
 
     else {
@@ -24,20 +23,29 @@ function CheckForModule($m) {
 CheckForModule("PSCalendar")
 #endregion
 
+#region FileData
+$monthFormat = @(01,02,03,04,05,06,07,08,09,10,11,12)
+Export-Csv -Path "C:\PS Demo\Working with files\$fileName"
+
+$CurrentMonth   = (Get-Date).Month
+$CurrentYear    = (Get-Date).Year
+$fileName = "$CurrentMonth" + "$CurrentYear" + "_Tracker.csv"
+#endregion
+
 
 ##################### Testing a pscustomobject ####################
-$Variables = @( 
+$DailyVariables = @( 
     "Follow nutrition plan",
     "Drink 3L water",
     "Take vitamins",
+    "Follow sleep pattern",
     "Workout",
-    "Check-in",
-    "Follow sleep pattern"
+    "Check-in"
     )
 
-# Change all completed variables to Yes
-function AllCompleted() {}
 
+# Change all completed variables to Yes
+#function AllCompleted() {}
 
 function CreateResults() {
     param(
@@ -45,22 +53,27 @@ function CreateResults() {
         [string]$AllCompleted
     )
     
-    $Results = @()
-    foreach ($item in $Variables) {
-        
-        $completed  = $AllCompleted
-        $notes      = "Notes"
+    #($weekly in $WeeklyVariables)
+    #"Weekly variables"      = $weekly
+    
 
-        $trackerObjects = [pscustomobject]@{   
-            "Variables to complete" = $item
-            "Completed"             = $AllCompleted
-            "Notes"                 = $notes
+    $completed  = $AllCompleted
+    $notes      = "Notes"
+    $Results    = @()
+
+    foreach ($daily in $DailyVariables) {
+
+            $dailyObjects = [pscustomobject]@{  
+                "Daily variables"       = $daily
+                "Completed"             = if ($daily -eq $DailyVariables[4] -or $daily -eq $DailyVariables[5]) {$null} else {$AllCompleted}
+                "Notes"                 = $notes
         }
-        
-        $Results += $trackerObjects
+    
+    $Results += $dailyObjects
+                    
     }
-    
-    
+
+
     $Results
 
 } #endfunction
