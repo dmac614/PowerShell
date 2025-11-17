@@ -9,12 +9,12 @@ function CheckForModule($m) {
 
                 if (Get-Module -ListAvailable | ? { $_.name -eq $m }) {
                     "Located module: importing $m"
-                    Import-Module -Name $m -Verbose
+                    Import-Module -Name $m
                 }
                 
                 elseif (Get-Module -ListAvailable | ? {$_.name -ne $m}) {
                     "Module is not installed: installing $m"
-                    Install-Module $m -Verbose
+                    Install-Module $m
                 }
             } catch { Write-Error $Error[0] }
     }
@@ -23,17 +23,112 @@ function CheckForModule($m) {
 CheckForModule("PSCalendar")
 #endregion
 
-#region FileData
-$monthFormat = @(01,02,03,04,05,06,07,08,09,10,11,12)
-Export-Csv -Path "C:\PS Demo\Working with files\$fileName"
+####################################
 
-$CurrentMonth   = (Get-Date).Month
-$CurrentYear    = (Get-Date).Year
-$fileName = "$CurrentMonth" + "$CurrentYear" + "_Tracker.csv"
+#region FileData
+$dateData = @((Get-Date).ToShortDateString(),
+            (Get-Date).Month,(Get-Date).Year)
+
+$folderName = "$((Get-Date).Month)_" + "$((Get-Date).Year)"
+$fileName = "$((Get-Date).ToLongDateString())" + "_Tracker.csv"
+$Path = "C:\PowerShell Dev\PowerShell\Projects\Accountability tracker\Tracker Data"
+
+
+(!(Test-Path $Path\$folderName)) ? 
+        (Write-Output "Creating folder: $folderName",
+        New-Item -ItemType Directory -Name $folderName -Path $Path | Out-Null ) 
+    : "$Path\$folderName"
+
+
+(!(Test-Path $Path\$folderName\$fileName)) ? 
+        (Write-Output "Creating file: $fileName",
+        New-Item -ItemType File -Path $Path\$folderName -Name $fileName | Out-Null ) 
+    : "$Path\$folderName\$fileName"
+
 #endregion
 
 
-##################### Testing a pscustomobject ####################
+#################### working with the calendar ####################
+
+# Display the monthly calendar
+Write-Output "`nDisplaying calendar for the month`n"
+Show-Calendar -MonthOnly
+
+
+
+####################################
+
+
+#region Get the gym day dates of any month
+
+function GetDays() {
+    param(
+        $Month = (Get-Date).Month
+    )    
+
+    $DateFormat = @('DayOfWeek','Day','Month','Year')
+    $GymDays = @('Tuesday', 'Friday', 'Saturday')
+    $d = [system.datetime]::DaysInMonth(2025,$Month)
+            $script:dayGym = for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | 
+                Select-Object $DateFormat }
+            
+            $script:dayMonth = for ($i = 1; $i -le $d; $i++) {Get-Date -Month $Month -Day $i | Select-Object $DateFormat}            
+} 
+GetDays
+#endregion
+
+####################################
+
+
+
+##################### User input ####################
+#$dayGym = for ($i = 1; $i -le $d; $i++) { Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays} | Select-Object $DateFormat }
+
+$gymDayVariables = [pscustomobject]@{
+    "Nutrition Plan"    = ""
+    "7K steps"          = ""
+    "1L water"          = ""
+    "Gym session"       = ""
+}
+
+$otherDayVariables = [pscustomobject]@{
+    "Nutrition Plan"    = ""
+    "7K steps"          = ""
+    "1L water"          = ""
+}
+
+if ((Get-Date).DayOfWeek -match $dayGym){ 
+    $gymDayVariables
+     
+} elseif ((Get-Date).DayOfWeek -match $dayMonth) {
+    $otherDayVariables
+}
+
+
+
+#$dailyNote = Read-Host "Enter notes for today"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################
+
+
+<#
+
+
 $DailyVariables = @( 
     "Follow nutrition plan",
     "Drink 3L water",
@@ -81,36 +176,14 @@ function CreateResults() {
 # Call function
 CreateResults -AllCompleted Yes
 
-################################################################################
 
 
 
-#################### working with the calendar ####################
-
-# Display the monthly calendar
-$CurrentMonth = (Get-Date).Month
-Write-Output "Displaying calendar for the month"
-Show-Calendar -MonthOnly
 
 
 
-# write up a command to get all of the dates which Tuesdays, Fridays, and Saturdays fall on for a month
-$Nov = 11
-
-function GymDays([int]$Month) {
-    $DateFormat = @('DayOfWeek','Day','Month','Year')
-    $GymDays = @('Tuesday', 'Friday', 'Saturday')
-    $d = [system.datetime]::DaysInMonth(2025,$Month)
-            for ($i = 1; $i -le $d; $i++) {
-                Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | Select-Object $DateFormat
-            }
-} GymDays(10)
 
 
-############################################################
-
-
-<#
 
     Testing
 
@@ -144,13 +217,13 @@ function GymDays([int]$Month) {
 
 
 #     #region List the days of a single month
-    $Nov = 11
-    $DateFormat = @('DayOfWeek','Day','Month','Year')
-    $GymDays = @('Tuesday', 'Friday', 'Saturday')
-    $d = [system.datetime]::DaysInMonth(2025,$Nov)
-            for ($i = 1; $i -le $d; $i++) {
-                Get-Date -Month $Nov -Day $i | ? {$_.DayOfWeek -in $GymDays}  | Select-Object $DateFormat
-            }
+    # $Nov = 11
+    # $DateFormat = @('DayOfWeek','Day','Month','Year')
+    # $GymDays = @('Tuesday', 'Friday', 'Saturday')
+    # $d = [system.datetime]::DaysInMonth(2025,$Nov)
+    #         for ($i = 1; $i -le $d; $i++) {
+    #             Get-Date -Month $Nov -Day $i | ? {$_.DayOfWeek -in $GymDays}  | Select-Object $DateFormat
+    #         }
 #     #endregion
             
 
