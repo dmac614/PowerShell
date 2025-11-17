@@ -93,3 +93,47 @@ END FOR
 DISPLAY message "Today's updates saved to " + fileName
 
 END
+
+
+##########################################################
+
+
+gym day object -- complete
+normal day object -- complete
+current month variable 
+
+# complete :)
+Get the gym day dates of the current month
+- Gym days: tuesday, friday, saturday
+#
+
+
+if its a gym day: N; 7K; 2L; G
+else: N; 7K; 2L
+
+Ask the user if they completed all the daily variables
+- if not all, which variables were completed
+- else, A = all
+
+## possible addition ##
+if a full day is completed, highligh the calendar day green
+
+
+
+folder: Tracker Data
+
+Create a new folder for the month -- complete
+
+Save daily tracker as a file in the folder
+
+
+
+### Logical steps
+
+navigate to folder path
+-- does folder exist?
+open the file
+-- does file exist?
+update values with Y or N
+-- append data to the file
+save file
