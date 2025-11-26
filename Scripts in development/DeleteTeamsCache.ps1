@@ -1,22 +1,13 @@
-# Testing #
-
-$TeamsClassic = "${env:USERPROFILE}\AppData\Roaming\Microsoft"
+$TeamsClassic = "${env:USERPROFILE}\AppData\Roaming\Microsoft\Teams"
 $TeamsNew = "${env:USERPROFILE}\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe"
 
+$Warning = "The classic version of Teams is installed`nUpgrade to the new version" 
 
-Test-Path $TeamsClassic
-(Test-Path $TeamsNew).GetHashCode()
-(Test-Path $TeamsClassic).GetHashCode()
-
-# Learn a simpler way to write this
-$TeamsClassic -xor $TeamsNew | ForEach-Object {
-    Test-Path $_
-    if ($_.GetHashCode() ) {
-        Write-Output $_.ToString()
-    }
-}
-
-
-
-$TeamsClassic.CompareTo($TeamsNew)
-$TeamsNew.Equals($TeamsClassic)
+if (Test-Path $TeamsClassic) { Write-Warning $Warning -WarningAction Stop }
+if (Test-Path $TeamsNew) 
+    {
+        Get-Process -Name ms-teams -ErrorAction SilentlyContinue | Stop-Process 
+        Remove-Item -Path $TeamsNew -Recurse -Force
+        Start-Sleep -Seconds 5
+        Start-Process ms-teams 
+    }   else { Write-Output "Teams is possibly not installed" }
