@@ -1,7 +1,7 @@
 #region Check for required module
 function CheckForModule($m) {
     if (Get-Module | ? { $_.name -eq $m }) {
-        Write-Host "Module is imported"
+        Write-Host "Imported the PSCalendar module"
     }
 
     else {
@@ -23,7 +23,9 @@ function CheckForModule($m) {
 CheckForModule("PSCalendar")
 #endregion
 
+
 ####################################
+
 
 #region FileData
 $dateData = @((Get-Date).ToShortDateString(),
@@ -35,25 +37,28 @@ $Path = "C:\PowerShell Dev\PowerShell\Projects\Accountability tracker\Tracker Da
 
 
 (!(Test-Path $Path\$folderName)) ? 
-        (Write-Output "Creating folder: $folderName",
-        New-Item -ItemType Directory -Name $folderName -Path $Path | Out-Null ) 
+        (Write-Output "New folder created: $folderName"),
+        (New-Item -ItemType Directory -Name $folderName -Path $Path | Out-Null) 
     : "$Path\$folderName"
 
 
 (!(Test-Path $Path\$folderName\$fileName)) ? 
-        (Write-Output "Creating file: $fileName",
-        New-Item -ItemType File -Path $Path\$folderName -Name $fileName | Out-Null ) 
+        (Write-Output "New file created: $fileName"),
+        (New-Item -ItemType File -Path $Path\$folderName -Name $fileName | Out-Null) 
     : "$Path\$folderName\$fileName"
 
 #endregion
 
 
-#################### working with the calendar ####################
+####################################
+
+
+#region Monthly calendar
 
 # Display the monthly calendar
 Write-Output "`nDisplaying calendar for the month`n"
 Show-Calendar -MonthOnly
-
+#endregion
 
 
 ####################################
@@ -73,59 +78,74 @@ function GetDays() {
                 Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | 
                 Select-Object $DateFormat }
             
-            $script:dayMonth = for ($i = 1; $i -le $d; $i++) {Get-Date -Month $Month -Day $i | Select-Object $DateFormat}            
+            $script:dayMonth = for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $Month -Day $i | 
+                Select-Object $DateFormat}            
 } 
 GetDays
 #endregion
 
+
 ####################################
 
 
-
-##################### User input ####################
-#$dayGym = for ($i = 1; $i -le $d; $i++) { Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays} | Select-Object $DateFormat }
+#region User input 
 
 $gymDayVariables = [pscustomobject]@{
-    "Nutrition Plan"    = ""
-    "7K steps"          = ""
-    "1L water"          = ""
-    "Gym session"       = ""
+    "Nutrition Plan"    = $q1
+    "7K steps"          = $q2
+    "1L water"          = $q3
+    "Gym session"       = $q4
+    #"Notes"             = $dailyNote
+
 }
 
 $otherDayVariables = [pscustomobject]@{
-    "Nutrition Plan"    = ""
-    "7K steps"          = ""
-    "1L water"          = ""
+    "Nutrition Plan"    = $q1
+    "7K steps"          = $q2
+    "1L water"          = $q3
+    #"Notes"             = $dailyNote
 }
 
 if ((Get-Date).DayOfWeek -match $dayGym){ 
     $gymDayVariables
      
 } elseif ((Get-Date).DayOfWeek -match $dayMonth) {
+    
+    #display the results $otherDayVariables
     $otherDayVariables
-}
+
+} else { Write-Error "User input failed" }
 
 
 
 #$dailyNote = Read-Host "Enter notes for today"
 
 
+# function GetAnswers() {
+# <#
+#     Ask the Qs first
+#     Their answers will be stored in the pscustomobject
+# #>
+#     param(
+#         [ValidateSet("A","Y","N")]
+#         $Answer
+#     )
+#     $q1 = Read-Host -Prompt "Did you follow the nutrition plan today?" 
+#     $q2 = Read-Host -Prompt "Did you complete 7k steps today?"
+#     $q3 = Read-Host -Prompt "Did you drink 1L of water with added salt today?"
+#     $q4 = Read-Host -Prompt "Did you complete the gym session today?"
 
 
+# }
 
-
-
-
-
-
-
-
-
+# GetAnswers
+#endregion
 
 
 ############################################################
 
-
+#region testing stuff
 <#
 
 
@@ -294,3 +314,4 @@ CreateResults -AllCompleted Yes
 #             }
     
 #     }   DisplayDate-Week
+#endregion

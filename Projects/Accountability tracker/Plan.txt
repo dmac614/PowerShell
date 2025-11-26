@@ -73,6 +73,22 @@ IF fileName does not exist THEN
         Date, Task, Completed, Notes
 ENDIF
 
+
+
+
+
+
+USER INPUT 
+
+pscustomobject has empty values
+the user is asked a question
+- did you complete all tasks? If A = complete all tasks with Y
+- if no; ask for answer for each task
+Ask if any notes are to be added 
+Append the answers to the pscustomobject
+
+
+
 FOR each task in taskList DO
     DISPLAY task
     PROMPT user for completion status (Yes/No)
