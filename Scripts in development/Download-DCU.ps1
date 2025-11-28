@@ -15,7 +15,21 @@
     Each identifying number appears to be different (based on the app version)
 
 
+    Is the manufacturer dell? 
+    Is DCU installed?
+    - ensure incompatible DCU is not installed
+    - if no, download and install it
+    - if yes, get the version, determine if the version is ok, possibly download and install the latest version
+    Check for updates
+
+
 #>
+
+# Confirm it's a Dell system
+if (! (Get-CimInstance -ClassName Win32_ComputerSystem).Manufacturer -match 'Dell') 
+        { Write-Error "This is not a Dell system" -ErrorAction Stop }
+
+
 #region Temp folder
 # The installer file will be downloaded here 
 function Get-TempFolder {
@@ -54,7 +68,7 @@ function IncompatibleDCU {
 
             try {
                 # Uninstall the app silently
-                msiexec.exe /X"$AppIdentifyingNumber" /qn
+                msiexec.exe /X "$AppIdentifyingNumber" /qn
                 Write-Output "Uninstalling $IncompatibleApp`nWaiting 60 seconds to complete the uninstall"
                 Start-Sleep -Seconds 60
 
@@ -80,11 +94,10 @@ function IncompatibleDCU {
 
 #region
 function Get-DCU {
-    param(
-        [string]$dl = "https://downloads.dell.com/FOLDER11914128M/1/Dell-Command-Update-Windows-Universal-Application_9M35M_WIN_5.4.0_A00.EXE",
-        [string]$FileName = $dl.split("https://downloads.dell.com/FOLDER11914128M/1/"),
+        [string]$dl = "https://downloads.dell.com/FOLDER11914128M/1/Dell-Command-Update-Windows-Universal-Application_9M35M_WIN_5.4.0_A00.EXE"
+        [string]$FileName = $dl.split("https://downloads.dell.com/FOLDER11914128M/1/")
         [string]$DownloadPath = "${env:SystemDrive}\Temp" # -- use $TempFolder instead
-    )
+
         # Combine the file name and the download path
         # This will download the file to C:\Temp
         $CombinedPath = Join-Path -Path $DownloadPath -ChildPath $FileName.Trim()
@@ -99,7 +112,7 @@ function Get-DCU {
         try {
             # Create .NET object to download the DCU .exe file
             $WebDownload = New-Object Net.WebClient
-            $WebDownload.DownloadFile($dl, $CombinedPath)
+            $WebDownload.DownloadFile($dl, $CombinedPath) | 
 
             # Validate download of the DCU .exe file
             $FileExists = Get-ChildItem -Path C:\ -Recurse -Filter $FileName.Trim() -ErrorAction SilentlyContinue
