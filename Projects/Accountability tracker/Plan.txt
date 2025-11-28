@@ -1,81 +1,14 @@
 <#
-    Project plan
-        Variables to track
-        1. Eat nutritious foods: no processed food; 2150 cals
-        2. Drink 3L water with celtic sea salt
-        3. Take vitamins: pill box
-        4. Workout 2-3 x per week: Tue; Fri; Sat
-        5. Weigh in; progress pics 1 x per week
-        6. Stick to sleep pattern
-
-    Track for the entire month
-    Simple Y or N to track a variable
-
-    Name: Accountability tracker [month/year]
-    Save tracker file
-
-    Display options:
-
-    Days of the month   1 2 3 4 5 6 7 8 ... 28-31
-    variable            Y Y
-    variable            Y Y
-    variable            N Y
-    variable            Y Y
-    variable            Y N
-    variable            Y Y
-
-
-    Days of month   Variable Variable Variable Variable Variable Variable Variable 
-    1                   Y           Y       Y       Y       N       Y           Y
-    2                   N           Y       Y       Y       Y       Y           Y  
-    3
-    4
-    5
-    6
-    7                   Y           Y       Y       Y       Y       Y           Y 
-    ...
-    28-31
-#>
-
-
 
 # psuedocode
-You’ll:
 
 Define your goals/tasks for the day.
-
 Check if the monthly CSV exists.
-
 Create or load the file.
-
 Add a new record for today.
-
 Save the updated data.
+
 add: file versioning -- Save backups or log changes to prevent overwriting data.
-
-BEGIN
-
-DEFINE taskList = [
-    "Follow nutrition plan",
-    "Drink 3L water",
-    "Take vitamins",
-    "Workout",
-    "Check-in",
-    "Follow sleep pattern"
-]
-
-SET currentMonth = get current month name
-SET currentYear = get current year
-SET fileName = "Accountability_" + currentYear + "_" + currentMonth + ".csv"
-
-IF fileName does not exist THEN
-    CREATE new file with headers:
-        Date, Task, Completed, Notes
-ENDIF
-
-
-
-
 
 
 USER INPUT 
@@ -135,12 +68,6 @@ Ask the user if they completed all the daily variables
 if a full day is completed, highligh the calendar day green
 
 
-
-folder: Tracker Data
-
-Create a new folder for the month -- complete
-
-Save daily tracker as a file in the folder
 
 
 
