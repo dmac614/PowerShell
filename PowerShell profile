@@ -8,6 +8,7 @@ function prompt {
 }
 
 
+## -- this function will be refined -- ##
 function Welcome {
     $Time = (Get-Date).Hour
     $Name = "Daniel"	
