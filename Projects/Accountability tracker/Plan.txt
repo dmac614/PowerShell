@@ -10,73 +10,42 @@ Save the updated data.
 
 add: file versioning -- Save backups or log changes to prevent overwriting data.
 
+## Adding a day retrospectively ##
 
-USER INPUT 
+string prompt: are you tracking for the current or a previous day?
+-- validateset(current,previous); answer stored in variable
+if current day -- create daily file; proceed with the program
+elseif retrospective day:
+- [datetime]prompt which date do you want to track?
+- enter a ToLongDateString i.e 29 November 2025
 
-pscustomobject has empty values
-the user is asked a question
-- did you complete all tasks? If A = complete all tasks with Y
-- if no; ask for answer for each task
-Ask if any notes are to be added 
-Append the answers to the pscustomobject
-
-
-
-FOR each task in taskList DO
-    DISPLAY task
-    PROMPT user for completion status (Yes/No)
-    PROMPT user for notes (optional)
-        did you complete all tasks? If yes mark completed as yes
-        if no, ask the user one by one for their answer
-
-    CREATE dailyRecord as object {
-        Date = today’s date
-        Task = current task
-        Completed = user input
-        Notes = user input
-    }
-
-    APPEND dailyRecord to fileName
-END FOR
-
-DISPLAY message "Today's updates saved to " + fileName
-
-END
-
-
-##########################################################
-
-
-gym day object -- complete
-normal day object -- complete
-current month variable 
-
-# complete :)
-Get the gym day dates of the current month
-- Gym days: tuesday, friday, saturday
-#
-
-
-if its a gym day: N; 7K; 2L; G
-else: N; 7K; 2L
-
-Ask the user if they completed all the daily variables
-- if not all, which variables were completed
-- else, A = all
-
-## possible addition ##
-if a full day is completed, highligh the calendar day green
+try {
+    specifyDate notin $Path\$folderName
+    create a new file for this date
+    [datetime]prompt + "_Tracker.csv"
+}
+catch {$error[0]} 
 
 
 
 
 
-### Logical steps
+29
+N,Y,Y,Y
+Note: along the lines of... utilised 10% of my weekly calories to eat off my nutrition plan. Maximised output by doing 18k steps, gym and cycling
 
-navigate to folder path
--- does folder exist?
-open the file
--- does file exist?
-update values with Y or N
--- append data to the file
-save file
+30
+YYY
+Note: 
+
+1
+YYY
+Note: 
+
+2
+YYYY
+Note: 
+
+3
+NYY
+Note: a portion of the 10% of off-plan calories were consumed. Fasted walk to work
