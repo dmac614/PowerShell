@@ -112,7 +112,7 @@ function Get-DCU {
         try {
             # Create .NET object to download the DCU .exe file
             $WebDownload = New-Object Net.WebClient
-            $WebDownload.DownloadFile($dl, $CombinedPath) | 
+            $WebDownload.DownloadFile($dl, $CombinedPath)
 
             # Validate download of the DCU .exe file
             $FileExists = Get-ChildItem -Path C:\ -Recurse -Filter $FileName.Trim() -ErrorAction SilentlyContinue
