@@ -1,0 +1,27 @@
+## PowerShell profile
+
+# Modify the prompt
+# dmac@[company name]
+function prompt {
+    Write-Output ("dmac@AspireTS -- " + $(Get-Location) +">")
+    return " "
+}
+
+
+## -- this function will be refined -- ##
+function Welcome {
+    $Time = (Get-Date).Hour
+    $Name = "Daniel"	
+    [string]$Morning = "Good morning, $Name`n"
+    [string]$Afternoon = "Good afternoon, $Name`n"
+    [string]$Evening = "Good evening, $Name`n"
+
+
+        if     ($Time -gt 4 -and $Time -lt 12 ) { Write-Host ($Morning)   }
+        elseif ($Time -gt 12 -and $Time -lt 17) { Write-Host ($Afternoon) }
+        elseif ($Time -gt 17 -and $Time -lt 23) { Write-Host ($Evening)   }   
+}
+
+
+# Evoke function
+Welcome
