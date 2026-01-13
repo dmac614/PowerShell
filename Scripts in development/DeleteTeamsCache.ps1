@@ -7,7 +7,8 @@ if (Test-Path $TeamsClassic) { Write-Warning $Warning -WarningAction Stop }
 if (Test-Path $TeamsNew) 
     {
         Get-Process -Name ms-teams -ErrorAction SilentlyContinue | Stop-Process 
-        Remove-Item -Path $TeamsNew -Recurse -Force
+        Remove-Item -Path $TeamsNew -Recurse -Force -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 5
         Start-Process ms-teams 
+        
     }   else { Write-Output "Teams is possibly not installed" }
