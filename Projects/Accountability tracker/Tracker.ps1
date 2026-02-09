@@ -1,9 +1,12 @@
 <#
     To do:
-    Add logic for tracking a day retrospectively
+    Get-PreviousDays function
+
+    create the switch statement
+    -- write the pseudocode
+    -- test with this
+    
 #>
-
-
 #region Check for required module
 function CheckForModule($m) {
     if (Get-Module | ? { $_.name -eq $m }) {
@@ -11,18 +14,19 @@ function CheckForModule($m) {
     }
 
     else {
-            try {
+        try {
 
-                if (Get-Module -ListAvailable | ? { $_.name -eq $m }) {
-                    "Located module: importing $m"
-                    Import-Module -Name $m
-                }
+            if (Get-Module -ListAvailable | ? { $_.name -eq $m }) {
+                "Located module: importing $m"
+                Import-Module -Name $m
+            }
                 
-                elseif (Get-Module -ListAvailable | ? {$_.name -ne $m}) {
-                    "Module is not installed: installing $m"
-                    Install-Module $m
-                }
-            } catch { Write-Error $Error[0] }
+            elseif (Get-Module -ListAvailable | ? { $_.name -ne $m }) {
+                "Module is not installed: installing $m"
+                Install-Module $m
+            }
+        }
+        catch { Write-Error $Error[0] }
     }
 } 
 
@@ -32,170 +36,308 @@ CheckForModule("PSCalendar")
 ####################################
 
 #region FileData
-# $dateData = @((Get-Date).ToShortDateString(),
-#             (Get-Date).Month,(Get-Date).Year)
-
-$folderName = "$((Get-Date).Month)_" + "$((Get-Date).Year)"
-$fileName = "$((Get-Date).ToLongDateString())" + "_Tracker.csv"
+# file name i.e 28 November 2025_Tracker.csv
+$currentDay = (Get-Date).ToLongDateString() 
+$currentMonth = "$((Get-Date).Month)"
+$currentYear = "$((Get-Date).Year)"
+$fileName = $currentDay + "_Tracker.csv"
 $Path = "C:\PowerShell Dev\PowerShell\Projects\Accountability tracker\Tracker Data"
+#endregion
 
+####################################
 
-    (!(Test-Path $Path\$folderName)) ? 
-        (Write-Output "New month folder created: $folderName"),
-        (New-Item -ItemType Directory -Name $folderName -Path $Path | Out-Null) 
-    : "Monthly folder exists:   $Path\$folderName"
+#region functions for testing paths
 
+## When tracking current days ##
 
-# current or previous day #
-[ValidateSet("Current","Previous")]
-[string]$whichDay = Read-Host -Prompt "Are you tracking a previous day or the current day?"
-
-    if ($whichDay -eq "Previous") {
-        
-        [datetime]$specifyDate = Read-Host "Date syntax: 29 November 2025`nWhich date do you want to track?"
-
-            try {
-
-                if ($specifyDate.ToLongDateString() -notin (Get-ChildItem ("$Path\$folderName").Trim("_Tracker.csv") -Name)) {
-                    
-                    # logic for the specifyDate month and (Get-Date).Month
-                    # if the months don't match, create the file in the monthly folder that the month matches
-                    $monthMatch = $specifyDate.Month -match (get-date).Month
-                    if (!($monthMatch)) {
-
-                        $Path | ForEach-Object { 
-                            Get-ChildItem $_ | ? { $_.Name -match $specifyDate.Month | 
-                            New-Item -ItemType File -Path $_ -Name $($specifyDate.ToLongDateString() + "_Tracker.csv") | # error here
-                            # This adds the new item to both monthly folders... that makes sense in hindsight
-                            Out-Null 
-                        }
-                    }
-
-                    } elseif ($monthMatch) {
-
-                        New-Item -ItemType File -Path $Path\$folderName -Name $($specifyDate.ToLongDateString() + "_Tracker.csv") | Out-Null 
-
-                    } else { Write-Error "The monthly folders do not match" -ErrorAction Stop }
-
-                } else { Write-Error "error -- testing" -ErrorAction Stop} 
-
-            } catch { Write-Error $Error[0] }
-
-    } elseif ($whichDay -eq "Current") {
-
-        (!(Test-Path $Path\$folderName\$fileName)) ? 
-            (Write-Output "New daily file created: $fileName"),
-            (New-Item -ItemType File -Path $Path\$folderName -Name $fileName | Out-Null) 
-        : "Daily file exists:       $Path\$folderName\$fileName"
-
+# Test currentYear path
+function currentYearFolder() {
+    if (Test-Path $Path\$currentYear) {
+        "Yearly folder exists: $Path\$currentYear"
+    } else {
+        Write-Output "Yearly folder created: $currentYear"
+        New-Item -ItemType Directory -Name $currentYear -Path $Path | Out-Null
     }
+}
 
+# Test currentMonth
+function currentMonthFolder() {
+    if (Test-Path $Path\$currentYear\$currentMonth) {
+        "Monthly folder exists: $Path\$currentYear\$currentMonth"
+    } else {
+        Write-Output "Monthly folder created: $currentMonth"
+        New-Item -ItemType Directory -Name $currentMonth -Path $Path\$currentYear | Out-Null
+    }
+}
 
+# Test the current day file
+function currentDayFile() {
 
+    $script:joinYearandMonth = Join-Path -Path $currentYear -ChildPath $currentMonth
+    $script:currentFullPath = Join-Path -Path $Path -ChildPath $joinYearandMonth
 
-# #endregion
+    if (Test-Path $currentFullPath\$fileName) {
+        Write-Output "Daily file exists: $currentFullPath\$fileName"
+    } else {
+        Write-Output "New daily file created: $fileName"
+        New-Item -ItemType File -Path "$currentFullPath\$fileName" | Out-Null
+    }
+}
 
-# ####################################
+## When tracking previous days ##
+
+# Test specifyDate.Year 
+function previousYearFolder() {
+    if (Test-Path $Path\$($specifyDate.Year)) {
+        "Yearly folder exists: $Path\$($specifyDate.Year)"
+    } else {
+        Write-Output "Yearly folder created: $($specifyDate.Year)"
+        New-Item -ItemType Directory -Name $($specifyDate.Year) -Path $Path | Out-Null
+    }    
+}
+
+# Test specifyDate.Month
+function previousMonthFolder() {
+    if (Test-Path $Path\$($specifyDate.Year)\$($specifyDate.Month)) {
+        "Monthly folder exists: $Path\$($specifyDate.Year)\$($specifyDate.Month)"
+    } else {
+        Write-Output "Monthly folder created: $($specifyDate.Month)"
+        New-Item -ItemType Directory -Name $($specifyDate.Month) -Path $Path\$($specifyDate.Year) | Out-Null
+    }          
+}
+
+# Test previous day file
+function previousDayFile() {
+
+    $script:previousFolderPath = Join-Path -Path $Path -ChildPath "$($specifyDate.Year)\$($specifyDate.Month)"
+    $script:previousFileName = "$($specifyDate.ToLongDateString())_Tracker.csv"
+    $script:previousFullPath = Join-Path -Path $previousFolderPath -ChildPath $previousFileName
+
+    if (Test-Path $previousFullPath) {
+        Write-Output "Previous day file already exists: $previousFolderPath"
+    } else {
+        New-Item -ItemType File -Path $previousFullPath | Out-Null 
+        Write-Output "New daily file created: $previousFileName" 
+    }
+}
+
+#endregion
+
+####################################
+
+#region tracking the current or previous day
+do {
+    [string]$whichDay = Read-Host -Prompt "`nAnswer with 'Current' or 'Previous'`nAre you tracking a previous day or the current day?"
+} until ($whichDay -in ("Current","Previous"))
+
+# Tracking the current day
+$dayMatch = $currentDay -eq (Get-Date).ToLongDateString()
+if ($whichDay -eq "Current" -and $dayMatch) {
+
+    # Test currentYear path
+    currentYearFolder
+
+    # Test currentMonth path
+    currentMonthFolder
+
+    # Test current day file
+    currentDayFile
+}
+
+# Tracking the previous day
+elseif ($whichDay -eq "Previous") {
+
+    # Enter the date to track. Format 29 November 2025
+    [datetime]$specifyDate = Read-Host "Date syntax: 29 November 2025`nWhich date do you want to track?"
+
+    try {
+
+        # Test specifyDate.Year 
+        previousYearFolder
+
+        # Test specifyDate.Month
+        previousMonthFolder
+
+        # Test previous day file
+        previousDayFile
+
+    } catch { 
+        
+        Write-Error $Error[0] 
+    
+    }
+}
+#endregion
+
+####################################
 
 #region Monthly calendar
 
-# Display the monthly calendar
+# # Display the monthly calendar
 Write-Output "`nDisplaying calendar for the month`n"
 Show-Calendar -MonthOnly
 #endregion
 
 ####################################
 
-#region Get the gym day dates of any month
+#region Get the gym day dates
 
-function GetDays() {
+# Dates of the current month
+function Get-CurrentDays() {
     param(
-        $Month = (Get-Date).Month
+        $Month = (Get-Date).Month,
+        $Year = (Get-Date).Year 
     )    
 
     $DateFormat = @('DayOfWeek','Day','Month','Year')
-    $GymDays = @('Tuesday', 'Friday', 'Saturday')
-    $d = [system.datetime]::DaysInMonth(2025,$Month)
-            $script:dayGym = for ($i = 1; $i -le $d; $i++) {
+    $GymDays = @('Thursday', 'Friday', 'Sunday')
+    $d = [system.datetime]::DaysInMonth($Year,$Month)
+            $script:currentDayGym = for ($i = 1; $i -le $d; $i++) {
                 Get-Date -Month $Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | 
                 Select-Object $DateFormat }
-            
-            $script:dayMonth = for ($i = 1; $i -le $d; $i++) {
+        
+            $script:currentDayMonth = for ($i = 1; $i -le $d; $i++) {
                 Get-Date -Month $Month -Day $i | 
                 Select-Object $DateFormat}            
 } 
-GetDays
+
+Get-CurrentDays
+
+# Dates of the previous month
+function Get-PreviousDays() {
+
+    $DateFormat = @('DayOfWeek','Day','Month','Year')
+    $GymDays = @('Thursday', 'Friday', 'Sunday')
+    $d = [system.datetime]::DaysInMonth($specifyDate.Year,$specifyDate.Month)
+            $script:previousDayGym = for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $specifyDate.Month -Day $i | ? {$_.DayOfWeek -in $GymDays}  | 
+                Select-Object $DateFormat }
+        
+            $script:previousDayMonth = for ($i = 1; $i -le $d; $i++) {
+                Get-Date -Month $specifyDate.Month -Day $i | 
+                Select-Object $DateFormat}       
+}
 #endregion
 
 ####################################
 
 #region User input
-if ((Get-Date).DayOfWeek -in $dayGym.DayOfWeek){ 
 
-    "Daily habits"
-    "`nHint: respond with 'Yes' or 'No'"
-    [ValidateSet("Yes","No")]$q1 = Read-Host -Prompt "Did you follow the nutrition plan today?" 
-    [ValidateSet("Yes","No")]$q2 = Read-Host -Prompt "Did you complete 7k steps today?"
-    [ValidateSet("Yes","No")]$q3 = Read-Host -Prompt "Did you drink 1L of water with added salt today?"
-    [ValidateSet("Yes","No")]$q4 = Read-Host -Prompt "Did you complete the gym session today?"
+# Read questions (gym days)
+# figure out a way to ask the required questions
+function Read-GymQuestions() {
 
-        $qht = [ordered]@{
-            Q1 = $q1
-            Q2 = $q2
-            Q3 = $q3
-            Q4 = $q4
-        }
+    [string[]]$gymQuestions = @(
+        "Did you follow the nutrition plan?",
+        "Did you complete the daily step count?",
+        "Did you drink 2L of water with added salt?",
+        "Did you complete the gym session?"
+    )
 
-    $gymDayVariables = [ordered]@{
-        "Nutrition Plan"    = $qht.Values[0]
-        "7K steps"          = $qht.Values[1]
-        "1L water"          = $qht.Values[2]
-        "Gym session"       = $qht.Values[3]
+    $script:answersStore1 = @()
+    foreach ($q in $gymQuestions) {
+        do {
+            [String[]]$answer = Read-Host $q
+                if ($answer -eq "yes" -or $answer -eq "no"){
+                    $answersStore1 += $answer
+                }
+        } until ($answer -in ("yes","no"))
     }
 
-    $dailyNote = Read-Host "`nEnter notes for today"
+    # Display the answers in an ordered hashtable
+    $script:gymAnswers = [ordered]@{
+        "Nutrition Plan"    = $answersStore1[0]
+        "Daily steps"       = $answersStore1[1]
+        "Daily water"       = $answersStore1[2]
+        "Gym session"       = $answersStore1[3]
+    }
+}
 
-    # logic for previous or current day file
-    # append data to the daily file
-    "`nAdded data to: $fileName"
-    $gymDayVariables | Out-File -FilePath "$Path\$folderName\$fileName"
-    Write-Output "Daily note: $dailyNote" | Out-File -FilePath "$Path\$folderName\$fileName" -Append
+function Read-OtherQuestions() {
 
-    Get-Content "$Path\$folderName\$fileName"
+    [string[]]$gymQuestions = @(
+        "Did you follow the nutrition plan?",
+        "Did you complete the daily step count?",
+        "Did you drink 2L of water with added salt?"
+    )
 
-
-} elseif ((Get-Date).DayOfWeek -in $dayMonth.DayOfWeek) {
-    
-    "Daily habits"
-    "`nHint: respond with 'Yes' or 'No'"
-    ## if answered incorrectly, prompt again
-    [ValidateSet("Yes","No")]$q1 = Read-Host -Prompt "Did you follow the nutrition plan today?" 
-    [ValidateSet("Yes","No")]$q2 = Read-Host -Prompt "Did you complete 7k steps today?"
-    [ValidateSet("Yes","No")]$q3 = Read-Host -Prompt "Did you drink 1L of water with added salt today?"
-    
-        $qht = [ordered]@{
-            Q1 = $q1
-            Q2 = $q2
-            Q3 = $q3
-        }
-
-    $otherDayVariables = [ordered]@{
-        "Nutrition Plan"    = $qht.Values[0]
-        "7K steps"          = $qht.Values[1]
-        "1L water"          = $qht.Values[2]
-        #"Notes"             = $dailyNote
+    $script:answersStore2 = @()
+    foreach ($q in $gymQuestions) {
+        do {
+            [String[]]$answer = Read-Host $q
+                if ($answer -eq "yes" -or $answer -eq "no"){
+                    $answersStore2 += $answer
+                }
+        } until ($answer -in ("yes","no"))
     }
 
+    # Display the answers in an ordered hashtable
+    $script:otherAnswers = [ordered]@{
+        "Nutrition Plan"    = $answersStore2[0]
+        "Daily steps"       = $answersStore2[1]
+        "Daily water"       = $answersStore2[2]
+    }
+}
+
+
+function dailyNote($saveLocation) {
     $dailyNote = Read-Host "`nEnter notes for today"
+    [float]$weighIn = Read-Host "Daily weigh-in (KG)"
+    "Daily note: $dailyNote"        | Out-File -FilePath $saveLocation -Append
+    "Daily weigh-in (KG): $weighIn" | Out-File -FilePath $saveLocation -Append
+}
 
-    # logic for previous or current day file
-    # append data to the daily file
-    "`nAdded data to: $fileName"
-    $otherDayVariables | Out-File -FilePath "$Path\$folderName\$fileName"
-    Write-Output "Daily note: $dailyNote" | Out-File -FilePath "$Path\$folderName\$fileName" -Append
+function Save-DayFile() {
 
-    Get-Content "$Path\$folderName\$fileName"
+    param(
+        $fileData,
+        [string]$saveLocation
+    )
+
+    $fileData | Out-File -FilePath $saveLocation # error saving
+    "Added data to: $saveLocation"
+}
 
 
-} else { Write-Error "User input failed" }
+## work on creating the switch statement
+
+# if the current day is a gym day
+if ((Get-Date).DayOfWeek -in $currentDayGym.DayOfWeek){ 
+
+    "`nHint: respond with 'Yes' or 'No'"
+    Read-GymQuestions
+
+        # logic for saving the file when tracking a previous or current day
+        if ($whichDay -eq "Previous") {
+
+            Save-DayFile -fileData $gymAnswers -saveLocation $($previousFullPath)
+            dailyNote($previousFullPath)
+
+        } elseif ($whichDay -eq "Current") { 
+
+            Save-DayFile -fileData $gymAnswers -saveLocation $("$currentFullPath\$fileName")
+            dailyNote("$currentFullPath\$fileName") 
+
+        }
+
+# if the current day is not a gym day
+} elseif ((Get-Date).DayOfWeek -in $currentDayMonth.DayOfWeek) {
+
+    "`nHint: respond with 'Yes' or 'No'"
+    Read-OtherQuestions
+
+        # logic for saving the file when tracking a previous or current day
+        if ($whichDay -eq "Previous") {
+
+            Save-DayFile -fileData $otherAnswers -saveLocation $previousFullPath
+            dailyNote($previousFullPath)
+
+        } elseif ($whichDay -eq "Current") { 
+
+            Save-DayFile -fileData $otherAnswers -saveLocation $("$currentFullPath\$fileName")
+            dailyNote($("$currentFullPath\$fileName"))
+
+        }
+
+} else { Write-Error "Failed to ask data tracking questions" }
 #endregion
