@@ -1,5 +1,7 @@
 <#
     To do:
+    create one function for testing existences of folders / files
+
 
     create the switch statement
     -- write the pseudocode
@@ -45,6 +47,20 @@ $Path = "C:\PowerShell Dev\PowerShell\Projects\Accountability tracker\Tracker Da
 ####################################
 
 #region functions for testing paths
+
+function checkFolderExistence($path) {
+    if (Test-Path $path) {
+        "Path exists: $path"
+    } else {
+        Write-Output "Path created: $path"
+        New-Item -ItemType Directory -Path $Path | Out-Null
+    }
+}
+
+function checkFileExistence($file) {}
+
+
+
 
 ## When tracking current days ##
 
@@ -214,6 +230,27 @@ function Get-PreviousDays() {
                 Get-Date -Month $specifyDate.Month -Day $i | 
                 Select-Object $DateFormat}       
 }
+
+# it makes sense to use this, but i dont want to copy and paste chatgpt code
+
+# function Get-DayInfo {
+#     param(
+#         [datetime]$Date = (Get-Date),
+#         [string[]]$GymDays = @('Thursday','Friday','Sunday')
+#     )
+
+#     $isGymDay = $Date.DayOfWeek -in $GymDays
+
+#     [PSCustomObject]@{
+#         Date       = $Date
+#         DayOfWeek  = $Date.DayOfWeek
+#         Day        = $Date.Day
+#         Month      = $Date.Month
+#         Year       = $Date.Year
+#         IsGymDay   = $isGymDay
+#     }
+# }
+
 #endregion
 
 ####################################
@@ -314,7 +351,7 @@ $matchPreviousNonGymDay = ((Get-Date).DayOfWeek -in $previousDayMonth.DayOfWeek)
 $Current = $whichDay -eq "current"
 $Previous = ($whichday -eq "previous")
 
-switch ($Current -or $Previous)
+switch ($whichDay)
 {
     $matchGymDayofWeek {
         Get-CurrentDays
