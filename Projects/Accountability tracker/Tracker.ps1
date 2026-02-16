@@ -1,6 +1,5 @@
 <#
     To do:
-    Get-PreviousDays function
 
     create the switch statement
     -- write the pseudocode
@@ -33,7 +32,6 @@ function CheckForModule($m) {
 CheckForModule("PSCalendar")
 #endregion
 
-####################################
 
 #region FileData
 # file name i.e 28 November 2025_Tracker.csv
@@ -201,7 +199,6 @@ function Get-CurrentDays() {
                 Select-Object $DateFormat}            
 } 
 
-Get-CurrentDays
 
 # Dates of the previous month
 function Get-PreviousDays() {
@@ -224,7 +221,6 @@ function Get-PreviousDays() {
 #region User input
 
 # Read questions (gym days)
-# figure out a way to ask the required questions
 function Read-GymQuestions() {
 
     [string[]]$gymQuestions = @(
@@ -298,46 +294,95 @@ function Save-DayFile() {
     "Added data to: $saveLocation"
 }
 
+$matchGymDayofWeek = ((Get-Date).DayOfWeek -in $currentDayGym.DayOfWeek)
+$matchNonGymDay = ((Get-Date).DayOfWeek -in $currentDayMonth.DayOfWeek)
+
+$matchPreviousGymDayofWeek = ((Get-Date).DayOfWeek -in $previousDayGym.DayOfWeek)
+$matchPreviousNonGymDay = ((Get-Date).DayOfWeek -in $previousDayMonth.DayOfWeek)
+
+
+
 
 ## work on creating the switch statement
+## verify the switch statements and the follow if/else statements match
+## go over the switch statements before running the script
+## run individual parts from the switch statements
 
-# if the current day is a gym day
-if ((Get-Date).DayOfWeek -in $currentDayGym.DayOfWeek){ 
+## this is erroing -- it does straight to default
+## something wrong with the switch expression?
 
-    "`nHint: respond with 'Yes' or 'No'"
-    Read-GymQuestions
+$Current = $whichDay -eq "current"
+$Previous = ($whichday -eq "previous")
 
-        # logic for saving the file when tracking a previous or current day
-        if ($whichDay -eq "Previous") {
+switch ($Current -or $Previous)
+{
+    $matchGymDayofWeek {
+        Get-CurrentDays
 
-            Save-DayFile -fileData $gymAnswers -saveLocation $($previousFullPath)
-            dailyNote($previousFullPath)
+        "`nHint: respond with 'Yes' or 'No'"
+        Read-GymQuestions
 
-        } elseif ($whichDay -eq "Current") { 
+        Save-DayFile -fileData $gymAnswers -saveLocation $("$currentFullPath\$fileName")
+        dailyNote("$currentFullPath\$fileName") 
+    }
 
-            Save-DayFile -fileData $gymAnswers -saveLocation $("$currentFullPath\$fileName")
-            dailyNote("$currentFullPath\$fileName") 
+    $matchNonGymDay {
+        Get-CurrentDays
 
-        }
+        "`nHint: respond with 'Yes' or 'No'"
+        Read-OtherQuestions
 
-# if the current day is not a gym day
-} elseif ((Get-Date).DayOfWeek -in $currentDayMonth.DayOfWeek) {
+        Save-DayFile -fileData $otherAnswers -saveLocation $("$currentFullPath\$fileName")
+        dailyNote("$currentFullPath\$fileName") 
+    }
 
-    "`nHint: respond with 'Yes' or 'No'"
-    Read-OtherQuestions
+    $matchPreviousGymDayofWeek {
+        Get-PreviousDays
 
-        # logic for saving the file when tracking a previous or current day
-        if ($whichDay -eq "Previous") {
+        "`nHint: respond with 'Yes' or 'No'"
+        Read-GymQuestions
 
-            Save-DayFile -fileData $otherAnswers -saveLocation $previousFullPath
-            dailyNote($previousFullPath)
+        Save-DayFile -fileData $gymAnswers -saveLocation $($previousFullPath)
+        dailyNote($previousFullPath)
+    }
 
-        } elseif ($whichDay -eq "Current") { 
+    $matchPreviousNonGymDay {
+        Get-PreviousDays
 
-            Save-DayFile -fileData $otherAnswers -saveLocation $("$currentFullPath\$fileName")
-            dailyNote($("$currentFullPath\$fileName"))
+        "`nHint: respond with 'Yes' or 'No'"
+        Read-OtherQuestions
 
-        }
+        Save-DayFile -fileData $otherAnswers -saveLocation $($previousFullPath)
+        dailyNote($previousFullPath)
+    }
 
-} else { Write-Error "Failed to ask data tracking questions" }
-#endregion
+    Default { Write-Error $Error[0] }
+}
+
+
+
+
+# switch ($whichDay -eq "Previous") 
+# {
+#     $matchPreviousGymDayofWeek {
+#         Get-PreviousDays
+
+#         "`nHint: respond with 'Yes' or 'No'"
+#         Read-GymQuestions
+
+#         Save-DayFile -fileData $gymAnswers -saveLocation $($previousFullPath)
+#         dailyNote($previousFullPath)
+#     }
+
+#     $matchPreviousNonGymDay {
+#         Get-PreviousDays
+
+#         "`nHint: respond with 'Yes' or 'No'"
+#         Read-OtherQuestions
+
+#         Save-DayFile -fileData $otherAnswers -saveLocation $($previousFullPath)
+#         dailyNote($previousFullPath)
+#     }
+
+#     Default { Write-Error $Error[0] }
+# } 
