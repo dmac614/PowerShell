@@ -10,14 +10,63 @@ Save the updated data.
 
 add: file versioning -- Save backups or log changes to prevent overwriting data.
 
-## Adding a day retrospectively ##
+## tracking a date ##
+
+whatever date is being tracked, i must verify if a yearly folder exists for that year and i must verify if a monthly folder exists for that month
+-- Then I can create the file in the appropriate folder
+
+if the yearly folder doesnt exist, create it
+if the monthly folder doesnt exist, create it
+
 
 string prompt: are you tracking for the current or a previous day?
 -- validateset(current,previous); answer stored in variable
-if current day -- create daily file; proceed with the program
-elseif retrospective day:
+
+if current day: (get-date).ToLongDateString() 
+    - test the folderYear path exists; if not create it 
+        - if it exists, test folderMonth path exists; if not create it
+            - if the file doesnt exist, create it
+            - if it exists, write-warning
+                - use the current code to test if the file exists as that works for the current day 
+
+
+elseif previous day: 
 - [datetime]prompt which date do you want to track?
-- enter a ToLongDateString i.e 29 November 2025
+- enter a ToLongDateString i.e 01 December 2025
+    - verify the year being matched: if it matches the current year
+    - does a yearly folder exist for this date? if not, create it
+        - verify the month being matched: if it matches the current month
+        - does a monthly folder exist for this date? if not, create it 
+            - test the file is not in this path already
+            - create an out variable for the path being tracked
+            - create the file in this path 
+        - if the month does not match the current month
+        - does a monthly folder exist for this month? if not, create it 
+            - test the file is not in this path already
+            - create an out variable for the path being tracked
+            - create the file in this path 
+    - if the year does not match the current year 
+    - does a yearly folder exist for this year? if not, create it    
+        - verify the month being matched: if it matches the current month
+        - does a monthly folder exist for this date? if not, create it 
+            - test the file is not in this path already
+            - create an out variable for the path being tracked
+            - create the file in this path 
+        - if the month does not match the current month
+        - does a monthly folder exist for this month? if not, create it 
+            - test the file is not in this path already
+            - create an out variable for the path being tracked
+            - create the file in this path 
+
+
+the month is feb
+tracking the month of jan
+
+
+
+
+
+
 
 try {
     specifyDate notin $Path\$folderName
@@ -25,27 +74,3 @@ try {
     [datetime]prompt + "_Tracker.csv"
 }
 catch {$error[0]} 
-
-
-
-
-
-29
-N,Y,Y,Y
-Note: along the lines of... utilised 10% of my weekly calories to eat off my nutrition plan. Maximised output by doing 18k steps, gym and cycling
-
-30
-YYY
-Note: 
-
-1
-YYY
-Note: 
-
-2
-YYYY
-Note: 
-
-3
-NYY
-Note: a portion of the 10% of off-plan calories were consumed. Fasted walk to work
