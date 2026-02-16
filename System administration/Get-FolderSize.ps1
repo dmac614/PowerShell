@@ -33,7 +33,7 @@ function FolderSize {
         
     if ($PSEdition -ne "Core") {
         $Pwsh = (Get-Command pwsh.exe -ErrorAction SilentlyContinue).Source
-        if (-not $Pwsh) {
+        if (-not (Test-Path $Pwsh)) {
             Write-Error "PowerShell 7 is required to run the .NET objects in this script"
             return 
         }
@@ -42,22 +42,18 @@ function FolderSize {
         # A new window is opened and the rest of the script runs there opposed to the $PSCommandPath
         # Read more about Start-Process
         # Test this: $ProcObj = [system.diagnostics.processstartinfo]::new()
+        $p7 = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PowerShell\PowerShell 7 (x64).lnk"
         Write-Output "Starting PowerShell 7"
+        #Invoke-Item -Path $p7
         $argList = @{
             ExecutionPolicy = 'Bypass'
             File = $PSCommandPath
-            Path = $Path
+            Path = $p7
             Wait = $true
+            NoProfile = $true
         }
 
-        <# another possiblity to use
-        $argList = @(
-            '-NoProfile',
-            '-ExecutionPolicy', 'Bypass',
-            '-File', "`"$PSCommandPath`"",
-            '-Path', "`"$Path`"")
-        #>
-            Start-Process -FilePath $Pwsh -ArgumentList @argList -NoNewWindow
+            Start-Process -ArgumentList @argList -NoNewWindow
             return
     }
 
