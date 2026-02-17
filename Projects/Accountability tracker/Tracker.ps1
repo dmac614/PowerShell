@@ -1,6 +1,6 @@
 <#
     To do:
-    create one function for testing existences of folders / files
+    create a function to track if the day is a gym day or not
 
 
     create the switch statement
@@ -40,99 +40,50 @@ CheckForModule("PSCalendar")
 $currentDay = (Get-Date).ToLongDateString() 
 $currentMonth = "$((Get-Date).Month)"
 $currentYear = "$((Get-Date).Year)"
+
+# file names
 $fileName = $currentDay + "_Tracker.csv"
+$previousFileName = "$($specifyDate.ToLongDateString())_Tracker.csv"
+
+# root directory for saving files
 $Path = "C:\PowerShell Dev\PowerShell\Projects\Accountability tracker\Tracker Data"
+
+# Create the full path when tracking the current day file
+$currentFolderPath = Join-Path -Path $Path -ChildPath "$currentYear\$currentMonth"
+$currentFullPath = Join-Path -Path $currentFolderPath -ChildPath $fileName
+
+# Create the full path when tracking the previous day file
+$previousFolderPath = Join-Path -Path $Path -ChildPath "$($specifyDate.Year)\$($specifyDate.Month)"
+$previousFullPath = Join-Path -Path $previousFolderPath -ChildPath $previousFileName
 #endregion
 
 ####################################
 
-#region functions for testing paths
+#region functions for testing files and folders
 
+# Test the folder path exists 
 function checkFolderExistence($path) {
-    if (Test-Path $path) {
-        "Path exists: $path"
-    } else {
-        Write-Output "Path created: $path"
-        New-Item -ItemType Directory -Path $Path | Out-Null
-    }
+
+    $directoryExists = [System.IO.Directory]::Exists($path)
+        if ($directoryExists){
+            "Path exists: $path"
+        } else {
+            "Path created: $path"
+            New-Item -ItemType Directory -Path $Path | Out-Null
+        }
 }
 
-function checkFileExistence($file) {}
 
+# Test the absolute path the file will exist in 
+function checkFileExistence($file) {
 
-
-
-## When tracking current days ##
-
-# Test currentYear path
-function currentYearFolder() {
-    if (Test-Path $Path\$currentYear) {
-        "Yearly folder exists: $Path\$currentYear"
-    } else {
-        Write-Output "Yearly folder created: $currentYear"
-        New-Item -ItemType Directory -Name $currentYear -Path $Path | Out-Null
-    }
-}
-
-# Test currentMonth
-function currentMonthFolder() {
-    if (Test-Path $Path\$currentYear\$currentMonth) {
-        "Monthly folder exists: $Path\$currentYear\$currentMonth"
-    } else {
-        Write-Output "Monthly folder created: $currentMonth"
-        New-Item -ItemType Directory -Name $currentMonth -Path $Path\$currentYear | Out-Null
-    }
-}
-
-# Test the current day file
-function currentDayFile() {
-
-    $script:joinYearandMonth = Join-Path -Path $currentYear -ChildPath $currentMonth
-    $script:currentFullPath = Join-Path -Path $Path -ChildPath $joinYearandMonth
-
-    if (Test-Path $currentFullPath\$fileName) {
-        Write-Output "Daily file exists: $currentFullPath\$fileName"
-    } else {
-        Write-Output "New daily file created: $fileName"
-        New-Item -ItemType File -Path "$currentFullPath\$fileName" | Out-Null
-    }
-}
-
-## When tracking previous days ##
-
-# Test specifyDate.Year 
-function previousYearFolder() {
-    if (Test-Path $Path\$($specifyDate.Year)) {
-        "Yearly folder exists: $Path\$($specifyDate.Year)"
-    } else {
-        Write-Output "Yearly folder created: $($specifyDate.Year)"
-        New-Item -ItemType Directory -Name $($specifyDate.Year) -Path $Path | Out-Null
-    }    
-}
-
-# Test specifyDate.Month
-function previousMonthFolder() {
-    if (Test-Path $Path\$($specifyDate.Year)\$($specifyDate.Month)) {
-        "Monthly folder exists: $Path\$($specifyDate.Year)\$($specifyDate.Month)"
-    } else {
-        Write-Output "Monthly folder created: $($specifyDate.Month)"
-        New-Item -ItemType Directory -Name $($specifyDate.Month) -Path $Path\$($specifyDate.Year) | Out-Null
-    }          
-}
-
-# Test previous day file
-function previousDayFile() {
-
-    $script:previousFolderPath = Join-Path -Path $Path -ChildPath "$($specifyDate.Year)\$($specifyDate.Month)"
-    $script:previousFileName = "$($specifyDate.ToLongDateString())_Tracker.csv"
-    $script:previousFullPath = Join-Path -Path $previousFolderPath -ChildPath $previousFileName
-
-    if (Test-Path $previousFullPath) {
-        Write-Output "Previous day file already exists: $previousFolderPath"
-    } else {
-        New-Item -ItemType File -Path $previousFullPath | Out-Null 
-        Write-Output "New daily file created: $previousFileName" 
-    }
+    $fileExists = [System.IO.File]::Exists($file)
+        if ($fileExists) {
+            "Daily file exists: $file"
+        } else {
+            "File created: $file"
+            New-Item -ItemType File -Path $file | Out-Null
+        }
 }
 
 #endregion
@@ -148,14 +99,12 @@ do {
 $dayMatch = $currentDay -eq (Get-Date).ToLongDateString()
 if ($whichDay -eq "Current" -and $dayMatch) {
 
-    # Test currentYear path
-    currentYearFolder
-
-    # Test currentMonth path
-    currentMonthFolder
+    # Test the folder path
+    checkFolderExistence($currentFolderPath)
 
     # Test current day file
-    currentDayFile
+    checkFileExistence($currentFullPath)
+
 }
 
 # Tracking the previous day
@@ -165,15 +114,11 @@ elseif ($whichDay -eq "Previous") {
     [datetime]$specifyDate = Read-Host "Date syntax: 29 November 2025`nWhich date do you want to track?"
 
     try {
+        # Test the previous day folder path
+        checkFolderExistence($previousFolderPath)
 
-        # Test specifyDate.Year 
-        previousYearFolder
-
-        # Test specifyDate.Month
-        previousMonthFolder
-
-        # Test previous day file
-        previousDayFile
+        # Test the previous day file
+        checkFileExistence($previousFullPath)
 
     } catch { 
         
