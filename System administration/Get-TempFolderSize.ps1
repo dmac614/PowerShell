@@ -17,7 +17,7 @@ function Get-TempFolderSize {
     )
 
     # Get all items in the appdata\local\temp folder
-    $Items = Get-ChildItem -Path $TempFolderPath -Recurse
+    $Items = Get-ChildItem -Path $TempFolderPath -Recurse -File
     
     # Calculate the size of the folder
     $TotalSize = $Items | 
