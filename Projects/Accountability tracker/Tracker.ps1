@@ -178,23 +178,6 @@ function Get-PreviousDays() {
 
 # it makes sense to use this, but i dont want to copy and paste chatgpt code
 
-# function Get-DayInfo {
-#     param(
-#         [datetime]$Date = (Get-Date),
-#         [string[]]$GymDays = @('Thursday','Friday','Sunday')
-#     )
-
-#     $isGymDay = $Date.DayOfWeek -in $GymDays
-
-#     [PSCustomObject]@{
-#         Date       = $Date
-#         DayOfWeek  = $Date.DayOfWeek
-#         Day        = $Date.Day
-#         Month      = $Date.Month
-#         Year       = $Date.Year
-#         IsGymDay   = $isGymDay
-#     }
-# }
 
 #endregion
 
