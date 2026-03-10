@@ -1,22 +1,29 @@
-# use a variation of this path to better detect which teams version is installed
-# C:\Program Files\WindowsApps\MSTeams_25306.804.4102.7193_x64__8wekyb3d8bbwe 
 
-[string]$TeamsName = [regex]'MSTeams .+ 8wekyb3d8bbwe'
+function deleteTeamsCache() {
+    
+    param(
+        [parameter(Mandatory)]
+        [string]$username
+    )
 
+    $regexPattern = [regex]"MSTeams\w\d.+8wekyb3d8bbwe"
+    $newTeamsPath = Get-ChildItem "C:\Program Files\WindowsApps\" | Where-Object { $_.name -match $regexPattern } -OutVariable teamsVersion
+    $teamsCache = "C:\Users\$username\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe"
+    $fullPath = Join-Path $teamsVersion.FullName -ChildPath "ms-teams.exe"
 
-
-
-$TeamsClassic = "${env:USERPROFILE}\AppData\Roaming\Microsoft\Teams"
-$TeamsNew = "${env:USERPROFILE}\AppData\Local\Packages\MSTeams_8wekyb3d8bbwe"
-
-$Warning = "The classic version of Teams is installed`nUpgrade to the new version" 
-
-if (Test-Path $TeamsClassic) { Write-Warning $Warning -WarningAction Stop }
-if (Test-Path $TeamsNew) 
-    {
-        Get-Process -Name ms-teams -ErrorAction SilentlyContinue | Stop-Process 
-        Remove-Item -Path $TeamsNew -Recurse -Force -ErrorAction SilentlyContinue
-        Start-Sleep -Seconds 5
-        Start-Process ms-teams 
+    
+    if ($newTeamsPath.Length -eq 1) {
         
-    }   else { Write-Output "Teams is possibly not installed" }
+        "new Teams is installed: $($teamsVersion.Name)"
+        "Proceeding to empty the cache folder then restart ms-teams"
+        
+        Get-Process -Name ms-teams -ErrorAction SilentlyContinue | Stop-Process -Confirm
+        Remove-Item -Path $teamsCache -Recurse -Force -ErrorAction SilentlyContinue | Wait-Process # testing this line
+        
+        "The cache folder is now empty. Reopen the Teams app"
+        
+    } else { "Could not locate MSTeams in the WindowsApps folder"  }
+
+}
+
+deleteTeamsCache
