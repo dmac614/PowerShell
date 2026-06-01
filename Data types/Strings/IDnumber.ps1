@@ -1,24 +1,46 @@
 param(
-    [int]$ticketID
+    [int]$ticketID,
+    [switch]$skipFirstLine
 )
 
 function addTicketID() {
+
 $firstFile = "C:\PowerShell Dev\PowerShell\Data types\Strings\firstResponse.txt"
+$firstFile_v2 = "C:\PowerShell Dev\PowerShell\Data types\Strings\firstResponse_v2.txt"
 $secondFile = "C:\PowerShell Dev\PowerShell\Data types\Strings\secondResponse.txt"
 
-$noResponse = Write-Output "As we have not received a response on this ticket we will now be closing it.
+if($skipFirstLine){
 
-If you still require assistance can you please call 03301242701 when you have a moment and quote reference $ticketID so that we can assist you.
+    $needAssistance = "If you still require assistance can you please call 03301242701 when you have a moment and quote reference $ticketID so that we can assist you.
 
 Thanks very much"
+
+    $ticketClosure = "Advised the customer to call us when they have availability and quote reference $ticketID so that we can assist"
+
+    $needAssistance | Out-File -FilePath $firstFile_v2
+    $ticketClosure | Out-File -FilePath $secondFile
+
+    Start-Process -FilePath $firstFile_v2
+    Start-Process -FilePath $secondFile
+
+
+} else {
+
+    $noResponse = "As we have not received a response on this ticket we will now be closing it.
     
-$ticketClosure = Write-Output "Advised the customer to call us when they have availability and quote reference $ticketID so that we can assist"
+If you still require assistance can you please call 03301242701 when you have a moment and quote reference $ticketID so that we can assist you.
+    
+Thanks very much"
+    
+    $ticketClosure = "Advised the customer to call us when they have availability and quote reference $ticketID so that we can assist"
     
     $noResponse | Out-File -FilePath $firstFile
     $ticketClosure | Out-File -FilePath $secondFile
-
+    
     Start-Process -FilePath $firstFile
     Start-Process -FilePath $secondFile
+
+    }
 
 }
 
