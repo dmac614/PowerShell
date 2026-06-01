@@ -5,7 +5,7 @@ function ClearPrintQueue() {
 
         Write-Output "Stopping $(($Spool).Name)`nEmptying $SpoolPath"
         Stop-Service $Spool
-        Get-ChildItem $SpoolPath | Remove-Item
+        Get-ChildItem $SpoolPath | Remove-Item -Recurse -Verbose
         Start-Service $Spool
         
         $SpoolProc = Get-Process -ProcessName spoolsv
