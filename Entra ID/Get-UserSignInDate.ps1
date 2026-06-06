@@ -1,58 +1,38 @@
-# $signIn = get-entrauser -UserId $globalAdminUserId -Property SignInActivity  | Select-Object -ExpandProperty SignInActivity
+<#
+    # ideas
+    create an if..else statement
+    if $specificSearch search for names of users
+    if $allUsers search through all entra users with enabled accounts
 
-# $signIn.lastSignInRequestId
-
-# $signInDmac = get-entrauser -UserId $dmacUserId -Property displayname,SignInActivity  | Select-Object -Property displayname -ExpandProperty SignInActivity
-
-# $dates = (get-date).Date - $signInDmac.lastSuccessfulSignInDateTime
-
-# Write-Output "$($signInDmac.displayname) last signed-in $($dates.days) days ago"
-# Write-Output "This user last signed-in $($dates.days) days ago"
-
-
-# $twoUsers = @(
-#     $dmacUserId
-#     $globalAdmin
-# )
-
-# foreach ($i in $twoUsers) {
-#     $t = Get-EntraUser -UserId $i -Property SignInActivity,displayname | Select-Object -Property displayname -ExpandProperty SignInActivity
-   
-#     $dates2 = (get-date).Date - $t.lastSuccessfulSignInDateTime
-   
-#     Write-Output "$($t.displayname) last signed-in $($dates2.days) days ago"
-# }
+    ToDo
+    Add a parameter to the Connect-Entra command
+    Allows me to connect to different Entra tenancies
+#>
 
 param(
-    [string]$searchName
+    [string]$searchName,
+    [switch]$specificSearch,
+    [switch]$allUsers
 )
+
+if (-not (Get-EntraContext)) {
+    $dmacEntra = "ccd5a42d-4beb-4856-b324-d3498aa10af5"
+    Connect-Entra -TenantID $dmacEntra
+}
 
 $signIns = Get-Entrauser -SearchString $searchName -Property displayname, id, SignInActivity  | Select-Object -Property displayname, id -ExpandProperty SignInActivity
 
 
 foreach ($item in $signIns){
-    $days = (Get-Date).Date - $item.lastSuccessfulSignInsDateTime # error occuring here
+    $days = ($item.lastSuccessfulSignInDateTime.date | ForEach-Object { (Get-Date) - $_.Date } ).days
 
-
-    $results = @{
+    $results = [PSCustomObject][ordered]@{
         Name                 = $item.displayname
         Id                   = $item.id
-        "Successful sign-in" = $item.lastSuccessfulSignInsDateTime
+        "Successful sign-in" = $item.lastSuccessfulSignInDateTime
+        "Last signed-in"     = "$days days ago"
     }
 
-    Write-Output ("{0} last signed-in {1} days ago" -f $item.displayname, $days.days)
+    $results
+
 }
-
-
-
-
-
-
-# if ($days.Days -eq 0){
-
-#     Write-Output ("{0} last signed-in {1} days ago" -f $signIns.displayname, $days.days)
-
-# } else {
-#     Write-Output ("{0} last signed-in {1} days ago" -f $signIns.displayname, $days.days)
-
-# }
