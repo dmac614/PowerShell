@@ -1,0 +1,1 @@
+& "C:\TEMP\Latitude_XXXX_X.XX.X.exe" /s /l="C:\TEMP\DellSoftware.txt"
