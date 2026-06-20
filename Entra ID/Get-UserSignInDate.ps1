@@ -10,17 +10,17 @@
 #>
 
 param(
-    [string]$searchName,
-    [switch]$specificSearch,
-    [switch]$allUsers
+    [string]$searchUser,
+    [string]$tenantID = "ccd5a42d-4beb-4856-b324-d3498aa10af5", # my Entra tenant
+    [switch]$specificSearch, #Todo
+    [switch]$allUsers #Todo
 )
 
 if (-not (Get-EntraContext)) {
-    $dmacEntra = "ccd5a42d-4beb-4856-b324-d3498aa10af5"
-    Connect-Entra -TenantID $dmacEntra
+    Connect-Entra -TenantID $tenantID
 }
 
-$signIns = Get-Entrauser -SearchString $searchName -Property displayname, id, SignInActivity  | Select-Object -Property displayname, id -ExpandProperty SignInActivity
+$signIns = Get-Entrauser -SearchString $searchUse -Property displayname, id, SignInActivity  | Select-Object -Property displayname, id -ExpandProperty SignInActivity
 
 
 foreach ($item in $signIns){
