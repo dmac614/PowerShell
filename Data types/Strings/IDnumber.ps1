@@ -20,8 +20,8 @@ Thanks very much"
     $needAssistance | Out-File -FilePath $firstFile_v2
     $ticketClosure | Out-File -FilePath $secondFile
 
-    Start-Process -FilePath $firstFile_v2
     Start-Process -FilePath $secondFile
+    Start-Process -FilePath $firstFile_v2
 
 
 } else {
@@ -37,8 +37,8 @@ Thanks very much"
     $noResponse | Out-File -FilePath $firstFile
     $ticketClosure | Out-File -FilePath $secondFile
     
-    Start-Process -FilePath $firstFile
     Start-Process -FilePath $secondFile
+    Start-Process -FilePath $firstFile
 
     }
 
