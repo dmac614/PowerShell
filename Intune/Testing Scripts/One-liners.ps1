@@ -1,17 +1,29 @@
-# My personal tenant
-Connect-MgGraph -TenantId "ccd5a42d-4beb-4856-b324-d3498aa10af5"
+# Connect to Graph
+$dmacTenant = "ccd5a42d-4beb-4856-b324-d3498aa10af5"
+Connect-MgGraph -TenantId $dmacTenant
+Connect-MgGraph -TenantId ""
+
 
 ####################
 
 
-# Career Connect tenant ID
-Connect-MgGraph -TenantId "252ffc8e-c412-4e63-bc41-bff0cf4958c9"
+# Compliant device properties
+$DeviceProps = @("DisplayName","id","IsCompliant")
 
-# Device to test with
-$DeviceID = "26a4d4fe-c271-4111-82fc-fe9eeacd5b3d"
-Get-MgDeviceManagementManagedDevice -ManagedDeviceId $DeviceID | Select-Object -Property *
+# Locate the device
+# By Displayname
 
-# Device properties
-$DeviceProps = @("")
+$displayName = "LOM-CYV8DS3"
+Get-MgDevice -All | where { $_.DisplayName -eq $displayName } | Format-List $DeviceProps
 
 
+# Multiple devices
+
+$multipleDisplayNames = @(
+    "LOM-CYV8DS3",
+    "LOM-FTV8DS3"
+)
+
+foreach ($item in $multipleDisplayNames) { 
+    Get-MgDevice -all | ? {$_.DisplayName -eq $item } | Format-List $DeviceProps 
+}
