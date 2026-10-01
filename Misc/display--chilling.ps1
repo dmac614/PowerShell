@@ -1,0 +1,1 @@
+Set-DisplayPosition -LeftToRightDisplayIds 2,1
