@@ -1,3 +1,14 @@
+<#
+
+    .EXAMPLE
+    # To open an inprivate Edge window
+    .\Start-EdgePrivate.ps1 -openWindow
+
+    # To close the current inprivate Edge window (the inprivate Edge window has to be in focus)
+    .\Start-EdgePrivate.ps1 -closeWindow
+
+#>
+
 param(
     [switch]$openWindow,
     [switch]$closeWindow

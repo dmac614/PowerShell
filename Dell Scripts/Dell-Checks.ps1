@@ -2,15 +2,15 @@
     Upload this script and the dotnet .exe file to the C:\Temp folder
     dotnet .exe is located C:\Temp\Software
 
-    Install dotnet 8
-    # https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+    Install dotnet 8.0.10
+    https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.10-windows-x64-installer
 
 #>
 
 $comments = @(
     "Info: Dell Command Update should be on v5.5-5.7",
     "Info: .NET Desktop Runtime should be greater than version 8.0.7",
-    "Info: checking software versions..."
+    "Info: checking software versions...`n"
 )
 
 $comments

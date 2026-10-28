@@ -13,7 +13,7 @@ This is the name of the file that is to be converted to an .intunewin file
 This is the folder for .intunewin files
 
 .EXAMPLE
-.\ConvertTo-IntuneWin.ps1 -AppExe "SophosConnect_2.3.3(IPsec_and_SSLVPN).msi"
+.\ConvertTo-IntuneWin.ps1
 
 .NOTES
 Author: Daniel Macdonald

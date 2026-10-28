@@ -1,3 +1,15 @@
+<#
+
+    .EXAMPLE
+    # To open an inprivate Chrome window
+    .\Start-ChromePrivate.ps1 -openWindow
+
+    # To close the current inprivate Chrome window
+    .\Start-ChromePrivate.ps1 -closeWindow
+
+#>
+
+
 param(
     [switch]$openWindow,
     [switch]$closeWindow
