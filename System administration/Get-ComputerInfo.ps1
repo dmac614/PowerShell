@@ -17,8 +17,7 @@ function ComputerDetails {
     
         $CompInfoProps = @(
             "csname","csusername","CsDomain","OsName","osversion","BiosSeralNumber","BiosSMBIOSBIOSVersion","CsManufacturer","CsModel",
-            @{n='CsTotalPhysicalMemory'; e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }}
-        ),
+            @{n='CsTotalPhysicalMemory'; e={ '{0:N2}' -f ($_.CsTotalPhysicalMemory/1GB) }} )
 
         $DiskProps = @(
             "DeviceID",
