@@ -9,7 +9,8 @@ function ClearPrintQueue() {
         Start-Service $Spool
         
         $SpoolProc = Get-Process -ProcessName spoolsv
-        if ($SpoolProc.StartTime -gt $(Get-Date).AddSeconds(-120)) { Write-Output "Spooler has restarted successfully" } else { Write-Error "An error occurred" }
+        if ($SpoolProc.StartTime -gt $(Get-Date).AddSeconds(-120)) { Write-Output "Spooler has restarted successfully" } 
+        else { Write-Error "An error occurred" }
     }   
 
 ClearPrintQueue
